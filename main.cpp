@@ -8,6 +8,7 @@
 #include <winbgim.h>
 #include <stdlib.h>
 #include <time.h>
+#include <cstring>
 using namespace std;
 
 #define MAX1 10
@@ -15,12 +16,17 @@ using namespace std;
 #define FUNDAL LIGHTGRAY
 
 void languageMenu();
-void initialWindow();
-void changeLgEn();
-void changeLgRo();
-void changeLgFr();
-void changeLgGe();
-void changeLgRu();
+
+struct lang{
+    char language[10],
+            start[10];
+};
+
+lang ro = {"limba","INCEPE"},
+     en = {"language", "START"},
+     ge = {"sprache","ANFANG"},
+     fr = {"langue","DÉBUT"};
+
 
 void myOuttextXY(int x, int y, int cerneala, int hartie, char *text)
 {
@@ -136,31 +142,9 @@ void deseneazaLegatura(int &idNod1, int &p1, int &idNod2, int &p2)
     drawLine(x1,y1,xMouse,yMouse, 15-FUNDAL);
 }
 
-void languageButtonClick()
+
+void startingPage(lang L)
 {
-    bool click=false;
-    //if the mouse is clicked on a button, the corresponding language will be chosen
-    while(1){
-
-        if(ismouseclick(WM_LBUTTONDOWN) && !click){
-
-            clearmouseclick(WM_LBUTTONDOWN);
-            int xMouse = mousex();
-            int yMouse = mousey();
-            if(xMouse >= 300  && xMouse <= 500 && yMouse >= 400 && xMouse <=450 )
-               {
-                   languageMenu();
-                   click = true;
-               }
-
-        }
-
-    }
-}
-
-void startingPage()
-{
-    //create a window
     initwindow(1000,800,"Electron",100,100);
     //set the background color to black
     setbkcolor(BLACK);
@@ -171,57 +155,81 @@ void startingPage()
     //write the text "Electron" in blue in the center of the window
     outtextxy(300, 200, "Electron");
     //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "Press any key to continue");
-    //add a button that will enter another window
     setcolor(WHITE);
-    rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "Language");
-    //look for a keabord click
+    rectangle(200, 400, 400, 450);
+    outtextxy(210, 410, L.language);
+    setcolor(WHITE);
+    rectangle(500, 400, 700, 450);
+    outtextxy(510, 410, L.start);
+    bool click=false;
+    //if the mouse is clicked on a button, the corresponding language will be chosen
+    while(1){
 
-    languageButtonClick();
+        if(ismouseclick(WM_LBUTTONDOWN) && !click){
 
-    srand(time(NULL));
-    setbkcolor(FUNDAL);
-    cleardevice();
+            clearmouseclick(WM_LBUTTONDOWN);
+            int xMouse = mousex();
+            int yMouse = mousey();
+            if(xMouse >= 200  && xMouse <= 400 && yMouse >= 400 && xMouse <=450 )
+               {
+                   languageMenu();
+                   click = true;
+               }
+            if(click == false)
+                if(xMouse >= 500  && xMouse <= 700 && yMouse >= 400 && xMouse <=450)
+                    {
+                        click = true;
+                        setbkcolor(FUNDAL);
+                        cleardevice();
+
+                                int i,j,r;
+                                for (i=1; i<=nrNoduri; i++)
+                                {
+                                    r=rand()%4;
+                                    switch(r) {
+                                        case 0: initNod(vecNoduri[i],"Tip1", 2+rand()%12); break;
+                                        case 1: initNod(vecNoduri[i],"Tip2", 2+rand()%12); break;
+                                        case 2: initNod(vecNoduri[i],"Tip3", 2+rand()%12); break;
+                                        case 3: initNod(vecNoduri[i],"Tip4", 2+rand()%12); break;
+                                    }
+                                    deseneazaNod(vecNoduri[i]);
+                                }
+                                int idNod1, idNod2, p1, p2;
+
+                                myOuttextXY(getmaxx()/2,50,BLUE,YELLOW,"Click pe un cerculet de la un nod, apoi click pe altul de la alt nod.");
+                                nrLegaturi=0;
+                                do {
+                                    deseneazaLegatura(idNod1,p1,idNod2,p2);
+                                    nrLegaturi++;
+                                    vecLegaturi[nrLegaturi].nod1=idNod1;
+                                    vecLegaturi[nrLegaturi].nod2=idNod2;
+                                    vecLegaturi[nrLegaturi].punct1=p1;
+                                    vecLegaturi[nrLegaturi].punct2=p2;
+                                    cout<<"Am trasat legatura de la punctul "<<p1<<" al nodului "<<idNod1;
+                                    cout<<" la punctul "<<p2<<" al nodului "<<idNod2<<".\n";
+                                    for (j=1;j<=nrNoduri;j++)
+                                        deseneazaNod(vecNoduri[j]);
+                                } while (nrLegaturi<=10);
+                                getch();
+                                closegraph();
+                                //cout<<"hello world";
+                                system("pause");
+
+
+
+                    }
+
+        }
+
+    }
+
+
+
 }
 
 int main(){
 
-    startingPage();
-
-    int i,j,r;
-    for (i=1; i<=nrNoduri; i++)
-    {
-        r=rand()%4;
-        switch(r) {
-            case 0: initNod(vecNoduri[i],"Tip1", 2+rand()%12); break;
-            case 1: initNod(vecNoduri[i],"Tip2", 2+rand()%12); break;
-            case 2: initNod(vecNoduri[i],"Tip3", 2+rand()%12); break;
-            case 3: initNod(vecNoduri[i],"Tip4", 2+rand()%12); break;
-        }
-        deseneazaNod(vecNoduri[i]);
-    }
-    int idNod1, idNod2, p1, p2;
-
-    myOuttextXY(getmaxx()/2,50,BLUE,YELLOW,"Click pe un cerculet de la un nod, apoi click pe altul de la alt nod.");
-    nrLegaturi=0;
-    do {
-        deseneazaLegatura(idNod1,p1,idNod2,p2);
-        nrLegaturi++;
-        vecLegaturi[nrLegaturi].nod1=idNod1;
-        vecLegaturi[nrLegaturi].nod2=idNod2;
-        vecLegaturi[nrLegaturi].punct1=p1;
-        vecLegaturi[nrLegaturi].punct2=p2;
-        cout<<"Am trasat legatura de la punctul "<<p1<<" al nodului "<<idNod1;
-        cout<<" la punctul "<<p2<<" al nodului "<<idNod2<<".\n";
-        for (j=1;j<=nrNoduri;j++)
-            deseneazaNod(vecNoduri[j]);
-    } while (nrLegaturi<=10);
-    getch();
-    closegraph();
-    return 0;
-    //cout<<"hello world";
-    system("pause");
+    startingPage(en);
 }
 
 void languageMenu(){
@@ -229,18 +237,16 @@ void languageMenu(){
     cleardevice();
     setcolor(WHITE);
     rectangle(100, 100, 300, 150);
-    outtextxy(150, 110, "English - default");
+    outtextxy(110, 110, "English - default");
     rectangle(100, 200, 300, 250);
-    outtextxy(150, 210, "Romanian");
+    outtextxy(110, 210, "Romanian");
     rectangle(100, 300, 300, 350);
-    outtextxy(150, 310, "French");
+    outtextxy(110, 310, "French");
     rectangle(100, 400, 300, 450);
-    outtextxy(150, 410, "German");
-    rectangle(100, 500, 300, 550);
-    outtextxy(150, 510, "Russian");
+    outtextxy(110, 410, "German");
 
     bool hello=false;
-
+    lang language;
     //if the mouse is clicked on a button, the corresponding language will be chosen
     while(1){
 
@@ -252,21 +258,18 @@ void languageMenu(){
             if(x >= 100 && x <= 300)
             {
                 if( y >= 100 && y <= 150 )
-                {changeLgEn(); hello = true;}
+                language = en ;
                 if( y >= 200 && y <= 250)
-                {changeLgRo(); hello = true;}
+                language = ro;
                 if( y >= 300 && y <= 350)
-                {changeLgFr(); hello = true;}
+                language = fr;
                 if(y >= 400 && y <= 450)
-                {changeLgGe(); hello = true;}
-                if( y >= 500 && y <= 550)
-                {changeLgRu(); hello = true;}
+                language = ge;
 
+                startingPage(language);
                 break;
             }
 
-            if( !hello )
-            {startingPage(); hello = true;}
         }
 
 
@@ -274,107 +277,3 @@ void languageMenu(){
 }
 }
 
-void changeLgEn(){
-    cleardevice();
-    //set the background color to black
-    setbkcolor(BLACK);
-    //set the color of the text to white
-    setcolor(WHITE);
-    //set the text style to bold
-    settextstyle(3, HORIZ_DIR, 4);
-    //write the text "Electron" in blue in the center of the window
-    outtextxy(300, 200, "Electron");
-    //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "Press any key to continue");
-    //add a button that will enter another window
-    setcolor(WHITE);
-    rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "Language");
-
-    languageButtonClick();
-    //wait for a key to be pressed
-    getch();
-}
-
-void changeLgRo(){
-    cleardevice();
-    //set the background color to black
-    setbkcolor(BLACK);
-    //set the color of the text to white
-    setcolor(WHITE);
-    //set the text style to bold
-    settextstyle(3, HORIZ_DIR, 4);
-    //write the text "Electron" in blue in the center of the window
-    outtextxy(300, 200, "Electron");
-    //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "Apasa orice tasta pentru a continua");
-    //add a button that will enter another window
-    setcolor(WHITE);
-    rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "Limba");
-
-    languageButtonClick();
-
-    getch();
-}
-
-void changeLgGe(){
-    cleardevice();
-    //set the background color to black
-    setbkcolor(BLACK);
-    //set the color of the text to white
-    setcolor(WHITE);
-    //set the text style to bold
-    settextstyle(3, HORIZ_DIR, 4);
-    //write the text "Electron" in blue in the center of the window
-    outtextxy(300, 200, "Electron");
-    //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "Drücken Sie eine beliebige Taste, um fortzufahren");
-    //add a button that will enter another window
-    setcolor(WHITE);
-    rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "Sprache");
-    //look for a keabord click
-
-    languageButtonClick();
-
-}
-
-void changeLgFr(){
-    cleardevice();
-    //set the background color to black
-    setbkcolor(BLACK);
-    //set the color of the text to white
-    setcolor(WHITE);
-    //set the text style to bold
-    settextstyle(3, HORIZ_DIR, 4);
-    //write the text "Electron" in blue in the center of the window
-    outtextxy(300, 200, "Electron");
-    //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "Appuyez sur n'importe quelle touche pour continuer");
-    //add a button that will enter another window
-    setcolor(WHITE);
-    rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "Langue");
-    languageButtonClick();
-}
-
-void changeLgRu(){
-    cleardevice();
-    //set the background color to black
-    setbkcolor(BLACK);
-    //set the color of the text to white
-    setcolor(WHITE);
-    //set the text style to bold
-    settextstyle(3, HORIZ_DIR, 4);
-    //write the text "Electron" in blue in the center of the window
-    outtextxy(300, 200, "Electron");
-    //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "d0 bd d0 b0 d0 b6 d0 bc d0 b8 d1 82 d0 b5 20 d0 bb d1 8e d0 b1 d1 83 d1 8e 20 d0 ba d0 bb d0 b0 d0 b2 d0 b8 d1 88 d1 83 20 d0 b4 d0 bb d1 8f 20 d0 bf d1 80 d0 be d0 b4 d0 be d0 bb d0 b6 d0 b5 d0 bd d0 b8 d1 8f");
-    //add a button that will enter another window
-    setcolor(WHITE);
-    rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "d0 af d0 b7 d1 8b d0 ba");
-    languageButtonClick();
-
-}
