@@ -9,5 +9,20 @@
 using namespace std;
 
 int main(){
+    //create a window
+    initwindow(800, 600, "Electron");
+    //set the background color to black
+    setbkcolor(BLACK);
+    //set the color of the text to white
+    setcolor(WHITE);
+    //set the text style to bold
+    settextstyle(3, HORIZ_DIR, 4);
+    //write the text "Electron" in blue in the center of the window
+    outtextxy(200, 200, "Electron");
+    //write the text "Press any key to continue" in the center of the window
+    outtextxy(200, 300, "Press any key to continue");
+    //wait for a key to be pressed
+    getch();
+
     cout<<"hello world";
 }
