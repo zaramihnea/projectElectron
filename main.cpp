@@ -233,27 +233,20 @@ void startingPage(lang L){
     if (hasStarted == false){
         hasStarted = true;
         initwindow(1000, 800, "Electron", 100, 100);
-        setbkcolor(BLACK);
-        setcolor(WHITE);
-        settextstyle(3, HORIZ_DIR, 4);
-        outtextxy(300, 200, "Electron");
-        setcolor(WHITE);
-        rectangle(200, 400, 400, 450);
-        outtextxy(210, 410, L.language);
-        setcolor(WHITE);
-        rectangle(500, 400, 700, 450);
-        outtextxy(510, 410, L.start);
     }
-    else{
-        cleardevice();
-        outtextxy(300, 200, "Electron");
-        setcolor(WHITE);
-        rectangle(200, 400, 400, 450);
-        outtextxy(210, 410, L.language);
-        setcolor(WHITE);
-        rectangle(500, 400, 700, 450);
-        outtextxy(510, 410, L.start);
-    }
+    else cleardevice();
+
+    setbkcolor(BLACK);
+    setcolor(WHITE);
+    settextstyle(3, HORIZ_DIR, 4);
+    outtextxy(300, 200, "Electron");
+    setcolor(WHITE);
+    rectangle(200, 400, 400, 450);
+    outtextxy(210, 410, L.language);
+    setcolor(WHITE);
+    rectangle(500, 400, 700, 450);
+    outtextxy(510, 410, L.start);
+    
     bool click = false;
     while (1){
         if (ismouseclick(WM_LBUTTONDOWN) && !click){
