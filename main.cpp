@@ -139,7 +139,7 @@ void deseneazaLegatura(int &idNod1, int &p1, int &idNod2, int &p2)
 int main(){
 
     //create a window
-    initwindow(800, 600, "Electron");
+    initwindow(1000,800,"Electron",100,100);
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -164,7 +164,6 @@ int main(){
         cleardevice();
     }
     srand(time(NULL));
-    initwindow(1000,800,"Legaturi",100,100);
     setbkcolor(FUNDAL);
     cleardevice();
 
@@ -218,45 +217,52 @@ void languageMenu(){
     rectangle(100, 500, 300, 550);
     outtextxy(150, 510, "X for Russian");
 
+    bool hello=false;
+
     //if the mouse is clicked on a button, the corresponding language will be chosen
     while(1){
-        if(ismouseclick(WM_LBUTTONDBLCLK)){
+        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
             int x = mousex();
             int y = mousey();
             if(x >= 100 && x <= 300 && y >= 100 && y <= 150){
                 changeLgEn();
+                hello=true;
                 break;
             }
         }
-        if(ismouseclick(WM_LBUTTONDBLCLK)){
+        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
             int x = mousex();
             int y = mousey();
             if(x >= 100 && x <= 300 && y >= 200 && y <= 250){
                 changeLgRo();
+                hello = true;
                 break;
             }
         }
-        if(ismouseclick(WM_LBUTTONDBLCLK)){
+        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
             int x = mousex();
             int y = mousey();
             if(x >= 100 && x <= 300 && y >= 300 && y <= 350){
                 changeLgFr();
+                hello = true;
                 break;
             }
         }
-        if(ismouseclick(WM_LBUTTONDBLCLK)){
+        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
             int x = mousex();
             int y = mousey();
             if(x >= 100 && x <= 300 && y >= 400 && y <= 450){
                 changeLgGe();
+                hello=true;
                 break;
             }
         }
-        if(ismouseclick(WM_LBUTTONDBLCLK)){
+        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
             int x = mousex();
             int y = mousey();
             if(x >= 100 && x <= 300 && y >= 500 && y <= 550){
                 changeLgRu();
+                hello = true;
                 break;
             }
         }
