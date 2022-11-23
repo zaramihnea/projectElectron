@@ -136,8 +136,30 @@ void deseneazaLegatura(int &idNod1, int &p1, int &idNod2, int &p2)
     drawLine(x1,y1,xMouse,yMouse, 15-FUNDAL);
 }
 
-int main(){
+void languageButtonClick()
+{
+    bool click=false;
+    //if the mouse is clicked on a button, the corresponding language will be chosen
+    while(1){
 
+        if(ismouseclick(WM_LBUTTONDOWN) && !click){
+
+            clearmouseclick(WM_LBUTTONDOWN);
+            int xMouse = mousex();
+            int yMouse = mousey();
+            if(xMouse >= 300  && xMouse <= 500 && yMouse >= 400 && xMouse <=450 )
+               {
+                   languageMenu();
+                   click = true;
+               }
+
+        }
+
+    }
+}
+
+void startingPage()
+{
     //create a window
     initwindow(1000,800,"Electron",100,100);
     //set the background color to black
@@ -155,17 +177,17 @@ int main(){
     rectangle(300, 400, 500, 450);
     outtextxy(320, 410, "Language");
     //look for a keabord click
-    int x;
-    //if a certain key is pressed, the language menu will appear
-    if(getch() == 76 || getch() == 108){
-        languageMenu();
-    }
-    else{
-        cleardevice();
-    }
+
+    languageButtonClick();
+
     srand(time(NULL));
     setbkcolor(FUNDAL);
     cleardevice();
+}
+
+int main(){
+
+    startingPage();
 
     int i,j,r;
     for (i=1; i<=nrNoduri; i++)
@@ -207,67 +229,49 @@ void languageMenu(){
     cleardevice();
     setcolor(WHITE);
     rectangle(100, 100, 300, 150);
-    outtextxy(150, 110, "E for English - default");
+    outtextxy(150, 110, "English - default");
     rectangle(100, 200, 300, 250);
-    outtextxy(150, 210, "R for Romanian");
+    outtextxy(150, 210, "Romanian");
     rectangle(100, 300, 300, 350);
-    outtextxy(150, 310, "F for French");
+    outtextxy(150, 310, "French");
     rectangle(100, 400, 300, 450);
-    outtextxy(150, 410, "G for German");
+    outtextxy(150, 410, "German");
     rectangle(100, 500, 300, 550);
-    outtextxy(150, 510, "X for Russian");
+    outtextxy(150, 510, "Russian");
 
     bool hello=false;
 
     //if the mouse is clicked on a button, the corresponding language will be chosen
     while(1){
-        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
-            int x = mousex();
-            int y = mousey();
-            if(x >= 100 && x <= 300 && y >= 100 && y <= 150){
-                changeLgEn();
-                hello=true;
-                break;
-            }
-        }
-        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
-            int x = mousex();
-            int y = mousey();
-            if(x >= 100 && x <= 300 && y >= 200 && y <= 250){
-                changeLgRo();
-                hello = true;
-                break;
-            }
-        }
-        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
-            int x = mousex();
-            int y = mousey();
-            if(x >= 100 && x <= 300 && y >= 300 && y <= 350){
-                changeLgFr();
-                hello = true;
-                break;
-            }
-        }
-        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
-            int x = mousex();
-            int y = mousey();
-            if(x >= 100 && x <= 300 && y >= 400 && y <= 450){
-                changeLgGe();
-                hello=true;
-                break;
-            }
-        }
-        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
-            int x = mousex();
-            int y = mousey();
-            if(x >= 100 && x <= 300 && y >= 500 && y <= 550){
-                changeLgRu();
-                hello = true;
-                break;
-            }
-        }
-    }
 
+        if(ismouseclick(WM_LBUTTONDOWN) && !hello){
+
+            clearmouseclick(WM_LBUTTONDOWN);
+            int x = mousex();
+            int y = mousey();
+            if(x >= 100 && x <= 300)
+            {
+                if( y >= 100 && y <= 150 )
+                {changeLgEn(); hello = true;}
+                if( y >= 200 && y <= 250)
+                {changeLgRo(); hello = true;}
+                if( y >= 300 && y <= 350)
+                {changeLgFr(); hello = true;}
+                if(y >= 400 && y <= 450)
+                {changeLgGe(); hello = true;}
+                if( y >= 500 && y <= 550)
+                {changeLgRu(); hello = true;}
+
+                break;
+            }
+
+            if( !hello )
+            {startingPage(); hello = true;}
+        }
+
+
+
+}
 }
 
 void changeLgEn(){
@@ -286,11 +290,8 @@ void changeLgEn(){
     setcolor(WHITE);
     rectangle(300, 400, 500, 450);
     outtextxy(320, 410, "Language");
-    //look for a keabord click
-    int x;
-    //if a certain key is pressed, the language menu will appear
-    x = getch();
-    if(x==108 || x==76) languageMenu();
+
+    languageButtonClick();
     //wait for a key to be pressed
     getch();
 }
@@ -311,12 +312,9 @@ void changeLgRo(){
     setcolor(WHITE);
     rectangle(300, 400, 500, 450);
     outtextxy(320, 410, "Limba");
-    //look for a keabord click
-    int x;
-    //if a certain key is pressed, the language menu will appear
-    x = getch();
-    if(x==108 || x==76) languageMenu();
-    //wait for a key to be pressed
+
+    languageButtonClick();
+
     getch();
 }
 
@@ -337,12 +335,9 @@ void changeLgGe(){
     rectangle(300, 400, 500, 450);
     outtextxy(320, 410, "Sprache");
     //look for a keabord click
-    int x;
-    //if a certain key is pressed, the language menu will appear
-    x = getch();
-    if(x==108 || x==76) languageMenu();
-    //wait for a key to be pressed
-    getch();
+
+    languageButtonClick();
+
 }
 
 void changeLgFr(){
@@ -361,13 +356,7 @@ void changeLgFr(){
     setcolor(WHITE);
     rectangle(300, 400, 500, 450);
     outtextxy(320, 410, "Langue");
-    //look for a keabord click
-    int x;
-    //if a certain key is pressed, the language menu will appear
-    x = getch();
-    if(x==108 || x==76) languageMenu();
-    //wait for a key to be pressed
-    getch();
+    languageButtonClick();
 }
 
 void changeLgRu(){
@@ -386,11 +375,6 @@ void changeLgRu(){
     setcolor(WHITE);
     rectangle(300, 400, 500, 450);
     outtextxy(320, 410, "d0 af d0 b7 d1 8b d0 ba");
-    //look for a keabord click
-    int x;
-    //if a certain key is pressed, the language menu will appear
-    x = getch();
-    if(x==108 || x==76) languageMenu();
-    //wait for a key to be pressed
-    getch();
+    languageButtonClick();
+
 }
