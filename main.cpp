@@ -9,16 +9,46 @@
 using namespace std;
 
 void languageMenu();
-void initialWindowEn();
-void initialWindowRo();
-void initialWindowGe();
-void initialWindowFr();
-void initialWindowRu();
+void initialWindow();
+void changeLgEn();
+void changeLgRo();
+void changeLgFr();
+void changeLgGe();
+void changeLgRu();
 
 int main(){
-    initialWindowEn();
-    cout<<"hello world";
+    initialWindow();
+    //cout<<"hello world";
+    system("pause");
+}
 
+void initialWindow(){
+    //create a window
+    initwindow(800, 600, "Electron");
+    //set the background color to black
+    setbkcolor(BLACK);
+    //set the color of the text to white
+    setcolor(WHITE);
+    //set the text style to bold
+    settextstyle(3, HORIZ_DIR, 4);
+    //write the text "Electron" in blue in the center of the window
+    outtextxy(300, 200, "Electron");
+    //write the text "Press any key to continue" in the center of the window
+    outtextxy(150, 300, "Press any key to continue");
+    //add a button that will enter another window
+    setcolor(WHITE);
+    rectangle(300, 400, 500, 450);
+    outtextxy(320, 410, "Language");
+    //look for a keabord click
+    int x;
+    //if a certain key is pressed, the language menu will appear
+    if(getch() == 76 || getch() == 108){
+       
+            languageMenu();
+        
+    }
+    //wait for a key to be pressed
+    getch();
 }
 
 void languageMenu(){
@@ -35,29 +65,39 @@ void languageMenu(){
     outtextxy(150, 410, "G for German");
     rectangle(100, 500, 300, 550);
     outtextxy(150, 510, "X for Russian");
+
     //if the mouse is clicked on a button, the corresponding language will be chosen
-    int y;
-    y=getch();
-    if(y==101){
-        initialWindowEn();
+    while(1){
+        if(ismouseclick(WM_LBUTTONDBLCLK)){
+            int x = mousex();
+            int y = mousey();
+            if(x >= 100 && x <= 300 && y >= 100 && y <= 150){
+                changeLgEn();
+                break;
+            }
+            if(x >= 100 && x <= 300 && y >= 200 && y <= 250){
+                changeLgRo();
+                break;
+            }
+            if(x >= 100 && x <= 300 && y >= 300 && y <= 350){
+                changeLgFr();
+                break;
+            }
+            if(x >= 100 && x <= 300 && y >= 400 && y <= 450){
+                changeLgGe();
+                break;
+            }
+            if(x >= 100 && x <= 300 && y >= 500 && y <= 550){
+                changeLgRu();
+                break;
+            }
+        }
     }
-    if(y==114){
-        initialWindowRo();
-    }
-    if(y==102){
-        initialWindowFr();
-    }
-    if(y==103){
-        initialWindowGe();
-    }
-    if(y==120){
-        initialWindowRu();
-    }
+
 }
 
-void initialWindowEn(){
-    //create a window
-    initwindow(800, 600, "Electron");
+void changeLgEn(){
+    cleardevice();
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -78,11 +118,11 @@ void initialWindowEn(){
     x = getch();
     if(x==108 || x==76) languageMenu();
     //wait for a key to be pressed
+    getch();
 }
 
-void initialWindowRo(){
-    //create a window
-    initwindow(800, 600, "Electron");
+void changeLgRo(){
+    cleardevice();
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -103,11 +143,11 @@ void initialWindowRo(){
     x = getch();
     if(x==108 || x==76) languageMenu();
     //wait for a key to be pressed
+    getch();
 }
 
-void initialWindowGe(){
-    //create a window
-    initwindow(800, 600, "Electron");
+void changeLgGe(){
+    cleardevice();
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -128,11 +168,11 @@ void initialWindowGe(){
     x = getch();
     if(x==108 || x==76) languageMenu();
     //wait for a key to be pressed
+    getch();
 }
 
-void initialWindowFr(){
-    //create a window
-    initwindow(800, 600, "Electron");
+void changeLgFr(){
+    cleardevice();
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -153,11 +193,11 @@ void initialWindowFr(){
     x = getch();
     if(x==108 || x==76) languageMenu();
     //wait for a key to be pressed
+    getch();
 }
 
-void initialWindowRu(){
-    //create a window
-    initwindow(800, 600, "Electron");
+void changeLgRu(){
+    cleardevice();
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -167,15 +207,16 @@ void initialWindowRu(){
     //write the text "Electron" in blue in the center of the window
     outtextxy(300, 200, "Electron");
     //write the text "Press any key to continue" in the center of the window
-    outtextxy(150, 300, "нажмите любую клавишу для продолжения");
+    outtextxy(150, 300, "d0 bd d0 b0 d0 b6 d0 bc d0 b8 d1 82 d0 b5 20 d0 bb d1 8e d0 b1 d1 83 d1 8e 20 d0 ba d0 bb d0 b0 d0 b2 d0 b8 d1 88 d1 83 20 d0 b4 d0 bb d1 8f 20 d0 bf d1 80 d0 be d0 b4 d0 be d0 bb d0 b6 d0 b5 d0 bd d0 b8 d1 8f");
     //add a button that will enter another window
     setcolor(WHITE);
     rectangle(300, 400, 500, 450);
-    outtextxy(320, 410, "Язык");
+    outtextxy(320, 410, "d0 af d0 b7 d1 8b d0 ba");
     //look for a keabord click
     int x;
     //if a certain key is pressed, the language menu will appear
     x = getch();
     if(x==108 || x==76) languageMenu();
     //wait for a key to be pressed
+    getch();
 }
