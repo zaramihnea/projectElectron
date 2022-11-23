@@ -7,8 +7,7 @@
 #include <graphics.h>
 #include <winbgim.h>
 using namespace std;
-
-int main(){
+void initialWindow(){
     //create a window
     initwindow(800, 600, "Electron");
     //set the background color to black
@@ -23,6 +22,9 @@ int main(){
     outtextxy(200, 300, "Press any key to continue");
     //wait for a key to be pressed
     getch();
+}
 
+int main(){
+    initialWindow();
     cout<<"hello world";
 }
