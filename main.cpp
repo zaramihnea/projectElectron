@@ -2,6 +2,7 @@
 //Electron is an open source project for the development of a 2D graphics circuit simulator
 //Project created by Bursuc Eduarda & Zara Mihnea-Tudor, Faculty of Computer Sience, University "Alexandru Ioan Cuza" of Iasi, Romania, 2022
 
+
 /*<--Begin libraries-->*/
 #include <iostream>
 #include <fstream>
@@ -227,12 +228,12 @@ int main(){
 
 /*<--------------------------Begin functions------------------------>*/
 
-/// @brief Start of the program
+/// @brief Start of the program; initializez the window and 
 /// @param Language
 void startingPage(lang L){
     if (hasStarted == false){
         hasStarted = true;
-        initwindow(1000, 800, "Electron", 100, 100);
+        initwindow(1000, 500, "Electron", 100, 100);
     }
     else cleardevice();
 
@@ -267,7 +268,7 @@ void startingPage(lang L){
     }
 }
 
-/// @brief Change the language of the menu
+/// @brief Change the language of the menu on click
 void languageMenu(){
     cleardevice();
     setcolor(WHITE);
@@ -282,11 +283,13 @@ void languageMenu(){
 
     bool hello = false;
     lang language;
-    // if the mouse is clicked on a button, the corresponding language will be chosen
+    // if the mouse is clicked on a button, the corresponding language will be chosen using coordonates 
+    //100-150: English
+    //200-250: Romanian
+    //300-350: French
+    //400-450: German
     while (1){
-
         if (ismouseclick(WM_LBUTTONDOWN) && !hello){
-
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex();
             int y = mousey();
