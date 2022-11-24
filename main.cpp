@@ -23,16 +23,22 @@ struct lang{
     char language[10],
             start[10];
 };
-lang ro = {"limba","INCEPE"},
-     en = {"language", "START"},
-     ge = {"sprache","ANFANG"},
-     fr = {"langue","DÉBUT"};
+lang ro = {"Limba","INCEPE"},
+     en = {"Language", "START"},
+     ge = {"Sprache","ANFANG"},
+     fr = {"Langue","DÉBUT"};
 
 /*<------------End structures------------>*/
 
 
 
 /*<------------Begin global variables------------>*/
+
+int systemWidth = GetSystemMetrics(SM_CXSCREEN);
+int systemHeight = GetSystemMetrics(SM_CYSCREEN);
+
+int middleX = systemWidth/2;
+int middleY = systemHeight/2;
 
 bool hasStarted = false;
 
@@ -233,14 +239,14 @@ int main(){
 void startingPage(lang L){
     if (hasStarted == false){
         hasStarted = true;
-        initwindow(1000, 500, "Electron", 100, 100);
+        initwindow(systemWidth, systemHeight, "Electron", -3, -3, false, true);
     }
     else cleardevice();
 
     setbkcolor(BLACK);
     setcolor(WHITE);
-    settextstyle(3, HORIZ_DIR, 4);
-    outtextxy(300, 200, "Electron");
+    settextstyle(8, HORIZ_DIR, 4);
+    outtextxy(390, 200, "Electron");
     setcolor(WHITE);
     rectangle(200, 400, 400, 450);
     outtextxy(210, 410, L.language);
@@ -272,7 +278,7 @@ void startingPage(lang L){
 void languageMenu(){
     cleardevice();
     setcolor(WHITE);
-    rectangle(100, 100, 300, 150);
+    rectangle(100, 100, 400, 150);
     outtextxy(110, 110, "English - default");
     rectangle(100, 200, 300, 250);
     outtextxy(110, 210, "Romanian");
@@ -293,16 +299,18 @@ void languageMenu(){
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex();
             int y = mousey();
+            if(x >= 100 && x <= 400 && y >= 100 && y <= 150){
+                language=en;
+                startingPage(language);
+                break;
+            }
             if (x >= 100 && x <= 300){
-                if (y >= 100 && y <= 150)
-                    language = en;
                 if (y >= 200 && y <= 250)
                     language = ro;
                 if (y >= 300 && y <= 350)
                     language = fr;
                 if (y >= 400 && y <= 450)
                     language = ge;
-
                 startingPage(language);
                 break;
             }
