@@ -50,6 +50,7 @@ bool hasStarted = false;
 
 void startingPage(lang Language);
 void languageMenu();
+void testMenu();
 
 /*<------------End function definitions------------>*/
 
@@ -232,11 +233,11 @@ int main(){
 }
 
 
-
 /*<--------------------------Begin functions------------------------>*/
 
 /// @brief Start of the program; initializez the window and
 /// @param Language
+
 
 void startingPage(lang L){
     if (hasStarted == false){
@@ -255,7 +256,6 @@ void startingPage(lang L){
     setcolor(WHITE);
     rectangle(middleX+100, 400, middleX+380, 480);
     outtextxy(middleX+150, 415, L.start);
-
     bool click = false;
     while (1){
         if (ismouseclick(WM_LBUTTONDOWN) && !click){
@@ -270,7 +270,8 @@ void startingPage(lang L){
             if (click == false)
                 if (xMouse >= middleX+100 && xMouse <= middleX+380 && yMouse >= 400 && yMouse <= 480){
                     click = true;
-                    gamePage();
+                    //gamePage();
+                    testMenu();
                 }
         }
     }
@@ -322,4 +323,16 @@ void languageMenu(){
         }
     }
 }
+
+void testMenu ()
+{
+    cleardevice();
+    readimagefile("condensator.bmp", 0, 0 , 150, 150);
+    readimagefile("dioda.bmp", 150, 0, 300, 150);
+    readimagefile("tranzistor.bmp", 0, 150, 150, 300);
+    readimagefile("inductor.bmp", 150, 150, 300, 300);
+    readimagefile("rezistor.bmp", 0, 300, 150, 450);
+
+}
 /*<--------------------------End functions------------------------>*/
+
