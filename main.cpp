@@ -25,7 +25,7 @@ struct lang{
 lang ro = {"limba","INCEPE"},
      en = {"language", "START"},
      ge = {"sprache","ANFANG"},
-     fr = {"langue","DÉBUT"};
+     fr = {"langue","DEBUT"};
 
 
 void myOuttextXY(int x, int y, int cerneala, int hartie, char *text)
@@ -145,7 +145,7 @@ void deseneazaLegatura(int &idNod1, int &p1, int &idNod2, int &p2)
 
 void startingPage(lang L)
 {
-    initwindow(1000,800,"Electron",100,100);
+    initwindow(1100,600,"Electron",100,100);
     //set the background color to black
     setbkcolor(BLACK);
     //set the color of the text to white
@@ -161,6 +161,7 @@ void startingPage(lang L)
     setcolor(WHITE);
     rectangle(500, 400, 700, 450);
     outtextxy(510, 410, L.start);
+
     bool click=false;
     //if the mouse is clicked on a button, the corresponding language will be chosen
     while(1){
@@ -176,7 +177,7 @@ void startingPage(lang L)
                    click = true;
                }
             if(click == false)
-                if(xMouse >= 500  && xMouse <= 700 && yMouse >= 400 && xMouse <=450)
+                if(xMouse >= 500  && xMouse <= 700 && yMouse >= 400 && yMouse <=450)
                     {
                         click = true;
                         setbkcolor(FUNDAL);
