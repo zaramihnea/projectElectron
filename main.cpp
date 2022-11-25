@@ -26,7 +26,7 @@ struct lang{
 lang ro = {"Limba","INCEPE"},
      en = {"Language", "START"},
      ge = {"Sprache","ANFANG"},
-     fr = {"Langue","DÉBUT"};
+     fr = {"Langue","DEBUT"};
 
 /*<------------End structures------------>*/
 
@@ -50,6 +50,7 @@ bool hasStarted = false;
 
 void startingPage(lang Language);
 void languageMenu();
+void testMenu();
 
 /*<------------End function definitions------------>*/
 
@@ -99,6 +100,7 @@ void deseneazaNod(nod N)
     circle(N.pLeg[0].x,N.pLeg[0].y,5);
     circle(N.pLeg[1].x,N.pLeg[1].y,5);
 }
+
 
 void stergeNod(nod N)
 {
@@ -222,7 +224,7 @@ void gamePage(){
 
 
 /// @brief Main function
-/// @return 0 
+/// @return 0
 int main(){
 
     startingPage(en);
@@ -231,11 +233,12 @@ int main(){
 }
 
 
-
 /*<--------------------------Begin functions------------------------>*/
 
-/// @brief Start of the program; initializez the window and 
+/// @brief Start of the program; initializez the window and
 /// @param Language
+
+
 void startingPage(lang L){
     if (hasStarted == false){
         hasStarted = true;
@@ -246,14 +249,13 @@ void startingPage(lang L){
     setbkcolor(BLACK);
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4);
-    outtextxy(middleX, middleY-100, "Electron");
+    outtextxy(390, 200, "Electron");
     setcolor(WHITE);
-    rectangle(200, 400, 400, 450);
-    outtextxy(210, 410, L.language);
+    rectangle(middleX-380, 400, middleX-100, 480);
+    outtextxy(middleX-370, 415, L.language);
     setcolor(WHITE);
-    rectangle(500, 400, 700, 450);
-    outtextxy(510, 410, L.start);
-    
+    rectangle(middleX+100, 400, middleX+380, 480);
+    outtextxy(middleX+150, 415, L.start);
     bool click = false;
     while (1){
         if (ismouseclick(WM_LBUTTONDOWN) && !click){
@@ -261,14 +263,15 @@ void startingPage(lang L){
             clearmouseclick(WM_LBUTTONDOWN);
             int xMouse = mousex();
             int yMouse = mousey();
-            if (xMouse >= 200 && xMouse <= 400 && yMouse >= 400 && xMouse <= 450){
+            if (xMouse >= middleX-380 && xMouse <= middleX-100 && yMouse >= 400 && xMouse <= 480){
                 languageMenu();
                 click = true;
             }
             if (click == false)
-                if (xMouse >= 500 && xMouse <= 700 && yMouse >= 400 && yMouse <= 450){
+                if (xMouse >= middleX+100 && xMouse <= middleX+380 && yMouse >= 400 && yMouse <= 480){
                     click = true;
-                    gamePage();
+                    //gamePage();
+                    testMenu();
                 }
         }
     }
@@ -278,43 +281,58 @@ void startingPage(lang L){
 void languageMenu(){
     cleardevice();
     setcolor(WHITE);
-    rectangle(100, 100, 400, 150);
-    outtextxy(110, 110, "English - default");
-    rectangle(100, 200, 300, 250);
-    outtextxy(110, 210, "Romanian");
-    rectangle(100, 300, 300, 350);
-    outtextxy(110, 310, "French");
-    rectangle(100, 400, 300, 450);
-    outtextxy(110, 410, "German");
+    rectangle(100, 150, 700, 230);
+    outtextxy(110, 160, "English - default");
+    rectangle(100, 250, 400, 330);
+    outtextxy(110, 260, "Romanian");
+    rectangle(100, 350, 400, 430);
+    outtextxy(110, 360, "French");
+    rectangle(100, 450, 400, 530);
+    outtextxy(110, 460, "German");
 
     bool hello = false;
     lang language;
-    // if the mouse is clicked on a button, the corresponding language will be chosen using coordonates 
-    //100-150: English
-    //200-250: Romanian
-    //300-350: French
-    //400-450: German
+    // if the mouse is clicked on a button, the corresponding language will be chosen using coordonates
+    //150-230: English
+    //250-330: Romanian
+    //350-430: French
+    //450-530: German
     while (1){
         if (ismouseclick(WM_LBUTTONDOWN) && !hello){
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex();
             int y = mousey();
-            if(x >= 100 && x <= 400 && y >= 100 && y <= 150){
+            if(x >= 100 && x <= 700 && y >= 150 && y <= 230){
                 language=en;
                 startingPage(language);
                 break;
-            }
-            if (x >= 100 && x <= 300){
-                if (y >= 200 && y <= 250)
-                    language = ro;
-                if (y >= 300 && y <= 350)
-                    language = fr;
-                if (y >= 400 && y <= 450)
-                    language = ge;
-                startingPage(language);
-                break;
-            }
+                }
+                if (x >= 100 && x <= 400)
+                {
+                    if (y >= 250 && y <= 330)
+                    {language = ro; hello = true;}
+                    if (y >= 350 && y <= 430)
+                    {language = fr; hello = true;}
+                    if (y >= 450 && y <= 530)
+                    {language = ge; hello = true;}
+
+                    if(hello)
+                    {startingPage(language);
+                    break;}
+                }
         }
     }
 }
+
+void testMenu ()
+{
+    cleardevice();
+    readimagefile("condensator.bmp", 0, 0 , 150, 150);
+    readimagefile("dioda.bmp", 150, 0, 300, 150);
+    readimagefile("tranzistor.bmp", 0, 150, 150, 300);
+    readimagefile("inductor.bmp", 150, 150, 300, 300);
+    readimagefile("rezistor.bmp", 0, 300, 150, 450);
+
+}
 /*<--------------------------End functions------------------------>*/
+
