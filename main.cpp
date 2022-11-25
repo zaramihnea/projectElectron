@@ -246,7 +246,7 @@ void startingPage(lang L){
     setbkcolor(BLACK);
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR, 4);
-    outtextxy(390, 200, "Electron");
+    outtextxy(middleX, middleY-100, "Electron");
     setcolor(WHITE);
     rectangle(200, 400, 400, 450);
     outtextxy(210, 410, L.language);
