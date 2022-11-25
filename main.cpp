@@ -338,8 +338,17 @@ void testMenu ()
 
 }
 
+struct connect{
+    int x, y;
+} connectingToPrevious, currentObject;
+
 void movingImage()
 {
+
+    connectingToPrevious.x = -1;
+    connectingToPrevious.y = -1;
+    currentObject.x = -1;
+    currentObject.y = -1;
 
     bool hello = false;
     while (1){
@@ -354,6 +363,8 @@ void movingImage()
                 int x = mousex();
                 int y = mousey();
                 readimagefile("tranzistor.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x;
+                currentObject.y = y-75;
                 break;
                 }
                 }
@@ -364,6 +375,8 @@ void movingImage()
                 int x = mousex();
                 int y = mousey();
                 readimagefile("dioda.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
                 break;
                 }
                 }
@@ -374,6 +387,8 @@ void movingImage()
                 int x = mousex();
                 int y = mousey();
                 readimagefile("condensator.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
                 break;
                 }
                 }
@@ -384,6 +399,8 @@ void movingImage()
                 int x = mousex();
                 int y = mousey();
                 readimagefile("inductor.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
                 break;
                 }
                 }
@@ -394,9 +411,25 @@ void movingImage()
                 int x = mousex();
                 int y = mousey();
                 readimagefile("rezistor.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
                 break;
                 }
                 }
+            if(currentObject.x != -1 && currentObject.y != -1)
+            {
+                if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1)
+                {
+                    line(currentObject.x, currentObject.y, connectingToPrevious.x, connectingToPrevious.y);
+                    connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;
+                }
+                else {connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;}
+
+                }
+
+            }
 
 
         }
@@ -416,6 +449,6 @@ void movingImage()
 
 
 
-}
+
 /*<--------------------------End functions------------------------>*/
 
