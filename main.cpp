@@ -51,6 +51,7 @@ bool hasStarted = false;
 void startingPage(lang Language);
 void languageMenu();
 void testMenu();
+void movingImage();
 
 /*<------------End function definitions------------>*/
 
@@ -333,6 +334,121 @@ void testMenu ()
     readimagefile("inductor.bmp", 150, 150, 300, 300);
     readimagefile("rezistor.bmp", 0, 300, 150, 450);
 
+    movingImage();
+
 }
+
+struct connect{
+    int x, y;
+} connectingToPrevious, currentObject;
+
+void movingImage()
+{
+
+    connectingToPrevious.x = -1;
+    connectingToPrevious.y = -1;
+    currentObject.x = -1;
+    currentObject.y = -1;
+
+    bool hello = false;
+    while (1){
+        if (ismouseclick(WM_LBUTTONDOWN) && !hello){
+            clearmouseclick(WM_LBUTTONDOWN);
+            int x = mousex();
+            int y = mousey();
+            if(x >= 0 && x <= 150 && y >= 150 && y <= 300)
+                while(1){
+                if (ismouseclick(WM_LBUTTONDOWN)){
+                clearmouseclick(WM_LBUTTONDOWN);
+                int x = mousex();
+                int y = mousey();
+                readimagefile("tranzistor.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x;
+                currentObject.y = y-75;
+                break;
+                }
+                }
+            if(x >= 150 && x <= 300 && y >= 0 && y <= 150)
+                while(1){
+                if (ismouseclick(WM_LBUTTONDOWN)){
+                clearmouseclick(WM_LBUTTONDOWN);
+                int x = mousex();
+                int y = mousey();
+                readimagefile("dioda.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
+                break;
+                }
+                }
+            if(x >= 0 && x <= 150 && y >= 0 && y <= 150)
+                while(1){
+                if (ismouseclick(WM_LBUTTONDOWN)){
+                clearmouseclick(WM_LBUTTONDOWN);
+                int x = mousex();
+                int y = mousey();
+                readimagefile("condensator.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
+                break;
+                }
+                }
+            if(x >= 150 && x <= 300 && y >= 150 && y <= 300)
+                while(1){
+                if (ismouseclick(WM_LBUTTONDOWN)){
+                clearmouseclick(WM_LBUTTONDOWN);
+                int x = mousex();
+                int y = mousey();
+                readimagefile("inductor.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
+                break;
+                }
+                }
+            if(x >= 0 && x <= 150 && y >= 300 && y <= 450)
+                while(1){
+                if (ismouseclick(WM_LBUTTONDOWN)){
+                clearmouseclick(WM_LBUTTONDOWN);
+                int x = mousex();
+                int y = mousey();
+                readimagefile("rezistor.bmp", x-75, y-75, x+75, y+75);
+                currentObject.x = x+75;
+                currentObject.y = y;
+                break;
+                }
+                }
+            if(currentObject.x != -1 && currentObject.y != -1)
+            {
+                if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1)
+                {
+                    line(currentObject.x, currentObject.y, connectingToPrevious.x, connectingToPrevious.y);
+                    connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;
+                }
+                else {connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;}
+
+                }
+
+            }
+
+
+        }
+    }
+
+
+        /*while (ismouseclick(WM_LBUTTONDOWN) && !hello){
+                GetCursorPos(&cursorPos);
+        readimagefile("tranzistor.bmp", cursorPos.x-75, cursorPos.y-75, cursorPos.x+75, cursorPos.y+75);
+
+        if(GetAsyncKeyState(VK_LBUTTON))
+            break;
+
+        delay(10);*/
+
+
+
+
+
+
 /*<--------------------------End functions------------------------>*/
 
