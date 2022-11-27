@@ -342,7 +342,7 @@ void testMenu ()
 
 }
 
-struct connect{
+struct objectCoord{
     int x, y;
 } connectingToPrevious, currentObject;
 
@@ -414,17 +414,25 @@ void movingImage()
             {
                 if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1)
                 {
-                    if(currentObject.x > connectingToPrevious.x)
+                    float difference = (currentObject.x - connectingToPrevious.x - 150)/2;
+
+                    if(difference > 0)
                     {
-                        swap(currentObject, connectingToPrevious);
+                        line(connectingToPrevious.x+75, connectingToPrevious.y, connectingToPrevious.x+75+difference, connectingToPrevious.y );
+                        line(connectingToPrevious.x+75+difference, connectingToPrevious.y, connectingToPrevious.x+75+difference, currentObject.y);
+                        line(connectingToPrevious.x+75+difference, currentObject.y, currentObject.x-75, currentObject.y);
                     }
-                    if(currentObject.x < connectingToPrevious.x)
+                     else
                     {
-                        float difference = (connectingToPrevious.x - currentObject.x - 150)/2;
+                        difference = (connectingToPrevious.x - currentObject.x - 150)/2;
                         line(currentObject.x+75, currentObject.y, currentObject.x+75+difference, currentObject.y );
                         line(currentObject.x+75+difference, currentObject.y, currentObject.x+75+difference, connectingToPrevious.y);
                         line(currentObject.x+75+difference, connectingToPrevious.y, connectingToPrevious.x-75, connectingToPrevious.y);
                     }
+
+                    connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;
+
                 }
                 else {connectingToPrevious.x = currentObject.x;
                     connectingToPrevious.y = currentObject.y;}
