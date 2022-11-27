@@ -28,6 +28,10 @@ lang ro = {"Limba","INCEPE"},
      ge = {"Sprache","ANFANG"},
      fr = {"Langue","DEBUT"};
 
+struct connect{
+    int x, y;
+} connectingToPrevious, currentObject;
+
 /*<------------End structures------------>*/
 
 
@@ -249,8 +253,8 @@ void startingPage(lang L){
 
     setbkcolor(BLACK);
     setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 6);
-    outtextxy(middleX-130, 200, "Electron");
+    settextstyle(8, HORIZ_DIR, 4);
+    outtextxy(390, 200, "Electron");
     setcolor(WHITE);
     rectangle(middleX-380, 400, middleX-100, 480);
     outtextxy(middleX-370, 415, L.language);
@@ -325,6 +329,7 @@ void languageMenu(){
     }
 }
 
+/// @brief Menu for testing
 void testMenu ()
 {
     cleardevice();
@@ -342,10 +347,8 @@ void testMenu ()
 
 }
 
-struct connect{
-    int x, y;
-} connectingToPrevious, currentObject;
 
+/// @brief Moving image
 void movingImage()
 {
 
@@ -414,20 +417,14 @@ void movingImage()
             {
                 if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1)
                 {
-                    if(currentObject.x > connectingToPrevious.x)
-                    {
-                        swap(currentObject, connectingToPrevious);
-                    }
-                    if(currentObject.x < connectingToPrevious.x)
-                    {
-                        float difference = (connectingToPrevious.x - currentObject.x - 150)/2;
-                        line(currentObject.x+75, currentObject.y, currentObject.x+75+difference, currentObject.y );
-                        line(currentObject.x+75+difference, currentObject.y, currentObject.x+75+difference, connectingToPrevious.y);
-                        line(currentObject.x+75+difference, connectingToPrevious.y, connectingToPrevious.x-75, connectingToPrevious.y);
-                    }
+                    line(currentObject.x, currentObject.y, connectingToPrevious.x, connectingToPrevious.y);
+                    connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;
                 }
-                else {connectingToPrevious.x = currentObject.x;
-                    connectingToPrevious.y = currentObject.y;}
+                else {
+                    connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;
+                    }
 
                 }
 
