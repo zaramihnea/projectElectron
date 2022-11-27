@@ -28,6 +28,10 @@ lang ro = {"Limba","INCEPE"},
      ge = {"Sprache","ANFANG"},
      fr = {"Langue","DEBUT"};
 
+struct connect{
+    int x, y;
+} connectingToPrevious, currentObject;
+
 /*<------------End structures------------>*/
 
 
@@ -325,6 +329,7 @@ void languageMenu(){
     }
 }
 
+/// @brief Menu for testing
 void testMenu ()
 {
     cleardevice();
@@ -338,10 +343,8 @@ void testMenu ()
 
 }
 
-struct connect{
-    int x, y;
-} connectingToPrevious, currentObject;
 
+/// @brief Moving image
 void movingImage()
 {
 
@@ -416,16 +419,16 @@ void movingImage()
                 break;
                 }
                 }
-            if(currentObject.x != -1 && currentObject.y != -1)
-            {
-                if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1)
-                {
+            if(currentObject.x != -1 && currentObject.y != -1){
+                if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1){
                     line(currentObject.x, currentObject.y, connectingToPrevious.x, connectingToPrevious.y);
                     connectingToPrevious.x = currentObject.x;
                     connectingToPrevious.y = currentObject.y;
                 }
-                else {connectingToPrevious.x = currentObject.x;
-                    connectingToPrevious.y = currentObject.y;}
+                else {
+                    connectingToPrevious.x = currentObject.x;
+                    connectingToPrevious.y = currentObject.y;
+                    }
 
                 }
 
