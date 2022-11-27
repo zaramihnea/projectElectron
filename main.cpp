@@ -392,6 +392,7 @@ void movingImage()
                 readimagefile("condensator.bmp", currentObject.x-75, currentObject.y-75, currentObject.x+75, currentObject.y+75);
                 break;
                 }
+                
                 }
             if(x >= 100 && x <= 200 && y >= 150 && y <= 250)
                 while(1){
