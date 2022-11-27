@@ -333,11 +333,15 @@ void languageMenu(){
 void testMenu ()
 {
     cleardevice();
-    readimagefile("condensator.bmp", 0, 0 , 150, 150);
-    readimagefile("dioda.bmp", 150, 0, 300, 150);
-    readimagefile("tranzistor.bmp", 0, 150, 150, 300);
-    readimagefile("inductor.bmp", 150, 150, 300, 300);
-    readimagefile("rezistor.bmp", 0, 300, 150, 450);
+    settextstyle(8, HORIZ_DIR, 1);
+    setcolor(LIGHTBLUE);
+    outtextxy( 7, 20, "Electric devices: ");
+    setcolor(WHITE);
+    readimagefile("condensator.bmp", 0, 50 , 100, 150);
+    readimagefile("dioda.bmp", 100, 50, 200, 150);
+    readimagefile("tranzistor.bmp", 0, 150, 100, 250);
+    readimagefile("inductor.bmp", 100, 150, 200, 250);
+    readimagefile("rezistor.bmp", 0, 250, 100, 350);
 
     movingImage();
 
@@ -359,68 +363,60 @@ void movingImage()
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex();
             int y = mousey();
-            if(x >= 0 && x <= 150 && y >= 150 && y <= 300)
+            if(x >= 0 && x <= 100 && y >= 150 && y <= 250)
                 while(1){
                 if (ismouseclick(WM_LBUTTONDOWN)){
                 clearmouseclick(WM_LBUTTONDOWN);
-                int x = mousex();
-                int y = mousey();
-                readimagefile("tranzistor.bmp", x-75, y-75, x+75, y+75);
-                currentObject.x = x;
-                currentObject.y = y-75;
+                currentObject.x = mousex();
+                currentObject.y = mousey();
+                readimagefile("tranzistor.bmp", currentObject.x-75, currentObject.y-75, currentObject.x+75, currentObject.y+75);
                 break;
                 }
                 }
-            if(x >= 150 && x <= 300 && y >= 0 && y <= 150)
+            if(x >= 100 && x <= 200 && y >= 50 && y <= 150)
                 while(1){
                 if (ismouseclick(WM_LBUTTONDOWN)){
                 clearmouseclick(WM_LBUTTONDOWN);
-                int x = mousex();
-                int y = mousey();
-                readimagefile("dioda.bmp", x-75, y-75, x+75, y+75);
-                currentObject.x = x+75;
-                currentObject.y = y;
+                currentObject.x = mousex();
+                currentObject.y = mousey();
+                readimagefile("dioda.bmp", currentObject.x-75, currentObject.y-75, currentObject.x+75, currentObject.y+75);
                 break;
                 }
                 }
-            if(x >= 0 && x <= 150 && y >= 0 && y <= 150)
+            if(x >= 0 && x <= 100 && y >= 50 && y <= 150)
                 while(1){
                 if (ismouseclick(WM_LBUTTONDOWN)){
                 clearmouseclick(WM_LBUTTONDOWN);
-                int x = mousex();
-                int y = mousey();
-                readimagefile("condensator.bmp", x-75, y-75, x+75, y+75);
-                currentObject.x = x+75;
-                currentObject.y = y;
+                currentObject.x = mousex();
+                currentObject.y = mousey();
+                readimagefile("condensator.bmp", currentObject.x-75, currentObject.y-75, currentObject.x+75, currentObject.y+75);
                 break;
                 }
                 }
-            if(x >= 150 && x <= 300 && y >= 150 && y <= 300)
+            if(x >= 100 && x <= 200 && y >= 150 && y <= 250)
                 while(1){
                 if (ismouseclick(WM_LBUTTONDOWN)){
                 clearmouseclick(WM_LBUTTONDOWN);
-                int x = mousex();
-                int y = mousey();
-                readimagefile("inductor.bmp", x-75, y-75, x+75, y+75);
-                currentObject.x = x+75;
-                currentObject.y = y;
+                currentObject.x = mousex();
+                currentObject.y = mousey();
+                readimagefile("inductor.bmp", currentObject.x-75, currentObject.y-75, currentObject.x+75, currentObject.y+75);
                 break;
                 }
                 }
-            if(x >= 0 && x <= 150 && y >= 300 && y <= 450)
+            if(x >= 0 && x <= 100 && y >= 250 && y <= 350)
                 while(1){
                 if (ismouseclick(WM_LBUTTONDOWN)){
                 clearmouseclick(WM_LBUTTONDOWN);
-                int x = mousex();
-                int y = mousey();
-                readimagefile("rezistor.bmp", x-75, y-75, x+75, y+75);
-                currentObject.x = x+75;
-                currentObject.y = y;
+                currentObject.x = mousex();
+                currentObject.y = mousey();
+                readimagefile("rezistor.bmp", currentObject.x-75, currentObject.y-75, currentObject.x+75, currentObject.y+75);
                 break;
                 }
                 }
-            if(currentObject.x != -1 && currentObject.y != -1){
-                if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1){
+            if(currentObject.x != -1 && currentObject.y != -1)
+            {
+                if (connectingToPrevious.x != -1 && connectingToPrevious.y != -1)
+                {
                     line(currentObject.x, currentObject.y, connectingToPrevious.x, connectingToPrevious.y);
                     connectingToPrevious.x = currentObject.x;
                     connectingToPrevious.y = currentObject.y;
