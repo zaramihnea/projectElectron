@@ -58,6 +58,7 @@ void movingImage();
 
 
 /*<---------------------------Begin cod ajutor--------------------------->*/
+/*
 
 #define MAX1 10
 #define MAX_NR 50
@@ -219,6 +220,7 @@ void gamePage(){
     getch();
     closegraph();
 }
+*/
 
 /*<---------------------------End cod ajutor--------------------------->*/
 
