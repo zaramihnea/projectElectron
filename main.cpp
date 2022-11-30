@@ -28,6 +28,15 @@ lang ro = {"Limba","INCEPE"},
      ge = {"Sprache","ANFANG"},
      fr = {"Langue","DEBUT"};
 
+struct prop{
+    float qunatity;
+    char measurement[31];
+}properties;
+
+struct objectCoord{
+    int x, y;
+} connectingToPrevious, currentObject;
+
 /*<------------End structures------------>*/
 
 
@@ -330,21 +339,55 @@ void testMenu ()
     cleardevice();
     settextstyle(8, HORIZ_DIR, 1);
     setcolor(LIGHTBLUE);
-    outtextxy( 7, 20, "Electric devices: ");
+    int yT = 20, yB = 120;
+
+
+    rectangle(middleX-595, yT-5, middleX-485, yB+5);
+    readimagefile("condensator.bmp", middleX-590, yT , middleX-490, yB);
+
+    rectangle(middleX-475, yT-5, middleX-365, yB+5);
+    readimagefile("dioda.bmp", middleX-470, yT, middleX-370, yB);
+
+    rectangle(middleX-355, yT-5, middleX-245, yB+5);
+    readimagefile("tranzistor.bmp", middleX-350, yT, middleX-250, yB);
+
+    rectangle(middleX-235, yT-5, middleX-125, yB+5);
+    readimagefile("inductor.bmp", middleX-230, yT, middleX-130, yB);
+
+    rectangle(middleX-115, yT-5, middleX-5, yB+5);
+    readimagefile("rezistor.bmp", middleX-110, yT, middleX-10, yB);
+
+    rectangle(middleX+5, yT-5, middleX+115, yB+5);
+    readimagefile("voltmeter.bmp", middleX+10, yT, middleX+110, yB);
+
+    rectangle(middleX+125, yT-5, middleX+235, yB+5);
+    //readimagefile("ammeter.bmp", middleX+130, yT, middleX+230, yB);
+
+    rectangle(middleX+245, yT-5, middleX+355, yB+5);
+    //readimagefile("bulb.bmp", middleX+250, yT, middleX+350, yB);
+
+    rectangle(middleX+365, yT-5, middleX+475, yB+5);
+    //readimagefile("fuse.bmp", middleX+370, yT, middleX+470, yB);
+
+    rectangle(middleX+485, yT-5, middleX+595, yB+5);
+    //readimagefile("battery.cmp", middleX+490, yT, middleX+590, yB);
+
+    setfillstyle(SOLID_FILL,LIGHTBLUE);
+    bar(middleX-595, systemHeight-220, middleX-435, systemHeight-50);
+
     setcolor(WHITE);
-    readimagefile("condensator.bmp", 0, 50 , 100, 150);
-    readimagefile("dioda.bmp", 100, 50, 200, 150);
-    readimagefile("tranzistor.bmp", 0, 150, 100, 250);
-    readimagefile("inductor.bmp", 100, 150, 200, 250);
-    readimagefile("rezistor.bmp", 0, 250, 100, 350);
+    rectangle(middleX-596, systemHeight-221, middleX-435, systemHeight-50);
+    line(middleX-596, systemHeight-191, middleX-435, systemHeight-191);
+    setbkcolor(LIGHTBLUE);
+    outtextxy(middleX-570, systemHeight-215, "PROPERTIES");
 
     movingImage();
 
+
+
 }
 
-struct objectCoord{
-    int x, y;
-} connectingToPrevious, currentObject;
+
 
 void movingImage()
 {
