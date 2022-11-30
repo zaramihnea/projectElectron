@@ -337,49 +337,74 @@ void languageMenu(){
 void testMenu ()
 {
     cleardevice();
+
+    setfillstyle(SOLID_FILL,DARKGRAY);
+    bar(0, 0, systemWidth, 120);
+    bar(0,0, middleX-500, systemHeight);
+
     settextstyle(8, HORIZ_DIR, 1);
-    setcolor(LIGHTBLUE);
-    int yT = 20, yB = 120;
 
+    int yT = 10, yB = 110;
 
-    rectangle(middleX-595, yT-5, middleX-485, yB+5);
     readimagefile("condensator.bmp", middleX-590, yT , middleX-490, yB);
 
-    rectangle(middleX-475, yT-5, middleX-365, yB+5);
+
     readimagefile("dioda.bmp", middleX-470, yT, middleX-370, yB);
 
-    rectangle(middleX-355, yT-5, middleX-245, yB+5);
     readimagefile("tranzistor.bmp", middleX-350, yT, middleX-250, yB);
 
-    rectangle(middleX-235, yT-5, middleX-125, yB+5);
     readimagefile("inductor.bmp", middleX-230, yT, middleX-130, yB);
 
-    rectangle(middleX-115, yT-5, middleX-5, yB+5);
     readimagefile("rezistor.bmp", middleX-110, yT, middleX-10, yB);
 
-    rectangle(middleX+5, yT-5, middleX+115, yB+5);
     readimagefile("voltmeter.bmp", middleX+10, yT, middleX+110, yB);
 
-    rectangle(middleX+125, yT-5, middleX+235, yB+5);
-    //readimagefile("ammeter.bmp", middleX+130, yT, middleX+230, yB);
+    readimagefile("ammeter.bmp", middleX+130, yT, middleX+230, yB);
 
-    rectangle(middleX+245, yT-5, middleX+355, yB+5);
-    //readimagefile("bulb.bmp", middleX+250, yT, middleX+350, yB);
+    readimagefile("bulb.bmp", middleX+250, yT, middleX+350, yB);
 
-    rectangle(middleX+365, yT-5, middleX+475, yB+5);
-    //readimagefile("fuse.bmp", middleX+370, yT, middleX+470, yB);
+    readimagefile("fuse.bmp", middleX+370, yT, middleX+470, yB);
 
-    rectangle(middleX+485, yT-5, middleX+595, yB+5);
-    //readimagefile("battery.cmp", middleX+490, yT, middleX+590, yB);
+    readimagefile("battery.bmp", middleX+490, yT, middleX+590, yB);
 
-    setfillstyle(SOLID_FILL,LIGHTBLUE);
-    bar(middleX-595, systemHeight-220, middleX-435, systemHeight-50);
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-465, middleX-510, systemHeight-425);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-590, systemHeight-457, "SAVE");
 
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-415, middleX-510, systemHeight-375);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-590, systemHeight-407, "MOVE");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-365, middleX-510, systemHeight-325);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-608, systemHeight-357, "ZOOM IN");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-315, middleX-510, systemHeight-275);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-611, systemHeight-307, "ZOOM OUT");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-265, middleX-510, systemHeight-225);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-600, systemHeight-257, "DELETE");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-215, middleX-510, systemHeight-175);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-590, systemHeight-207, "EXIT");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-165, middleX-510, systemHeight-50);
     setcolor(WHITE);
-    rectangle(middleX-596, systemHeight-221, middleX-435, systemHeight-50);
-    line(middleX-596, systemHeight-191, middleX-435, systemHeight-191);
-    setbkcolor(LIGHTBLUE);
-    outtextxy(middleX-570, systemHeight-215, "PROPERTIES");
+    rectangle(middleX-631, systemHeight-166, middleX-510, systemHeight-50);
+    line(middleX-631, systemHeight-145, middleX-510, systemHeight-145);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-625, systemHeight-165, "properties");
+
 
     movingImage();
 
