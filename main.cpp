@@ -28,6 +28,15 @@ lang ro = {"Limba","INCEPE"},
      ge = {"Sprache","ANFANG"},
      fr = {"Langue","DEBUT"};
 
+struct prop{
+    float qunatity;
+    char measurement[31];
+}properties;
+
+struct objectCoord{
+    int x, y;
+} connectingToPrevious, currentObject;
+
 /*<------------End structures------------>*/
 
 
@@ -330,23 +339,82 @@ void languageMenu(){
 void testMenu ()
 {
     cleardevice();
+
+    setfillstyle(SOLID_FILL,DARKGRAY);
+    bar(0, 0, systemWidth, 120);
+    bar(0,0, middleX-500, systemHeight);
+
     settextstyle(8, HORIZ_DIR, 1);
-    setcolor(LIGHTBLUE);
-    outtextxy( 7, 20, "Electric devices: ");
+
+    int yT = 10, yB = 110;
+
+    readimagefile("condensator.bmp", middleX-590, yT , middleX-490, yB);
+
+
+    readimagefile("dioda.bmp", middleX-470, yT, middleX-370, yB);
+
+    readimagefile("tranzistor.bmp", middleX-350, yT, middleX-250, yB);
+
+    readimagefile("inductor.bmp", middleX-230, yT, middleX-130, yB);
+
+    readimagefile("rezistor.bmp", middleX-110, yT, middleX-10, yB);
+
+    readimagefile("voltmeter.bmp", middleX+10, yT, middleX+110, yB);
+
+    readimagefile("ammeter.bmp", middleX+130, yT, middleX+230, yB);
+
+    readimagefile("bulb.bmp", middleX+250, yT, middleX+350, yB);
+
+    readimagefile("fuse.bmp", middleX+370, yT, middleX+470, yB);
+
+    readimagefile("battery.bmp", middleX+490, yT, middleX+590, yB);
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-465, middleX-510, systemHeight-425);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-590, systemHeight-457, "SAVE");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-415, middleX-510, systemHeight-375);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-590, systemHeight-407, "MOVE");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-365, middleX-510, systemHeight-325);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-608, systemHeight-357, "ZOOM IN");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-315, middleX-510, systemHeight-275);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-611, systemHeight-307, "ZOOM OUT");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-265, middleX-510, systemHeight-225);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-600, systemHeight-257, "DELETE");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-215, middleX-510, systemHeight-175);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-590, systemHeight-207, "EXIT");
+
+    setfillstyle(SOLID_FILL,LIGHTGRAY);
+    bar(middleX-630, systemHeight-165, middleX-510, systemHeight-50);
     setcolor(WHITE);
-    readimagefile("condensator.bmp", 0, 50 , 100, 150);
-    readimagefile("dioda.bmp", 100, 50, 200, 150);
-    readimagefile("tranzistor.bmp", 0, 150, 100, 250);
-    readimagefile("inductor.bmp", 100, 150, 200, 250);
-    readimagefile("rezistor.bmp", 0, 250, 100, 350);
+    rectangle(middleX-631, systemHeight-166, middleX-510, systemHeight-50);
+    line(middleX-631, systemHeight-145, middleX-510, systemHeight-145);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-625, systemHeight-165, "properties");
+
 
     movingImage();
 
+
+
 }
 
-struct objectCoord{
-    int x, y;
-} connectingToPrevious, currentObject;
+
 
 void movingImage()
 {
