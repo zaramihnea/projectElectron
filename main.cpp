@@ -361,6 +361,8 @@ void testMenu ()
 
     int yT = 10, yB = 110;
 
+    //available electric devices
+
     readimagefile("condensator.bmp", middleX-590, yT , middleX-490, yB);
 
     readimagefile("dioda.bmp", middleX-470, yT, middleX-370, yB);
@@ -380,6 +382,8 @@ void testMenu ()
     readimagefile("fuse.bmp", middleX+370, yT, middleX+470, yB);
 
     readimagefile("battery.bmp", middleX+490, yT, middleX+590, yB);
+
+    // circuit editing buttons
 
     setfillstyle(SOLID_FILL,LIGHTGRAY);
     bar(middleX-630, systemHeight-465, middleX-510, systemHeight-425);
@@ -418,6 +422,41 @@ void testMenu ()
     line(middleX-631, systemHeight-145, middleX-510, systemHeight-145);
     setbkcolor(LIGHTGRAY);
     outtextxy(middleX-625, systemHeight-165, "properties");
+
+    // number buttons for measurment units input
+
+    setbkcolor(BLACK);
+    settextstyle(8, HORIZ_DIR, 2);
+
+    rectangle(systemWidth-60, middleY-120, systemWidth-20, middleY-80);
+    outtextxy(systemWidth-46, middleY-110, "0");
+
+    rectangle(systemWidth-60, middleY-80, systemWidth-20, middleY-40);
+    outtextxy(systemWidth-46, middleY-70, "1");
+
+    rectangle(systemWidth-60, middleY-40, systemWidth-20, middleY);
+    outtextxy(systemWidth-46, middleY-30, "2");
+
+    rectangle(systemWidth-60, middleY, systemWidth-20, middleY+40);
+    outtextxy(systemWidth-46, middleY+10, "3");
+
+    rectangle(systemWidth-60, middleY+40, systemWidth-20, middleY+80);
+    outtextxy(systemWidth-46, middleY+50, "4");
+
+    rectangle(systemWidth-60, middleY+80, systemWidth-20, middleY+120);
+    outtextxy(systemWidth-46, middleY+90, "5");
+
+    rectangle(systemWidth-60, middleY+120, systemWidth-20, middleY+160);
+    outtextxy(systemWidth-46, middleY+130, "6");
+
+    rectangle(systemWidth-60, middleY+160, systemWidth-20, middleY+200);
+    outtextxy(systemWidth-46, middleY+170, "7");
+
+    rectangle(systemWidth-60, middleY+200, systemWidth-20, middleY+240);
+    outtextxy(systemWidth-46, middleY+210, "8");
+
+    rectangle(systemWidth-60, middleY+240, systemWidth-20, middleY+280);
+    outtextxy(systemWidth-46, middleY+250, "9");
 
     setbkcolor(BLACK);
 
@@ -772,7 +811,7 @@ void draw()
          char type;
          if(j == objects[objects[j].leftConnector].leftConnector)
             type = 'l';
-         else if( j == objects[objects[j].leftConnector].right)
+         else if( j == objects[objects[j].leftConnector].rightConnector)
                type = 'r';
          connect(j, 'l' , objects[j].leftConnector, type);
      }
