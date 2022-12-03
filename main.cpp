@@ -30,14 +30,16 @@ lang ro = {"Limba","INCEPE"},
 
 struct prop{
     float quantity;
-    char measurement[31];
+    char measurement[21],
+         name[21];
 }properties;
 
 struct object{
     int x, y;
     char type[31];
-    int leftConnector = 0, rightConnector = 0;
+    int leftConnector=-1, rightConnector=-1;
     char left, right;
+    prop properties;
 }objects[100];
 
 
@@ -70,6 +72,7 @@ void movingImage();
 void images();
 void draw();
 void connect(int i, char connectorI, int j,char connectorJ);
+void propertiesDisplay(int i);
 
 
 /*<------------End function definitions------------>*/
@@ -360,7 +363,6 @@ void testMenu ()
 
     readimagefile("condensator.bmp", middleX-590, yT , middleX-490, yB);
 
-
     readimagefile("dioda.bmp", middleX-470, yT, middleX-370, yB);
 
     readimagefile("tranzistor.bmp", middleX-350, yT, middleX-250, yB);
@@ -455,6 +457,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type, "condensator.bmp");
+                        strcpy(objects[objectsCount].properties.measurement, "Farad     ");
+                        strcpy(objects[objectsCount].properties.name , "condenser ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -470,6 +475,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"dioda.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Ohm       ");
+                        strcpy(objects[objectsCount].properties.name , "diode     ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -485,6 +493,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "tranzistor.bmp");
+                        strcpy(objects[objectsCount].properties.name , "transistor");
+                        strcpy(objects[objectsCount].properties.measurement , "          ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -500,6 +511,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"inductor.bmp");
+                        strcpy(objects[objectsCount].properties.measurement, "Henrys    ");
+                        strcpy(objects[objectsCount].properties.name , "inductor  ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -515,6 +529,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type, "rezistor.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Ohm       ");
+                        strcpy(objects[objectsCount].properties.name , "resistor  ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -530,6 +547,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "voltmeter.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Volt      ");
+                        strcpy(objects[objectsCount].properties.name , "voltmeter ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -545,6 +565,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"ammeter.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Amperes   ");
+                        strcpy(objects[objectsCount].properties.name , "ammeter   ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -560,6 +583,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "bulb.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Watts     ");
+                        strcpy(objects[objectsCount].properties.name , "bulb      ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -575,6 +601,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"fuse.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Amperes   ");
+                        strcpy(objects[objectsCount].properties.name , "fuse      ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -590,6 +619,9 @@ void images(){
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "battery.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "mAmps*H   ");
+                        strcpy(objects[objectsCount].properties.name , "battery   ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
@@ -616,9 +648,9 @@ void images(){
                         clearmouseclick(WM_LBUTTONDOWN);
                         for( int j = 0; j < objectsCount; j++){
                         if( mousex() >= objects[j].x-81 && mousex() <= objects[j].x-75 && mousey() >= objects[j].y-6 && mousey() <= objects[j].y+6 )
-                            connect(i, 'l', j, 'l');
+                            {connect(i, 'l', j, 'l'); objects[i].leftConnector = j; objects[j].leftConnector = i;}
                         else if(mousex() <= objects[j].x+81 && mousex() >= objects[j].x+75 && mousey() >= objects[j].y-6 && mousey() <= objects[j].y+6)
-                            connect(i, 'l', j, 'r');
+                            {connect(i, 'l', j, 'r'); objects[i].leftConnector = j; objects[j].rightConnector = i;}
                         }
                      break;
                         }
@@ -629,9 +661,9 @@ void images(){
                         clearmouseclick(WM_LBUTTONDOWN);
                         for( int j = 0; j < objectsCount; j++){
                         if( mousex() >= objects[j].x-81 && mousex() <= objects[j].x-75 && mousey() >= objects[j].y-6 && mousey() <= objects[j].y+6 )
-                            connect(i, 'r', j, 'l');
+                            {connect(i, 'r', j, 'l'); objects[i].rightConnector = j; objects[j].leftConnector = i;}
                         else if(mousex() <= objects[j].x+81 && mousex() >= objects[j].x+75 && mousey()>= objects[j].y-6 && mousey() <= objects[j].y+6)
-                            connect(i, 'r', j, 'r');
+                            {connect(i, 'r', j, 'r'); objects[i].rightConnector = j; objects[j].rightConnector = i;}
 
                         }
                      break;
@@ -726,6 +758,25 @@ void draw()
     {readimagefile(objects[j].type, objects[j].x - 75, objects[j].y - 75, objects[j].x + 75, objects[j].y + 75 );
      circle(objects[j].x + 78, objects[j].y, 6);
      circle(objects[j].x - 78, objects[j].y, 6);
+     if(objects[j].rightConnector > -1)
+     {
+         char type;
+         if(j == objects[objects[j].rightConnector].leftConnector)
+            type = 'l';
+         else if( j == objects[objects[j].rightConnector].rightConnector)
+               type = 'r';
+         connect(j, 'r', objects[j].rightConnector, type);
+     }
+     if(objects[j].leftConnector > -1)
+     {
+         char type;
+         if(j == objects[objects[j].leftConnector].leftConnector)
+            type = 'l';
+         else if( j == objects[objects[j].leftConnector].right)
+               type = 'r';
+         connect(j, 'l' , objects[j].leftConnector, type);
+     }
+
      }
 
 
@@ -768,6 +819,13 @@ void connect(int i, char connectorI, int j, char connectorJ)
 
 }
 
-
+void propertiesDisplay(int i)
+{
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX-625, systemHeight-140, objects[i].properties.name);
+    outtextxy(middleX-625, systemHeight-120, objects[i].properties.measurement);
+    //outtextxy(middleX-625, systemHeight-100, char(objects[i].properties.quantity));
+    setbkcolor(BLACK);
+}
 
 /*<--------------------------End functions------------------------>*/
