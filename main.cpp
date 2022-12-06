@@ -843,7 +843,6 @@ void connect(int i, char connectorI, int j, char connectorJ)
         }
    }
    else {
-
         if(connectorI == 'l')
         swap(i, j);
 
@@ -853,8 +852,6 @@ void connect(int i, char connectorI, int j, char connectorJ)
             line(objects[i].x+81+difference, objects[i].y, objects[i].x+81+difference, objects[j].y);
             line(objects[j].x-81-difference, objects[j].y, objects[j].x-81, objects[j].y);
         }
-
-
 
 }
 
