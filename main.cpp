@@ -463,6 +463,8 @@ void testMenu ()
     images();
 }
 
+
+
 void images(){
 
     int x, y;
@@ -489,8 +491,8 @@ void images(){
                     if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("condensator.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type, "condensator.bmp");
@@ -507,62 +509,62 @@ void images(){
                     if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("dioda.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"dioda.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Ohm       ");
+                        strcpy(objects[objectsCount].properties.name , "diode     ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX - 350 && x <= middleX - 250 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX - 350 && x <= middleX - 250 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("tranzistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "tranzistor.bmp");
+                        strcpy(objects[objectsCount].properties.name , "transistor");
+                        strcpy(objects[objectsCount].properties.measurement , "          ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX - 230 && x <= middleX - 130 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX - 230 && x <= middleX - 130 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("inductor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"inductor.bmp");
+                        strcpy(objects[objectsCount].properties.measurement, "Henrys    ");
+                        strcpy(objects[objectsCount].properties.name , "inductor  ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX - 110 && x <= middleX - 10 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX - 110 && x <= middleX - 10 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("rezistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type, "rezistor.bmp");
@@ -574,110 +576,109 @@ void images(){
                     }
                 }
             }
-            if (x >= middleX + 10 && x <= middleX + 110 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX + 10 && x <= middleX + 110 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("voltmeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "voltmeter.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Volt      ");
+                        strcpy(objects[objectsCount].properties.name , "voltmeter ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX + 130 && x <= middleX + 230 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX + 130 && x <= middleX + 230 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("ammeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"ammeter.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Amperes   ");
+                        strcpy(objects[objectsCount].properties.name , "ammeter   ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX + 250 && x <= middleX + 350 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX + 250 && x <= middleX + 350 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("bulb.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "bulb.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Watts     ");
+                        strcpy(objects[objectsCount].properties.name , "bulb      ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX + 370 && x <= middleX + 470 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX + 370 && x <= middleX + 470 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("fuse.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type ,"fuse.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "Amperes   ");
+                        strcpy(objects[objectsCount].properties.name , "fuse      ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
-            if (x >= middleX + 490 && x <= middleX + 590 && y >= 10 && y <= 110)
-            {
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
+            if (x >= middleX + 490 && x <= middleX + 590 && y >= 10 && y <= 110){
+                while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
                         clearmouseclick(WM_LBUTTONDOWN);
                         readimagefile("battery.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        circle(mousex()-78, mousey(), 6);
+                        circle(mousex()+78, mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type , "battery.bmp");
+                        strcpy(objects[objectsCount].properties.measurement , "mAmps*H   ");
+                        strcpy(objects[objectsCount].properties.name , "battery   ");
+                        propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
                     }
                 }
             }
+        //if you click on an object change it's position
 
-            for (int i = 0; i < objectsCount; i++)
-            {
-                if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
-                    while (1)
-                    {
-                        if (ismouseclick(WM_LBUTTONDOWN))
-                        {
-                            clearmouseclick(WM_LBUTTONDOWN);
-                            objects[i].x = mousex();
-                            objects[i].y = mousey();
+        for(int i = 0; i < objectsCount; i++)
+        {
+            if( x >= objects[i].x-75 && x <= objects[i].x+75 && y >= objects[i].y-75 && y <= objects[i].y+75 )
+            while (1){
+                    if (ismouseclick(WM_LBUTTONDOWN)){
+                        clearmouseclick(WM_LBUTTONDOWN);
+                        objects[i].x = mousex();
+                        objects[i].y = mousey();
 
-                            draw();
-                            break;
+                        draw();
+                        break;
                         }
                     }
             if( x >= objects[i].x-81 && x <= objects[i].x-75 && y >= objects[i].y-6 && y <= objects[i].y+6 )
@@ -686,9 +687,9 @@ void images(){
                         clearmouseclick(WM_LBUTTONDOWN);
                         for( int j = 0; j < objectsCount; j++){
                         if( mousex() >= objects[j].x-81 && mousex() <= objects[j].x-75 && mousey() >= objects[j].y-6 && mousey() <= objects[j].y+6 )
-                            connect(i, 'l', j, 'l');
+                            {connect(i, 'l', j, 'l'); objects[i].leftConnector = j; objects[j].leftConnector = i;}
                         else if(mousex() <= objects[j].x+81 && mousex() >= objects[j].x+75 && mousey() >= objects[j].y-6 && mousey() <= objects[j].y+6)
-                            connect(i, 'l', j, 'r');
+                            {connect(i, 'l', j, 'r'); objects[i].leftConnector = j; objects[j].rightConnector = i;}
                         }
                      break;
                         }
@@ -699,19 +700,25 @@ void images(){
                         clearmouseclick(WM_LBUTTONDOWN);
                         for( int j = 0; j < objectsCount; j++){
                         if( mousex() >= objects[j].x-81 && mousex() <= objects[j].x-75 && mousey() >= objects[j].y-6 && mousey() <= objects[j].y+6 )
-                            connect(i, 'r', j, 'l');
+                            {connect(i, 'r', j, 'l'); objects[i].rightConnector = j; objects[j].leftConnector = i;}
                         else if(mousex() <= objects[j].x+81 && mousex() >= objects[j].x+75 && mousey()>= objects[j].y-6 && mousey() <= objects[j].y+6)
-                            connect(i, 'r', j, 'r');
+                            {connect(i, 'r', j, 'r'); objects[i].rightConnector = j; objects[j].rightConnector = i;}
 
                         }
                      break;
                         }
                     }
-                
-            }
+
         }
-    }
+
+
+
 }
+
+}
+}
+
+
 
 void draw()
 {
@@ -853,6 +860,7 @@ void connect(int i, char connectorI, int j, char connectorJ)
 
 void propertiesDisplay(int i)
 {
+    settextstyle(8, HORIZ_DIR, 1);
     setbkcolor(LIGHTGRAY);
     outtextxy(middleX-625, systemHeight-140, objects[i].properties.name);
     outtextxy(middleX-625, systemHeight-120, objects[i].properties.measurement);
