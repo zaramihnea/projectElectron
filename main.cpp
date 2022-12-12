@@ -18,7 +18,7 @@ using namespace std;
 
 struct lang
 {
-    char language[20],
+    char language[20], 
         start[20],
         save[20],
         zoomIn[20],
@@ -62,7 +62,7 @@ bool hasStarted = false;
 
 int objectsCount = 0;
 
-lang L = en;
+lang L=en;
 
 /*<------------End global variables------------>*/
 
@@ -75,6 +75,9 @@ void images();
 void draw();
 void connect(int i, char connectorI, int j, char connectorJ);
 void propertiesDisplay(int i);
+void deleteObject(int i);
+void exit();
+
 
 /*<------------End function definitions------------>*/
 
@@ -149,7 +152,7 @@ void languageMenu()
     outtextxy(110, 460, "German");
 
     bool hello = false;
-
+    
     // if the mouse is clicked on a button, the corresponding language will be chosen using coordonates
     // 150-230: English
     // 250-330: Romanian
@@ -196,8 +199,7 @@ void languageMenu()
     }
 }
 
-void refresh()
-{
+void refresh(){
     cleardevice();
 
     setfillstyle(SOLID_FILL, DARKGRAY);
@@ -233,10 +235,11 @@ void refresh()
 
     // circuit editing buttons
 
+    //save button
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 465, middleX - 510, systemHeight - 425);
+    bar(middleX - 630, systemHeight - 415, middleX - 510, systemHeight - 375);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 590, systemHeight - 457, L.save);
+    outtextxy(middleX - 611, systemHeight - 407, L.save);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 365, middleX - 510, systemHeight - 325);
@@ -287,8 +290,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("condensator.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -310,8 +312,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("dioda.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -333,8 +334,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("tranzistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -356,8 +356,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("inductor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -379,8 +378,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("rezistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -402,8 +400,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("voltmeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -425,8 +422,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("ammeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -448,8 +444,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("bulb.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -471,8 +466,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("fuse.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -494,8 +488,7 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                            continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
                         readimagefile("battery.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -510,6 +503,7 @@ void images()
                     }
                 }
             }
+
             // if you click on an object change it's position
 
             for (int i = 0; i < objectsCount; i++)
@@ -520,8 +514,7 @@ void images()
                         if (ismouseclick(WM_LBUTTONDOWN))
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
-                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                                break;
+                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) break;
                             objects[i].x = mousex();
                             objects[i].y = mousey();
 
@@ -577,6 +570,11 @@ void images()
                             break;
                         }
                     }
+            }
+            
+            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 215 && y <= systemHeight - 175)
+            {
+                exit();
             }
         }
     }
@@ -656,6 +654,26 @@ void propertiesDisplay(int i)
     outtextxy(middleX - 625, systemHeight - 120, objects[i].properties.measurement);
     // outtextxy(middleX-625, systemHeight-100, char(objects[i].properties.quantity));
     setbkcolor(BLACK);
+}
+
+void deleteObject(int i)
+{
+    for (int k = 0; k < objectsCount; k++)
+    {
+        if (objects[k].leftConnector == i)
+            objects[k].leftConnector = -1;
+        if (objects[k].rightConnector == i)
+            objects[k].rightConnector = -1;
+    }
+    objects[i] = objects[objectsCount - 1];
+    objectsCount--;
+    refresh();
+}
+
+void exit()
+{
+    closegraph();
+    return;
 }
 
 /*<--------------------------End functions------------------------>*/
