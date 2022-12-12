@@ -1,0 +1,3 @@
+2
+461 354 rezistor.bmp -1 1 0 Ohm        resistor  
+860 255 voltmeter.bmp 0 -1 0 Volt       voltmeter 
