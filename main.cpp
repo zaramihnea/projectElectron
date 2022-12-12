@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cstring>
+#include <fstream>
 /*<--End libraries-->*/
 
 using namespace std;
@@ -21,16 +22,17 @@ struct lang
     char language[20], 
         start[20],
         save[20],
+        load[30],
         zoomIn[20],
         zoomOut[20],
         dele[20],
         props[20],
         exit[20];
 };
-lang ro = {"Limba", "INCEPE", "Salveaza", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire"},
-     en = {"Language", "START", "Save", "Zoom in", "Zoom out", "Delete", "Properties", "Exit"},
-     ge = {"Sprache", "ANFANG", "Speichern", "Vergrößern", "Verkleinern", "Löschen", "Eigenschaften", "Ausgang"},
-     fr = {"Langue", "DEBUT", "Sauvegarder", "Agrandir", "Réduire", "Supprimer", "Propriétés", "Sortie"};
+lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire"},
+     en = {"Language", "START", "Save", "Load", "Zoom in", "Zoom out", "Delete", "Properties", "Exit"},
+     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Vergrößern", "Verkleinern", "Löschen", "Eigenschaften", "Ausgang"},
+     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Agrandir", "Réduire", "Supprimer", "Propriétés", "Sortie"};
 
 struct prop
 {
@@ -77,6 +79,8 @@ void connect(int i, char connectorI, int j, char connectorJ);
 void propertiesDisplay(int i);
 void deleteObject(int i);
 void exit();
+void load();
+void save(); 
 
 
 /*<------------End function definitions------------>*/
@@ -236,6 +240,11 @@ void refresh(){
     // circuit editing buttons
 
     //save button
+    setfillstyle(SOLID_FILL, LIGHTGRAY);
+    bar(middleX - 630, systemHeight - 465, middleX - 510, systemHeight - 425);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 608, systemHeight - 457, L.load);
+
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 415, middleX - 510, systemHeight - 375);
     setbkcolor(LIGHTGRAY);
@@ -571,9 +580,15 @@ void images()
                         }
                     }
             }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 465 && y <= systemHeight - 425)
+            {
+                cout<<"pushed load()";
+                load();
+            }
             if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 415 && y <= systemHeight - 375)
             {
                 cout<<"pushed save()";
+                save();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 365 && y <= systemHeight - 325)
             {
@@ -684,6 +699,52 @@ void deleteObject(int i)
     objects[i] = objects[objectsCount - 1];
     objectsCount--;
     refresh();
+}
+
+void load(){
+    ifstream circuitFile("my_circuit.txt");
+    if (circuitFile.is_open())
+    {
+        // Read the objectsCount variable from the file
+        circuitFile >> objectsCount;
+
+        // Read the information for each object from the file
+        for (int i = 0; i < objectsCount; ++i)
+        {
+            circuitFile >> objects[i].x >> objects[i].y >> objects[i].type;
+            circuitFile >> objects[i].leftConnector >> objects[i].rightConnector;
+            circuitFile >> objects[i].left >> objects[i].right;
+            circuitFile >> objects[i].properties.quantity >> objects[i].properties.measurement;
+            circuitFile >> objects[i].properties.name;
+        }
+
+        // Close the file
+        circuitFile.close();
+        draw();
+    }
+}
+
+void save(){
+    ofstream circuitFile("my_circuit.txt");
+    if (circuitFile.is_open())
+    {
+        // Write the objectsCount variable to the file
+        circuitFile << objectsCount << endl;
+
+        // Write the information for each object to the file
+        for (int i = 0; i < objectsCount; ++i)
+        {
+            circuitFile << objects[i].x << " " << objects[i].y << " " << objects[i].type << " ";
+            circuitFile << objects[i].leftConnector << " " << objects[i].rightConnector << " ";
+            circuitFile << objects[i].left << " " << objects[i].right << " ";
+            circuitFile << objects[i].properties.quantity << " " << objects[i].properties.measurement << " ";
+            circuitFile << objects[i].properties.name << endl;
+        }
+
+        // Close the file
+        circuitFile.close();
+        cout<<"saved";
+    }
 }
 
 void exit()
