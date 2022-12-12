@@ -571,9 +571,25 @@ void images()
                         }
                     }
             }
-            
+            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 415 && y <= systemHeight - 375)
+            {
+                cout<<"pushed save()";
+            }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 365 && y <= systemHeight - 325)
+            {
+                cout<<"pushed zoomin()";
+            }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 315 && y <= systemHeight - 275)
+            {
+                cout<<"pushed zoomout()";
+            }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 265 && y <= systemHeight - 225)
+            {
+                cout<<"pushed delete()";
+            }
             if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 215 && y <= systemHeight - 175)
             {
+                cout<<"pushed exit()";
                 exit();
             }
         }
