@@ -947,7 +947,7 @@ void draw()
 
 void clear(){
     for(int i=0; i<objectsCount; ++i){
-        memset(&objects[i], 0, sizeof(objects[i]));
+        memset(&objects[i], 0, sizeof(objects[i])); //sets objects[i] memory block to 0
     }
     refresh();
 }
@@ -1082,8 +1082,6 @@ void propertiesDisplay(int i)
 
 int overlap(int x, int y)
 {
-    if (objectsCount == 0)
-        return -1;
     for (int i = 0; i < objectsCount; i++)
     {
         if (x > objects[i].x - 81 && x < objects[i].x + 81 && y > objects[i].y - 81 && y < objects[i].y + 81)
