@@ -27,16 +27,17 @@ struct lang
         zoomOut[20],
         dele[20],
         props[20],
-        exit[20];
+        exit[20],
+        clear[20];
 };
-lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire"},
-     en = {"Language", "START", "Save", "Load", "Zoom in", "Zoom out", "Delete", "Properties", "Exit"},
-     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Vergrößern", "Verkleinern", "Löschen", "Eigenschaften", "Ausgang"},
-     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Agrandir", "Réduire", "Supprimer", "Propriétés", "Sortie"};
+lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire", "Goleste"},
+     en = {"Language", "START", "Save", "Load", "Zoom in", "Zoom out", "Delete", "Properties", "Exit", "Clear"},
+     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Vergrï¿½ï¿½ern", "Verkleinern", "Lï¿½schen", "Eigenschaften", "Ausgang", "Klar"},
+     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Agrandir", "Rï¿½duire", "Supprimer", "Propriï¿½tï¿½s", "Sortie", "Clair"};
 
 struct prop
 {
-    float quantity;
+    char quantity[15];
     char measurement[21],
         name[21];
 } properties;
@@ -63,7 +64,7 @@ bool hasStarted = false;
 
 int objectsCount = 0;
 
-lang L=en;
+lang L = en;
 
 /*<------------End global variables------------>*/
 
@@ -83,7 +84,8 @@ void deleteObject(int i);
 void exit();
 void load();
 void save();
-
+int overlap(int x, int y);
+void clear();
 
 /*<------------End function definitions------------>*/
 
@@ -205,7 +207,8 @@ void languageMenu()
     }
 }
 
-void refresh(){
+void refresh()
+{
     cleardevice();
 
     setfillstyle(SOLID_FILL, DARKGRAY);
@@ -241,16 +244,20 @@ void refresh(){
 
     // circuit editing buttons
 
-    //save button
+    setfillstyle(SOLID_FILL, LIGHTGRAY);
+    bar(middleX - 630, systemHeight - 515, middleX - 510, systemHeight - 475);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 600, systemHeight - 507, L.clear);
+
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 465, middleX - 510, systemHeight - 425);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 608, systemHeight - 457, L.load);
+    outtextxy(middleX - 598, systemHeight - 457, L.load);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 415, middleX - 510, systemHeight - 375);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 611, systemHeight - 407, L.save);
+    outtextxy(middleX - 598, systemHeight - 407, L.save);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 365, middleX - 510, systemHeight - 325);
@@ -301,7 +308,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("condensator.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -310,6 +320,29 @@ void images()
                         strcpy(objects[objectsCount].type, "condensator.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Farad     ");
                         strcpy(objects[objectsCount].properties.name, "condenser ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -323,7 +356,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("dioda.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -332,6 +368,29 @@ void images()
                         strcpy(objects[objectsCount].type, "dioda.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Ohm       ");
                         strcpy(objects[objectsCount].properties.name, "diode     ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -345,7 +404,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("tranzistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -353,7 +415,30 @@ void images()
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type, "tranzistor.bmp");
                         strcpy(objects[objectsCount].properties.name, "transistor");
-                        strcpy(objects[objectsCount].properties.measurement, "          ");
+                        strcpy(objects[objectsCount].properties.measurement, "Ohm/A/V   ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -367,7 +452,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("inductor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -376,6 +464,29 @@ void images()
                         strcpy(objects[objectsCount].type, "inductor.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Henrys    ");
                         strcpy(objects[objectsCount].properties.name, "inductor  ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -389,7 +500,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("rezistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -398,6 +512,29 @@ void images()
                         strcpy(objects[objectsCount].type, "rezistor.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Ohm       ");
                         strcpy(objects[objectsCount].properties.name, "resistor  ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -411,7 +548,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("voltmeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -420,6 +560,29 @@ void images()
                         strcpy(objects[objectsCount].type, "voltmeter.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Volt      ");
                         strcpy(objects[objectsCount].properties.name, "voltmeter ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -433,7 +596,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("ammeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -442,6 +608,29 @@ void images()
                         strcpy(objects[objectsCount].type, "ammeter.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Amperes   ");
                         strcpy(objects[objectsCount].properties.name, "ammeter   ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -455,7 +644,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("bulb.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -464,6 +656,29 @@ void images()
                         strcpy(objects[objectsCount].type, "bulb.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Watts     ");
                         strcpy(objects[objectsCount].properties.name, "bulb      ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -477,7 +692,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("fuse.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -486,6 +704,29 @@ void images()
                         strcpy(objects[objectsCount].type, "fuse.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "Amperes   ");
                         strcpy(objects[objectsCount].properties.name, "fuse      ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -499,7 +740,10 @@ void images()
                     if (ismouseclick(WM_LBUTTONDOWN))
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
-                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) continue;
+                        if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            continue;
+                        if (!overlap(mousex(), mousey()))
+                            continue;
                         readimagefile("battery.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
@@ -508,6 +752,29 @@ void images()
                         strcpy(objects[objectsCount].type, "battery.bmp");
                         strcpy(objects[objectsCount].properties.measurement, "mAmps*H   ");
                         strcpy(objects[objectsCount].properties.name, "battery   ");
+                        propertiesDisplay(objectsCount);
+                        setbkcolor(LIGHTGRAY);
+                        outtextxy(middleX - 625, systemHeight - 120, "          ");
+                        char key[15] = "";
+                        int i = 0;
+                        while (1)
+                        {
+                            if (kbhit())
+                            {
+                                key[i] = getch();
+                                setbkcolor(DARKGRAY);
+                                outtextxy(middleX - 625, systemHeight - 120, key);
+                                // if you press "enter" the loop will break
+                                if (key[i] == 13)
+                                {
+                                    key[i] = '\0';
+                                    break;
+                                }
+
+                                i++;
+                            }
+                        }
+                        strcpy(objects[objectsCount].properties.quantity, key);
                         propertiesDisplay(objectsCount);
                         objectsCount++;
                         break;
@@ -522,23 +789,22 @@ void images()
                 if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
                     while (1)
                     {
+                        propertiesDisplay(i);
                         if (ismouseclick(WM_LBUTTONDOWN))
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
-                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth-85  || mousey() > systemHeight-60) break;
-                            for( int j = 0; j < objectsCount; j++) //IN LUCRU
-                            if(j != i){
-                                if(mousex() + 81 > objects[j].x -81 && mousex() + 81 < objects[j].x + 81)
-                                    if(mousey() > objects[j].y -81 && mousey() < objects[j].y + 81)
-                                    break;
-                                if(mousex() - 81 > objects[j].x - 81 && mousex() - 81 < objects[j].x + 81)
-                                    if(mousey() > objects[j].y -81 && mousey() < objects[j].y + 81)
-                                    break;
-                            }
-                            objects[i].x = mousex();
-                            objects[i].y = mousey();
 
-                            draw();
+                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                                break;
+
+                            if (overlap(mousex(), mousey()) == 1)
+                            {
+                                objects[i].x = mousex();
+                                objects[i].y = mousey();
+                                draw();
+                            }
+
+                            propertiesDisplay(i);
                             break;
                         }
                     }
@@ -554,13 +820,13 @@ void images()
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].leftConnector = i;
-                                    connectionAnalyst(i,j);
+                                    connectionAnalyst(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].rightConnector = i;
-                                    connectionAnalyst(i,j);
+                                    connectionAnalyst(i, j);
                                 }
                             }
                             break;
@@ -579,67 +845,80 @@ void images()
 
                                     objects[i].rightConnector = j;
                                     objects[j].leftConnector = i;
-                                    connectionAnalyst(i,j);
+                                    connectionAnalyst(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].rightConnector = i;
-                                    connectionAnalyst(i,j);
+                                    connectionAnalyst(i, j);
                                 }
                             }
                             break;
                         }
                     }
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 465 && y <= systemHeight - 425)
+            if(x>=middleX-630 && x<=middleX-510 && y>=systemHeight-515 && y<=systemHeight-475)
             {
-                cout<<"pushed load()";
+                cout<<"pushed clear()"<<'\n';
+                clear();
+            }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 465 && y <= systemHeight - 425)
+            {
+                cout << "pushed load()"<<'\n';
                 load();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 415 && y <= systemHeight - 375)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 415 && y <= systemHeight - 375)
             {
-                cout<<"pushed save()";
+                cout << "pushed save()"<<'\n';
                 save();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 365 && y <= systemHeight - 325)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 365 && y <= systemHeight - 325)
             {
-                cout<<"pushed zoomin()";
+                cout << "pushed zoomin()"<<'\n';
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 315 && y <= systemHeight - 275)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 315 && y <= systemHeight - 275)
             {
-                cout<<"pushed zoomout()";
+                cout << "pushed zoomout()"<<'\n';
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 265 && y <= systemHeight - 225)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 265 && y <= systemHeight - 225)
             {
-                cout<<"pushed delete()";
-                    while (1)
+                cout << "pushed delete()"<<'\n';
+                while (1)
+                {
+                    if (ismouseclick(WM_LBUTTONDOWN))
                     {
-                        if (ismouseclick(WM_LBUTTONDOWN))
+                        clearmouseclick(WM_LBUTTONDOWN);
+                        for (int j = 0; j < objectsCount; j++)
                         {
-                            clearmouseclick(WM_LBUTTONDOWN);
-                            for (int j = 0; j < objectsCount; j++)
+                            if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
-                                {
-                                    objects[j].leftConnector = -1;
-                                    draw();
-                                }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
-                                {
-                                    objects[j].rightConnector = -1;
-                                    draw();
-                                }
+                                objects[j].leftConnector = -1;
+                                draw();
                             }
-                            break;
+                            else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                            {
+                                objects[j].rightConnector = -1;
+                                draw();
+                            }
+                            else if (mousex() >= objects[j].x - 75 && mousex() <= objects[j].x + 75 && mousey() >= objects[j].y - 75 && mousey() <= objects[j].y + 75)
+                            {
+                                for (int i = j; i < objectsCount; i++)
+                                {
+                                    objects[i] = objects[i + 1];
+                                }
+                                objectsCount--;
+                                draw();
+                            }
                         }
+                        break;
+                    }
                 }
-
             }
 
-            if (x >= middleX - 630 && x <= middleX - 510 && y >=  systemHeight - 215 && y <= systemHeight - 175)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 215 && y <= systemHeight - 175)
             {
-                cout<<"pushed exit()";
+                cout << "pushed exit()"<<'\n';
                 exit();
             }
         }
@@ -666,147 +945,173 @@ void draw()
     }
 }
 
+void clear(){
+    for(int i=0; i<objectsCount; ++i){
+        memset(&objects[i], 0, sizeof(objects[i]));
+    }
+    refresh();
+}
+
 void connectionAnalyst(int i, int j)
 {
 
-    if(objects[i].leftConnector == j)
-        {if(objects[j].leftConnector == i)
-              connectionLL(i,j);
+    if (objects[i].leftConnector == j)
+    {
+        if (objects[j].leftConnector == i)
+            connectionLL(i, j);
 
-         else if(objects[j].rightConnector == i)
-             {
-                if(objects[j].x + 81 < objects[i].x -81)
-                connectionRL(i,j, 'l');
-                else {objects[j].leftConnector = i; objects[j].rightConnector = -1; connectionLL(i, j);}
-             }
-
-         }
+        else if (objects[j].rightConnector == i)
+        {
+            if (objects[j].x + 81 < objects[i].x - 81)
+                connectionRL(i, j, 'l');
+            else
+            {
+                objects[j].leftConnector = i;
+                objects[j].rightConnector = -1;
+                connectionLL(i, j);
+            }
+        }
+    }
     else if (objects[i].rightConnector == j)
     {
-        if(objects[j].leftConnector == i)
+        if (objects[j].leftConnector == i)
         {
-            if(objects[i].x + 81 < objects[j].x -81)
-                connectionRL(i,j, 'r');
-            else {objects[j].rightConnector = i; objects[j].leftConnector = -1; connectionRR(i, j);}
+            if (objects[i].x + 81 < objects[j].x - 81)
+                connectionRL(i, j, 'r');
+            else
+            {
+                objects[j].rightConnector = i;
+                objects[j].leftConnector = -1;
+                connectionRR(i, j);
+            }
         }
 
-
-         else if(objects[j].rightConnector == i)
-                connectionRR(i,j);
+        else if (objects[j].rightConnector == i)
+            connectionRR(i, j);
     }
-
 }
 
 void connectionRR(int i, int j)
 {
 
-            if (objects[i].x > objects[j].x)
-                swap(i, j);
+    if (objects[i].x > objects[j].x)
+        swap(i, j);
 
-            line(objects[j].x + 81, objects[j].y, objects[j].x + 100, objects[j].y);
-            int ok = 0;
+    line(objects[j].x + 81, objects[j].y, objects[j].x + 100, objects[j].y);
+    int ok = 0;
 
-            for(int k = 0; k < objectsCount; k++)
+    for (int k = 0; k < objectsCount; k++)
+    {
+        if (objects[k].x + 81 > objects[j].x + 100 && objects[k].x - 81 < objects[j].x + 100)
+        {
+            int y1 = objects[j].y, y2 = objects[i].y;
+            if (y1 > y2)
+                swap(y1, y2);
+            if (objects[k].y > y1 && objects[k].y < y2)
             {
-                if(objects[k].x + 81 > objects[j].x + 100 && objects[k].x-81 < objects[j].x + 100)
-                {
-                    int y1 = objects[j].y, y2 = objects[i].y;
-                    if(y1>y2) swap(y1, y2);
-                    if(objects[k].y > y1 && objects[k].y < y2)
-                        {
-                            float dif = objects[k].x + 81 - objects[j].x - 100;
-                            line(objects[j].x + 100, objects[j].y, objects[j].x + 100, objects[k].y - 80);
-                            line(objects[j].x + 100, objects[k].y - 80, objects[j].x + 110 + dif, objects[k].y - 80);
-                            line(objects[j].x + 110 + dif, objects[k].y - 80, objects[j].x + 110 + dif, objects[k].y + 80);
-                            line(objects[j].x + 110 + dif, objects[k].y + 80, objects[j].x + 100, objects[k].y + 80 );
-                            line(objects[j].x + 100, objects[k].y + 80, objects[j].x + 100, objects[i].y);
-                            ok = 1 ;
-
-                         }
-
-                }
-
+                float dif = objects[k].x + 81 - objects[j].x - 100;
+                line(objects[j].x + 100, objects[j].y, objects[j].x + 100, objects[k].y - 80);
+                line(objects[j].x + 100, objects[k].y - 80, objects[j].x + 110 + dif, objects[k].y - 80);
+                line(objects[j].x + 110 + dif, objects[k].y - 80, objects[j].x + 110 + dif, objects[k].y + 80);
+                line(objects[j].x + 110 + dif, objects[k].y + 80, objects[j].x + 100, objects[k].y + 80);
+                line(objects[j].x + 100, objects[k].y + 80, objects[j].x + 100, objects[i].y);
+                ok = 1;
             }
-            if(ok == 0) line(objects[j].x + 100, objects[j].y, objects[j].x + 100, objects[i].y);
-            line(objects[i].x + 81, objects[i].y, objects[j].x + 100, objects[i].y);
-
+        }
+    }
+    if (ok == 0)
+        line(objects[j].x + 100, objects[j].y, objects[j].x + 100, objects[i].y);
+    line(objects[i].x + 81, objects[i].y, objects[j].x + 100, objects[i].y);
 }
 
 void connectionLL(int i, int j)
 {
 
-            if (objects[j].x > objects[i].x)
-                swap(i, j);
+    if (objects[j].x > objects[i].x)
+        swap(i, j);
 
+    line(objects[j].x - 81, objects[j].y, objects[j].x - 100, objects[j].y);
+    int ok = 0;
 
-            line(objects[j].x - 81, objects[j].y, objects[j].x - 100, objects[j].y);
-            int ok = 0;
-
-            for(int k = 0; k < objectsCount; k++)
+    for (int k = 0; k < objectsCount; k++)
+    {
+        if (objects[k].x + 81 > objects[j].x - 100 && objects[k].x - 81 < objects[j].x - 100)
+        {
+            int y1 = objects[j].y, y2 = objects[i].y;
+            if (y1 > y2)
+                swap(y1, y2);
+            if (objects[k].y > y1 && objects[k].y < y2)
             {
-                if(objects[k].x + 81 > objects[j].x - 100 && objects[k].x-81 < objects[j].x - 100)
-                {
-                    int y1 = objects[j].y, y2 = objects[i].y;
-                    if(y1>y2) swap(y1, y2);
-                    if(objects[k].y > y1 && objects[k].y < y2)
-                        {
-                            float dif = abs(objects[k].x - 81 - objects[j].x + 100);
-                            line(objects[j].x - 100, objects[j].y, objects[j].x - 100, objects[k].y - 80);
-                            line(objects[j].x - 100, objects[k].y - 80, objects[j].x - 110 - dif, objects[k].y - 80);
-                            line(objects[j].x - 110 - dif, objects[k].y - 80, objects[j].x - 110 - dif, objects[k].y + 80);
-                            line(objects[j].x - 110 - dif, objects[k].y + 80, objects[j].x - 100, objects[k].y + 80 );
-                            line(objects[j].x - 100, objects[k].y + 80, objects[j].x - 100, objects[i].y);
-                            ok = 1 ;
-
-                         }
-
-                }
-
+                float dif = abs(objects[k].x - 81 - objects[j].x + 100);
+                line(objects[j].x - 100, objects[j].y, objects[j].x - 100, objects[k].y - 80);
+                line(objects[j].x - 100, objects[k].y - 80, objects[j].x - 110 - dif, objects[k].y - 80);
+                line(objects[j].x - 110 - dif, objects[k].y - 80, objects[j].x - 110 - dif, objects[k].y + 80);
+                line(objects[j].x - 110 - dif, objects[k].y + 80, objects[j].x - 100, objects[k].y + 80);
+                line(objects[j].x - 100, objects[k].y + 80, objects[j].x - 100, objects[i].y);
+                ok = 1;
             }
-            if(ok == 0) line(objects[j].x - 100, objects[j].y, objects[j].x - 100, objects[i].y);
-            line(objects[j].x - 100, objects[i].y, objects[i].x - 81, objects[i].y);
-
+        }
+    }
+    if (ok == 0)
+        line(objects[j].x - 100, objects[j].y, objects[j].x - 100, objects[i].y);
+    line(objects[j].x - 100, objects[i].y, objects[i].x - 81, objects[i].y);
 }
 
 void connectionRL(int i, int j, char connectorI)
 {
     if (connectorI == 'l')
-            swap(i, j);
+        swap(i, j);
 
-        float difference = (objects[j].x - objects[i].x - 162) / 2;
+    float difference = (objects[j].x - objects[i].x - 162) / 2;
 
-        line(objects[i].x + 81, objects[i].y, objects[i].x + 81 + difference, objects[i].y);
-        line(objects[i].x + 81 + difference, objects[i].y, objects[i].x + 81 + difference, objects[j].y);
-        line(objects[j].x - 81 - difference, objects[j].y, objects[j].x - 81, objects[j].y);
+    line(objects[i].x + 81, objects[i].y, objects[i].x + 81 + difference, objects[i].y);
+    line(objects[i].x + 81 + difference, objects[i].y, objects[i].x + 81 + difference, objects[j].y);
+    line(objects[j].x - 81 - difference, objects[j].y, objects[j].x - 81, objects[j].y);
 }
-
 
 void propertiesDisplay(int i)
 {
     settextstyle(8, HORIZ_DIR, 1);
     setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 625, systemHeight - 120, objects[i].properties.quantity);
     outtextxy(middleX - 625, systemHeight - 140, objects[i].properties.name);
-    outtextxy(middleX - 625, systemHeight - 120, objects[i].properties.measurement);
-    // outtextxy(middleX-625, systemHeight-100, char(objects[i].properties.quantity));
+    outtextxy(middleX - 625, systemHeight - 100, objects[i].properties.measurement);
+
     setbkcolor(BLACK);
 }
 
-void deleteObject(int i)
+int overlap(int x, int y)
 {
-    for (int k = 0; k < objectsCount; k++)
+    if (objectsCount == 0)
+        return -1;
+    for (int i = 0; i < objectsCount; i++)
     {
-        if (objects[k].leftConnector == i)
-            objects[k].leftConnector = -1;
-        if (objects[k].rightConnector == i)
-            objects[k].rightConnector = -1;
+        if (x > objects[i].x - 81 && x < objects[i].x + 81 && y > objects[i].y - 81 && y < objects[i].y + 81)
+            return 0;
     }
-    objects[i] = objects[objectsCount - 1];
-    objectsCount--;
-    refresh();
+    return 1;
 }
 
+int checkPointOverlap(int x, int y)
+{
+    // Loop through each object in the array
+    for (int i = 0; i < objectsCount; i++)
+    {
+        // Check if the point is within the specified range of the object's coordinates
+        if (x > objects[i].x - 81 && x < objects[i].x + 81 &&
+            y > objects[i].y - 75 && y < objects[i].y + 75)
+        {
+            // If the point overlaps with the object, return the object's index
+            return 0;
+        }
+    }
 
-void load(){
+    // If the point does not overlap with any of the objects, return -1
+    return -1;
+}
+
+void load()
+{
     ifstream circuitFile("my_circuit.txt");
     if (circuitFile.is_open())
     {
@@ -820,6 +1125,7 @@ void load(){
             circuitFile >> objects[i].leftConnector >> objects[i].rightConnector;
             circuitFile >> objects[i].properties.quantity >> objects[i].properties.measurement;
             circuitFile >> objects[i].properties.name;
+            cout << objects[i].x << " " << objects[i].y <<'\n';
         }
 
         // Close the file
@@ -828,8 +1134,10 @@ void load(){
     }
 }
 
-void save(){
+void save()
+{
     ofstream circuitFile("my_circuit.txt");
+    circuitFile << "";
     if (circuitFile.is_open())
     {
         // Write the objectsCount variable to the file
@@ -846,7 +1154,7 @@ void save(){
 
         // Close the file
         circuitFile.close();
-        cout<<"saved";
+        cout << "saved"<<'\n';
     }
 }
 
