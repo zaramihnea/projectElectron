@@ -135,7 +135,7 @@ void startingPage()
     bool click = false;
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN) && !click)
+        if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
         {
 
             clearmouseclick(WM_LBUTTONDOWN);
@@ -179,7 +179,7 @@ void languageMenu()
     // 450-530: German
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN) && !hello)
+        if (ismouseclick(WM_LBUTTONDOWN)&& !hello)
         {
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex();
@@ -218,6 +218,7 @@ void languageMenu()
     }
 }
 
+/// @brief Refreshes the screen
 void refresh()
 {
     cleardevice();
@@ -310,7 +311,7 @@ void refresh()
     setbkcolor(BLACK);
 }
 
-/// @brief Function that is used to draw the images and takes
+/// @brief Function that is used to draw the images and handles button clicks
 void images()
 {
     refresh();
@@ -318,7 +319,7 @@ void images()
     bool click = false;
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN) && !click)
+        if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
         {
             clearmouseclick(WM_LBUTTONDOWN);
             x = mousex();
@@ -327,7 +328,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -351,7 +352,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click&& !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -375,7 +376,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -399,7 +400,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -423,7 +424,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -447,7 +448,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -471,7 +472,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -495,7 +496,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -519,7 +520,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -543,7 +544,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -575,7 +576,7 @@ void images()
                 if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
                     while (1)
                     {
-                        if (ismouseclick(WM_LBUTTONDOWN))
+                        if (ismouseclick(WM_LBUTTONDOWN) && !click)
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
@@ -599,7 +600,7 @@ void images()
                 if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
                     while (1)
                     {
-                        if (ismouseclick(WM_LBUTTONDOWN))
+                        if (ismouseclick(WM_LBUTTONDOWN) && !click)
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
@@ -670,6 +671,7 @@ void images()
     }
 }
 
+/// @brief Draws objects and connections
 void draw()
 {
     refresh();
@@ -1093,33 +1095,36 @@ void clear()
 /// @brief This function is used for the move button
 void mov()
 {
-    bool shouldExit = 0;
-    while (1)
+    bool shouldExit = false;
+
+    while (!shouldExit)
     {
         if (ismouseclick(WM_LBUTTONDOWN))
         {
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex(), y = mousey();
-            for (int i = 0; i < objectsCount, shouldExit == 0; i++)
+            for (int i = 0; i < objectsCount && !shouldExit; i++)
             {
                 if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
-                    while (1)
+                {
+                    while (!shouldExit)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
-                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
+                            int newX = mousex(), newY = mousey();
+                            if (newX < middleX - 410 || newY < 200 || newX > systemWidth - 85 || newY > systemHeight - 60)
                                 break;
-                            if (imageOverlap(mousex(), mousey(), i) == 0)
+                            if (imageOverlap(newX, newY, i) == 0)
                                 break;
-                            objects[i].x = mousex();
-                            objects[i].y = mousey();
+                            objects[i].x = newX;
+                            objects[i].y = newY;
                             draw();
                             propertiesDisplay(i);
-                            shouldExit = 1;
-                            return;
+                            shouldExit = true;
                         }
                     }
+                }
             }
         }
     }
