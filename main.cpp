@@ -121,17 +121,17 @@ void startingPage()
     }
     else
         cleardevice();
-
     setbkcolor(BLACK);
     setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 6);
-    outtextxy(middleX - 130, 200, "Electron");
+    readimagefile("background.jpg", 0, 0, systemWidth, systemHeight);
+    setcolor(WHITE);
+    settextstyle(4, HORIZ_DIR, 4);
     setcolor(WHITE);
     rectangle(middleX - 380, 400, middleX - 100, 480);
-    outtextxy(middleX - 370, 415, L.language);
+    outtextxy(middleX - 340, 420, L.language);
     setcolor(WHITE);
     rectangle(middleX + 100, 400, middleX + 380, 480);
-    outtextxy(middleX + 150, 415, L.start);
+    outtextxy(middleX + 160, 420, L.start);
     bool click = false;
     while (1)
     {
@@ -310,6 +310,7 @@ void refresh()
     setbkcolor(BLACK);
 }
 
+/// @brief Function that is used to draw the images and takes
 void images()
 {
     refresh();
@@ -571,7 +572,30 @@ void images()
                 {
                     propertiesDisplay(i);
                 }
-                
+                if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
+                    while (1)
+                    {
+                        if (ismouseclick(WM_LBUTTONDOWN))
+                        {
+                            clearmouseclick(WM_LBUTTONDOWN);
+                            for (int j = 0; j < objectsCount; j++)
+                            {
+                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                                {
+                                    objects[i].leftConnector = j;
+                                    objects[j].leftConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                                {
+                                    objects[i].leftConnector = j;
+                                    objects[j].rightConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                            }
+                            break;
+                        }
+                    }
                 if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
                     while (1)
                     {
@@ -819,15 +843,7 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
 
 /*<-----------------------End Connection--------------------->*/
 
-void propertiesDisplay(int i)
-{
-    settextstyle(8, HORIZ_DIR, 1);
-    setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 625, systemHeight - 120, objects[i].properties.quantity);
-    outtextxy(middleX - 625, systemHeight - 140, objects[i].properties.name);
-    outtextxy(middleX - 625, systemHeight - 100, objects[i].properties.measurement);
-    setbkcolor(BLACK);
-}
+/*<-----------------------Overlap--------------------->*/
 
 int imageOverlap(int x, int y, int j)
 {
@@ -839,69 +855,6 @@ int imageOverlap(int x, int y, int j)
     }
     return 1;
 }
-
-void load()
-{
-    ifstream circuitFile("my_circuit.txt");
-    if (circuitFile.is_open())
-    {
-        // Read the objectsCount variable from the file
-        circuitFile >> objectsCount;
-
-        // Read the information for each object from the file
-        for (int i = 0; i < objectsCount; ++i)
-        {
-            circuitFile >> objects[i].x >> objects[i].y >> objects[i].type;
-            circuitFile >> objects[i].leftConnector >> objects[i].rightConnector;
-            circuitFile >> objects[i].properties.quantity >> objects[i].properties.measurement;
-            circuitFile >> objects[i].properties.name;
-            cout << objects[i].x << " " << objects[i].y << '\n';
-        }
-
-        // Close the file
-        circuitFile.close();
-        draw();
-    }
-}
-
-void save()
-{
-    ofstream circuitFile("my_circuit.txt");
-    circuitFile << "";
-    if (circuitFile.is_open())
-    {
-        // Write the objectsCount variable to the file
-        circuitFile << objectsCount << endl;
-
-        // Write the information for each object to the file
-        for (int i = 0; i < objectsCount; ++i)
-        {
-            circuitFile << objects[i].x << " " << objects[i].y << " " << objects[i].type << " ";
-            circuitFile << objects[i].leftConnector << " " << objects[i].rightConnector << " ";
-            circuitFile << objects[i].properties.quantity << " " << objects[i].properties.measurement << " ";
-            circuitFile << objects[i].properties.name << endl;
-        }
-
-        // Close the file
-        circuitFile.close();
-        cout << "saved" << '\n';
-    }
-}
-
-void commonSet()
-{
-    objectsCount++;
-    draw();
-    objectsCount--;
-    propertiesDisplay(objectsCount);
-    setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 625, systemHeight - 120, "          ");
-    handlePropertiesInsert(objectsCount);
-    propertiesDisplay(objectsCount);
-    objectsCount++;
-}
-
-
 
 void horizontalOverlap(int x1, int x2, int y, int &ok)
 {
@@ -985,6 +938,33 @@ void cornerOverlap(int &x, int &y, int x1, int y1)
     }
 }
 
+/*<-----------------------End Overlap--------------------->*/
+
+/*<-----------------------Properties--------------------->*/
+
+void commonSet()
+{
+    objectsCount++;
+    draw();
+    objectsCount--;
+    propertiesDisplay(objectsCount);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 625, systemHeight - 120, "          ");
+    handlePropertiesInsert(objectsCount);
+    propertiesDisplay(objectsCount);
+    objectsCount++;
+}
+
+void propertiesDisplay(int i)
+{
+    settextstyle(8, HORIZ_DIR, 1);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 625, systemHeight - 120, objects[i].properties.quantity);
+    outtextxy(middleX - 625, systemHeight - 140, objects[i].properties.name);
+    outtextxy(middleX - 625, systemHeight - 100, objects[i].properties.measurement);
+    setbkcolor(BLACK);
+}
+
 /// @brief This function is used for inserting the properties of an object
 void handlePropertiesInsert(int j)
 {
@@ -1007,7 +987,7 @@ void handlePropertiesInsert(int j)
             if (key[i] == 8)
             {
                 key[i] = '\0';
-                
+
                 setbkcolor(LIGHTGRAY);
                 outtextxy(middleX - 625, systemHeight - 120, "          ");
                 setbkcolor(DARKGRAY);
@@ -1022,34 +1002,55 @@ void handlePropertiesInsert(int j)
     setbkcolor(LIGHTGRAY);
 }
 
-/// @brief This function is used for checking if the point overlaps with any of the objects
-int overlap(int x, int y)
+/*<-----------------------End Properties--------------------->*/
+
+/*<-----------------------Buttons--------------------->*/
+void load()
 {
-    for (int i = 0; i < objectsCount; i++)
+    ifstream circuitFile("my_circuit.txt");
+    if (circuitFile.is_open())
     {
-        if (x > objects[i].x - 81 && x < objects[i].x + 81 && y > objects[i].y - 81 && y < objects[i].y + 81)
-            return 0;
+        // Read the objectsCount variable from the file
+        circuitFile >> objectsCount;
+
+        // Read the information for each object from the file
+        for (int i = 0; i < objectsCount; ++i)
+        {
+            circuitFile >> objects[i].x >> objects[i].y >> objects[i].type;
+            circuitFile >> objects[i].leftConnector >> objects[i].rightConnector;
+            circuitFile >> objects[i].properties.quantity >> objects[i].properties.measurement;
+            circuitFile >> objects[i].properties.name;
+            cout << objects[i].x << " " << objects[i].y << '\n';
+        }
+
+        // Close the file
+        circuitFile.close();
+        draw();
     }
-    return 1;
 }
 
-/// @brief This function is used for checking if the point overlaps with any of the objects
-int checkPointOverlap(int x, int y)
+void save()
 {
-    // Loop through each object in the array
-    for (int i = 0; i < objectsCount; i++)
+    ofstream circuitFile("my_circuit.txt");
+    circuitFile << "";
+    if (circuitFile.is_open())
     {
-        // Check if the point is within the specified range of the object's coordinates
-        if (x > objects[i].x - 81 && x < objects[i].x + 81 &&
-            y > objects[i].y - 75 && y < objects[i].y + 75)
-        {
-            // If the point overlaps with the object, return the object's index
-            return 0;
-        }
-    }
+        // Write the objectsCount variable to the file
+        circuitFile << objectsCount << endl;
 
-    // If the point does not overlap with any of the objects, return 1
-    return 1;
+        // Write the information for each object to the file
+        for (int i = 0; i < objectsCount; ++i)
+        {
+            circuitFile << objects[i].x << " " << objects[i].y << " " << objects[i].type << " ";
+            circuitFile << objects[i].leftConnector << " " << objects[i].rightConnector << " ";
+            circuitFile << objects[i].properties.quantity << " " << objects[i].properties.measurement << " ";
+            circuitFile << objects[i].properties.name << endl;
+        }
+
+        // Close the file
+        circuitFile.close();
+        cout << "saved" << '\n';
+    }
 }
 
 /// @brief This function is used for the edit button
@@ -1099,7 +1100,7 @@ void mov()
         {
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex(), y = mousey();
-            for (int i = 0; i < objectsCount, shouldExit==0; i++)
+            for (int i = 0; i < objectsCount, shouldExit == 0; i++)
             {
                 if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
                     while (1)
@@ -1109,15 +1110,14 @@ void mov()
                             clearmouseclick(WM_LBUTTONDOWN);
                             if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
                                 break;
-                            if (checkPointOverlap(mousex(), mousey()) == 0)
+                            if (imageOverlap(mousex(), mousey(), i) == 0)
                                 break;
                             objects[i].x = mousex();
                             objects[i].y = mousey();
                             draw();
                             propertiesDisplay(i);
-                            shouldExit=1;
+                            shouldExit = 1;
                             return;
-                            
                         }
                     }
             }
@@ -1165,5 +1165,7 @@ void exit()
     closegraph();
     return;
 }
+
+/*<-----------------------End Buttons--------------------->*/
 
 /*<--------------------------End functions------------------------>*/
