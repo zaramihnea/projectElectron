@@ -84,17 +84,19 @@ void connectionRR(int i, int j);
 void connectionRL(int i, int j, char connectorI);
 void connectionS(int i, int j, char connectorI);
 void propertiesDisplay(int i);
-void deleteObject(int i);
+void deleteObject();
 void exit();
 void load();
 void save();
 int imageOverlap(int x, int y, int j);
 void horizontalOverlap(int x1, int x2, int y, int &ok);
 void verticalOverlap(int y1, int y2, int x, int &ok);
+void cornerOverlap(int &x, int &y, int x1, int y1);
 void clear();
 void mov();
 void edit(int x, int y);
-void deleteObject();
+int checkPointOverlap(int x, int y);
+void handlePropertiesInsert(int j);
 
 /*<------------End function definitions------------>*/
 
@@ -566,51 +568,10 @@ void images()
             for (int i = 0; i < objectsCount; i++)
             {
                 if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
-                    while (1)
-                    {
-                        propertiesDisplay(i);
-                        if (ismouseclick(WM_LBUTTONDOWN))
-                        {
-                            clearmouseclick(WM_LBUTTONDOWN);
-
-                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                                break;
-
-                            if (imageOverlap(mousex(), mousey(), i) == 1)
-                            {
-                                objects[i].x = mousex();
-                                objects[i].y = mousey();
-                                draw();
-                            }
-
-                            propertiesDisplay(i);
-                            break;
-                        }
-                    }
-                if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
-                    while (1)
-                    {
-                        if (ismouseclick(WM_LBUTTONDOWN))
-                        {
-                            clearmouseclick(WM_LBUTTONDOWN);
-                            for (int j = 0; j < objectsCount; j++)
-                            {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
-                                {
-                                    objects[i].leftConnector = j;
-                                    objects[j].leftConnector = i;
-                                    connectionAnalyst(i, j);
-                                }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
-                                {
-                                    objects[i].leftConnector = j;
-                                    objects[j].rightConnector = i;
-                                    connectionAnalyst(i, j);
-                                }
-                            }
-                            break;
-                        }
-                    }
+                {
+                    propertiesDisplay(i);
+                }
+                
                 if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
                     while (1)
                     {
@@ -705,14 +666,7 @@ void draw()
     }
 }
 
-void clear()
-{
-    for (int i = 0; i < objectsCount; ++i)
-    {
-        memset(&objects[i], 0, sizeof(objects[i])); // sets objects[i] memory block to 0
-    }
-    refresh();
-}
+/*<-----------------------Connection--------------------->*/
 
 void connectionAnalyst(int i, int j)
 {
@@ -752,14 +706,18 @@ void connectionRR(int i, int j)
         swap(i, j);
 
     line(objects[j].x + 81, objects[j].y, objects[j].x + 100, objects[j].y);
-
     int ok;
-    verticalOverlap(objects[j].y, objects[i].y, objects[j].x + 100, ok);
+    int x = objects[j].x + 100, y = objects[i].y;
+
+    cornerOverlap(x, y, objects[i].x + 81, objects[j].y);
+
+    verticalOverlap(objects[j].y, y, objects[j].x + 100, ok);
     if (ok == 0)
-        line(objects[j].x + 100, objects[j].y, objects[j].x + 100, objects[i].y);
-    horizontalOverlap(objects[i].x + 81, objects[j].x + 100, objects[i].y, ok);
+        line(objects[j].x + 100, objects[j].y, objects[j].x + 100, y);
+
+    horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
     if (ok == 0)
-        line(objects[i].x + 81, objects[i].y, objects[j].x + 100, objects[i].y);
+        line(objects[i].x + 81, objects[i].y, x, objects[i].y);
 }
 
 void connectionLL(int i, int j)
@@ -770,13 +728,14 @@ void connectionLL(int i, int j)
 
     line(objects[j].x - 81, objects[j].y, objects[j].x - 100, objects[j].y);
 
-    int ok;
-    verticalOverlap(objects[j].y, objects[i].y, objects[j].x - 100, ok);
+    int ok, x = objects[j].x - 100, y = objects[i].y;
+    cornerOverlap(x, y, objects[i].x - 81, objects[j].y);
+    verticalOverlap(objects[j].y, y, objects[j].x - 100, ok);
     if (ok == 0)
-        line(objects[j].x - 100, objects[j].y, objects[j].x - 100, objects[i].y);
-    horizontalOverlap(objects[j].x - 100, objects[i].x - 81, objects[i].y, ok);
+        line(objects[j].x - 100, objects[j].y, objects[j].x - 100, y);
+    horizontalOverlap(x, objects[i].x - 81, objects[i].y, ok);
     if (ok == 0)
-        line(objects[j].x - 100, objects[i].y, objects[i].x - 81, objects[i].y);
+        line(x, objects[i].y, objects[i].x - 81, objects[i].y);
 }
 
 void connectionRL(int i, int j, char connectorI)
@@ -785,10 +744,21 @@ void connectionRL(int i, int j, char connectorI)
         swap(i, j);
 
     float difference = (objects[j].x - objects[i].x - 162) / 2;
-
-    line(objects[i].x + 81, objects[i].y, objects[i].x + 81 + difference, objects[i].y);
-    line(objects[i].x + 81 + difference, objects[i].y, objects[i].x + 81 + difference, objects[j].y);
-    line(objects[j].x - 81 - difference, objects[j].y, objects[j].x - 81, objects[j].y);
+    int ok;
+    int x = objects[i].x + 81 + difference, y = objects[i].y;
+    cornerOverlap(x, y, objects[i].x + 81, objects[j].y);
+    horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
+    if (ok == 0)
+        line(objects[i].x + 81, objects[i].y, x, objects[i].y);
+    x = objects[i].x + 81 + difference;
+    int y1 = objects[j].y;
+    cornerOverlap(x, y1, objects[j].x - 81, objects[i].y);
+    verticalOverlap(y, y1, objects[i].x + 81 + difference, ok);
+    if (ok == 0)
+        line(objects[i].x + 81 + difference, y, objects[i].x + 81 + difference, y1);
+    horizontalOverlap(x, objects[j].x - 81, objects[j].y, ok);
+    if (ok == 0)
+        line(x, objects[j].y, objects[j].x - 81, objects[j].y);
 }
 
 void connectionS(int i, int j, char connectorI) // this is a S type connection which means the left object is connected with the right one by left-right connectors
@@ -805,23 +775,49 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
     if (connectorI == 'l')
     {
         float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[j].x - objects[i].x + 91);
+        int ok;
         line(objects[i].x - 81, objects[i].y, objects[i].x - 91, objects[i].y);
-        line(objects[i].x - 91, objects[i].y, objects[i].x - 91, objects[i].y + difY);
-        line(objects[i].x - 91, objects[i].y + difY, objects[i].x + difX, objects[i].y + difY);
+        int x = objects[i].x - 91, y = objects[i].y + difY;
+        cornerOverlap(x, y, objects[i].x + difX, objects[i].y);
+        verticalOverlap(objects[i].y, y, objects[i].x - 91, ok);
+        if (ok == 0)
+            line(objects[i].x - 91, objects[i].y, objects[i].x - 91, y);
+        y = objects[i].y + difY;
+        int x1 = objects[j].x + 91;
+        cornerOverlap(x1, y, x, objects[j].y);
+        horizontalOverlap(x, x1, objects[i].y + difY, ok);
+        if (ok == 0)
+            line(x, objects[i].y + difY, x1, objects[i].y + difY);
+        verticalOverlap(y, objects[j].y, objects[j].x + 91, ok);
+        if (ok == 0)
+            line(objects[j].x + 91, objects[j].y, objects[i].x + difX, y);
         line(objects[j].x + 81, objects[j].y, objects[j].x + 91, objects[j].y);
-        line(objects[j].x + 91, objects[j].y, objects[i].x + difX, objects[i].y + difY);
     }
     else if (connectorI == 'r')
     {
 
         float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[i].x - objects[j].x + 91);
         line(objects[i].x + 81, objects[i].y, objects[i].x + 91, objects[i].y);
-        line(objects[i].x + 91, objects[i].y, objects[i].x + 91, objects[i].y + difY);
-        line(objects[i].x + 91, objects[i].y + difY, objects[i].x - difX, objects[i].y + difY);
+        int ok;
+        int x = objects[i].x + 91, y = objects[i].y + difY;
+        cornerOverlap(x, y, objects[i].x - difX, objects[i].y);
+        verticalOverlap(objects[i].y, y, objects[i].x + 91, ok);
+        if (ok == 0)
+            line(objects[i].x + 91, objects[i].y, objects[i].x + 91, y);
+        int x1 = objects[j].x - 91;
+        y = objects[i].y + difY;
+        cornerOverlap(x1, y, x, objects[j].y);
+        horizontalOverlap(x1, x, objects[i].y + difY, ok);
+        if (ok == 0)
+            line(x1, objects[i].y + difY, x, objects[i].y + difY);
         line(objects[j].x - 81, objects[j].y, objects[j].x - 91, objects[j].y);
-        line(objects[j].x - 91, objects[j].y, objects[i].x - difX, objects[i].y + difY);
+        verticalOverlap(objects[j].y, y, objects[i].x - difX, ok);
+        if (ok == 0)
+            line(objects[j].x - 91, objects[j].y, objects[i].x - difX, y);
     }
 }
+
+/*<-----------------------End Connection--------------------->*/
 
 void propertiesDisplay(int i)
 {
@@ -900,29 +896,12 @@ void commonSet()
     propertiesDisplay(objectsCount);
     setbkcolor(LIGHTGRAY);
     outtextxy(middleX - 625, systemHeight - 120, "          ");
-    char key[15] = "";
-    int i = 0;
-    while (1)
-    {
-        if (kbhit())
-        {
-            key[i] = getch();
-            setbkcolor(DARKGRAY);
-            outtextxy(middleX - 625, systemHeight - 120, key);
-            // if you press "enter" the loop will break
-            if (key[i] == 13)
-            {
-                key[i] = '\0';
-                break;
-            }
-
-            i++;
-        }
-    }
-    strcpy(objects[objectsCount].properties.quantity, key);
+    handlePropertiesInsert(objectsCount);
     propertiesDisplay(objectsCount);
     objectsCount++;
 }
+
+
 
 void horizontalOverlap(int x1, int x2, int y, int &ok)
 {
@@ -961,23 +940,49 @@ void verticalOverlap(int y1, int y2, int x, int &ok)
     }
 }
 
-/// @brief This function is used for checking if the point overlaps with any of the objects
-int checkPointOverlap(int x, int y)
+void cornerOverlap(int &x, int &y, int x1, int y1)
 {
-    // Loop through each object in the array
-    for (int i = 0; i < objectsCount; i++)
+    for (int k = 0; k <= objectsCount; k++)
     {
-        // Check if the point is within the specified range of the object's coordinates
-        if (x > objects[i].x - 81 && x < objects[i].x + 81 &&
-            y > objects[i].y - 75 && y < objects[i].y + 75)
+        if (abs(objects[k].x - x) <= 81 && abs(objects[k].y - y) <= 75)
         {
-            // If the point overlaps with the object, return the object's index
-            return 0;
+            if (objects[k].x + 81 > x && objects[k].x < x1)
+            {
+                if (objects[k].y + 75 > y && objects[k].y + 75 < y1)
+                {
+                    line(objects[k].x + 91, y, objects[k].x + 91, objects[k].y + 80);
+                    line(objects[k].x + 91, objects[k].y + 80, x, objects[k].y + 80);
+                    x = objects[k].x + 91;
+                    y = objects[k].y + 80;
+                }
+                else if (objects[k].y - 75 < y && objects[k].y - 75 > y1)
+                {
+                    line(objects[k].x + 91, y, objects[k].x + 91, objects[k].y - 80);
+                    line(objects[k].x + 91, objects[k].y - 80, x, objects[k].y - 80);
+                    x = objects[k].x + 91;
+                    y = objects[k].y - 80;
+                }
+            }
+            else
+            {
+
+                if (objects[k].y + 75 > y && objects[k].y + 75 < y1)
+                {
+                    line(objects[k].x - 91, y, objects[k].x - 91, objects[k].y + 80);
+                    line(objects[k].x - 91, objects[k].y + 80, x, objects[k].y + 80);
+                    x = objects[k].x - 91;
+                    y = objects[k].y + 80;
+                }
+                else if (objects[k].y - 75 < y && objects[k].y - 75 > y1)
+                {
+                    line(objects[k].x - 91, y, objects[k].x - 91, objects[k].y - 80);
+                    line(objects[k].x - 91, objects[k].y - 80, x, objects[k].y - 80);
+                    x = objects[k].x - 91;
+                    y = objects[k].y - 80;
+                }
+            }
         }
     }
-
-    // If the point does not overlap with any of the objects, return 1
-    return 1;
 }
 
 /// @brief This function is used for inserting the properties of an object
@@ -999,11 +1004,10 @@ void handlePropertiesInsert(int j)
             }
             setbkcolor(DARKGRAY);
             outtextxy(middleX - 625, systemHeight - 120, key);
-
             if (key[i] == 8)
             {
                 key[i] = '\0';
-                key[i - 1] = '\0';
+                
                 setbkcolor(LIGHTGRAY);
                 outtextxy(middleX - 625, systemHeight - 120, "          ");
                 setbkcolor(DARKGRAY);
@@ -1016,6 +1020,36 @@ void handlePropertiesInsert(int j)
     }
     strcpy(objects[j].properties.quantity, key);
     setbkcolor(LIGHTGRAY);
+}
+
+/// @brief This function is used for checking if the point overlaps with any of the objects
+int overlap(int x, int y)
+{
+    for (int i = 0; i < objectsCount; i++)
+    {
+        if (x > objects[i].x - 81 && x < objects[i].x + 81 && y > objects[i].y - 81 && y < objects[i].y + 81)
+            return 0;
+    }
+    return 1;
+}
+
+/// @brief This function is used for checking if the point overlaps with any of the objects
+int checkPointOverlap(int x, int y)
+{
+    // Loop through each object in the array
+    for (int i = 0; i < objectsCount; i++)
+    {
+        // Check if the point is within the specified range of the object's coordinates
+        if (x > objects[i].x - 81 && x < objects[i].x + 81 &&
+            y > objects[i].y - 75 && y < objects[i].y + 75)
+        {
+            // If the point overlaps with the object, return the object's index
+            return 0;
+        }
+    }
+
+    // If the point does not overlap with any of the objects, return 1
+    return 1;
 }
 
 /// @brief This function is used for the edit button
@@ -1045,35 +1079,45 @@ void edit(int x, int y)
     }
 }
 
+/// @brief This function is used for the clear button
+void clear()
+{
+    for (int i = 0; i < objectsCount; ++i)
+    {
+        memset(&objects[i], 0, sizeof(objects[i])); // sets objects[i] memory block to 0
+    }
+    refresh();
+}
+
 /// @brief This function is used for the move button
 void mov()
 {
+    bool shouldExit = 0;
     while (1)
     {
         if (ismouseclick(WM_LBUTTONDOWN))
         {
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex(), y = mousey();
-            for (int i = 0; i < objectsCount; i++)
+            for (int i = 0; i < objectsCount, shouldExit==0; i++)
             {
                 if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
                     while (1)
                     {
-
                         if (ismouseclick(WM_LBUTTONDOWN))
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
-
                             if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
                                 break;
-
                             if (checkPointOverlap(mousex(), mousey()) == 0)
                                 break;
                             objects[i].x = mousex();
                             objects[i].y = mousey();
                             draw();
                             propertiesDisplay(i);
+                            shouldExit=1;
                             return;
+                            
                         }
                     }
             }
