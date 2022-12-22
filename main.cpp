@@ -95,7 +95,7 @@ void verticalOverlap(int y1, int y2, int x, int &ok);
 void cornerOverlap(int &x, int &y, int x1, int y1);
 void clear();
 void mov();
-void edit(int x, int y);
+void edit();
 int checkPointOverlap(int x, int y);
 void handlePropertiesInsert(int j);
 
@@ -626,7 +626,7 @@ void images()
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 615 && y <= systemHeight - 575)
             {
                 cout << "pushed edit()" << '\n';
-                edit(x, y);
+                edit();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 575 && y <= systemHeight - 525)
             {
@@ -998,7 +998,7 @@ void handlePropertiesInsert(int j)
             if (key[i] == 8)
             {
                 key[i] = '\0';
-
+                key[i - 1] = '\0';
                 setbkcolor(LIGHTGRAY);
                 outtextxy(middleX - 625, systemHeight - 120, "          ");
                 setbkcolor(DARKGRAY);
@@ -1036,8 +1036,8 @@ void load()
     // Display the Open dialog box
     if (GetOpenFileName(&ofn) == TRUE)
     {
-       string fileName = ofn.lpstrFile;
-       circuitFile.open(fileName);
+        string fileName = ofn.lpstrFile;
+        circuitFile.open(fileName);
     }
     else
     {
@@ -1085,8 +1085,8 @@ void save()
     // Display the Save As dialog box
     if (GetSaveFileName(&ofn) == TRUE)
     {
-       string fileName = ofn.lpstrFile;
-       circuitFile.open(fileName);
+        string fileName = ofn.lpstrFile;
+        circuitFile.open(fileName);
     }
     else
     {
@@ -1117,30 +1117,30 @@ void save()
 }
 
 /// @brief This function is used for the edit button
-/// @param x
-/// @param y
-void edit(int x, int y)
+void edit()
 {
+    int x, y;
+    while (!ismouseclick(WM_LBUTTONDOWN))
+    {
+        delay(100); // Reduce CPU usage by waiting 100 milliseconds before checking again
+    }
+    x = mousex();
+    y = mousey();
+    clearmouseclick(WM_LBUTTONDOWN);
     for (int i = 0; i < objectsCount; ++i)
     {
-        while (1)
+        if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
         {
-            if (ismouseclick(WM_LBUTTONDOWN))
-            {
-                clearmouseclick(WM_LBUTTONDOWN);
-                if (mousex() >= objects[i].x - 75 && mousex() <= objects[i].x + 75 && mousey() >= objects[i].y - 75 && mousey() <= objects[i].y + 75)
-                {
-                    propertiesDisplay(i);
-                    setbkcolor(LIGHTGRAY);
-                    outtextxy(middleX - 625, systemHeight - 120, "          ");
-                    handlePropertiesInsert(i);
-                    propertiesDisplay(i);
-                    return;
-                }
-            }
+            propertiesDisplay(i);
+            setbkcolor(LIGHTGRAY);
+            outtextxy(middleX - 625, systemHeight - 120, "          ");
+            handlePropertiesInsert(i);
+            propertiesDisplay(i);
+            return;
         }
-        cout << "edited" << '\n';
     }
+    // Mouse is not within range of any object
+    cout << "No object was edited" << endl;
 }
 
 /// @brief This function is used for the clear button
