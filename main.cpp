@@ -11,6 +11,7 @@
 #include <time.h>
 #include <cstring>
 #include <fstream>
+#include <windows.h>
 /*<--End libraries-->*/
 
 using namespace std;
@@ -179,7 +180,7 @@ void languageMenu()
     // 450-530: German
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN)&& !hello)
+        if (ismouseclick(WM_LBUTTONDOWN) && !hello)
         {
             clearmouseclick(WM_LBUTTONDOWN);
             int x = mousex();
@@ -218,7 +219,6 @@ void languageMenu()
     }
 }
 
-/// @brief Refreshes the screen
 void refresh()
 {
     cleardevice();
@@ -311,7 +311,7 @@ void refresh()
     setbkcolor(BLACK);
 }
 
-/// @brief Function that is used to draw the images and handles button clicks
+/// @brief Function that is used to draw the images and takes
 void images()
 {
     refresh();
@@ -352,7 +352,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click&& !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -576,7 +576,7 @@ void images()
                 if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
                     while (1)
                     {
-                        if (ismouseclick(WM_LBUTTONDOWN) && !click)
+                        if (ismouseclick(WM_LBUTTONDOWN))
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
@@ -585,7 +585,7 @@ void images()
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].leftConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionLL(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                                 {
@@ -600,7 +600,7 @@ void images()
                 if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
                     while (1)
                     {
-                        if (ismouseclick(WM_LBUTTONDOWN) && !click)
+                        if (ismouseclick(WM_LBUTTONDOWN))
                         {
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
@@ -616,7 +616,7 @@ void images()
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].rightConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionRR(i, j);
                                 }
                             }
                             break;
@@ -671,7 +671,6 @@ void images()
     }
 }
 
-/// @brief Draws objects and connections
 void draw()
 {
     refresh();
@@ -683,11 +682,17 @@ void draw()
         circle(objects[j].x - 78, objects[j].y, 6);
         if (objects[j].rightConnector > -1)
         {
-            connectionAnalyst(j, objects[j].rightConnector);
+            if (objects[objects[j].rightConnector].rightConnector == j)
+                connectionRR(j, objects[j].rightConnector);
+            else
+                connectionAnalyst(j, objects[j].rightConnector);
         }
         if (objects[j].leftConnector > -1)
         {
-            connectionAnalyst(j, objects[j].leftConnector);
+            if (objects[objects[j].leftConnector].leftConnector == j)
+                connectionLL(j, objects[j].leftConnector);
+            else
+                connectionAnalyst(j, objects[j].leftConnector);
         }
     }
 }
@@ -699,10 +704,8 @@ void connectionAnalyst(int i, int j)
 
     if (objects[i].leftConnector == j)
     {
-        if (objects[j].leftConnector == i)
-            connectionLL(i, j);
 
-        else if (objects[j].rightConnector == i)
+        if (objects[j].rightConnector == i)
         {
             if (objects[j].x + 81 < objects[i].x - 81)
                 connectionRL(i, j, 'l');
@@ -719,9 +722,6 @@ void connectionAnalyst(int i, int j)
             else
                 connectionS(i, j, 'r');
         }
-
-        else if (objects[j].rightConnector == i)
-            connectionRR(i, j);
     }
 }
 
@@ -744,6 +744,8 @@ void connectionRR(int i, int j)
     horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
     if (ok == 0)
         line(objects[i].x + 81, objects[i].y, x, objects[i].y);
+
+    cout << "connected RR \n";
 }
 
 void connectionLL(int i, int j)
@@ -755,13 +757,17 @@ void connectionLL(int i, int j)
     line(objects[j].x - 81, objects[j].y, objects[j].x - 100, objects[j].y);
 
     int ok, x = objects[j].x - 100, y = objects[i].y;
+
     cornerOverlap(x, y, objects[i].x - 81, objects[j].y);
+
     verticalOverlap(objects[j].y, y, objects[j].x - 100, ok);
     if (ok == 0)
         line(objects[j].x - 100, objects[j].y, objects[j].x - 100, y);
     horizontalOverlap(x, objects[i].x - 81, objects[i].y, ok);
     if (ok == 0)
         line(x, objects[i].y, objects[i].x - 81, objects[i].y);
+
+    cout << "connected LL \n";
 }
 
 void connectionRL(int i, int j, char connectorI)
@@ -785,6 +791,8 @@ void connectionRL(int i, int j, char connectorI)
     horizontalOverlap(x, objects[j].x - 81, objects[j].y, ok);
     if (ok == 0)
         line(x, objects[j].y, objects[j].x - 81, objects[j].y);
+
+    cout << "connected RL \n";
 }
 
 void connectionS(int i, int j, char connectorI) // this is a S type connection which means the left object is connected with the right one by left-right connectors
@@ -841,6 +849,7 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
         if (ok == 0)
             line(objects[j].x - 91, objects[j].y, objects[i].x - difX, y);
     }
+    cout << "connected S";
 }
 
 /*<-----------------------End Connection--------------------->*/
@@ -1009,7 +1018,32 @@ void handlePropertiesInsert(int j)
 /*<-----------------------Buttons--------------------->*/
 void load()
 {
-    ifstream circuitFile("my_circuit.txt");
+    // open a FileOpenDialog box and load the file
+    OPENFILENAME ofn = {};
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = new TCHAR[MAX_PATH];
+    ofn.lpstrFile[0] = '\0';
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0";
+    ofn.nFilterIndex = 1;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrDefExt = "txt";
+    ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+    ifstream circuitFile;
+    // Display the Open dialog box
+    if (GetOpenFileName(&ofn) == TRUE)
+    {
+       string fileName = ofn.lpstrFile;
+       circuitFile.open(fileName);
+    }
+    else
+    {
+        cout << "Dialog cancelled" << std::endl;
+        return;
+    }
     if (circuitFile.is_open())
     {
         // Read the objectsCount variable from the file
@@ -1033,7 +1067,34 @@ void load()
 
 void save()
 {
-    ofstream circuitFile("my_circuit.txt");
+    // open a save as dialogue box and save the file
+    OPENFILENAME ofn = {};
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = new TCHAR[MAX_PATH];
+    ofn.lpstrFile[0] = '\0';
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0";
+    ofn.nFilterIndex = 1;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrDefExt = "txt";
+    ofn.Flags = OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+    ofstream circuitFile;
+    // Display the Save As dialog box
+    if (GetSaveFileName(&ofn) == TRUE)
+    {
+       string fileName = ofn.lpstrFile;
+       circuitFile.open(fileName);
+    }
+    else
+    {
+        cout << "Dialog cancelled" << std::endl;
+        return;
+    }
+
+    // if the user presses the OK button, save the file
     circuitFile << "";
     if (circuitFile.is_open())
     {
