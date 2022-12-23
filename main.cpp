@@ -11,6 +11,7 @@
 #include <time.h>
 #include <cstring>
 #include <fstream>
+#include <windows.h>
 /*<--End libraries-->*/
 
 using namespace std;
@@ -28,12 +29,14 @@ struct lang
         dele[20],
         props[20],
         exit[20],
-        clear[20];
+        clearr[20],
+        mov[20],
+        edit[20];
 };
-lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire", "Goleste"},
-     en = {"Language", "START", "Save", "Load", "Zoom in", "Zoom out", "Delete", "Properties", "Exit", "Clear"},
-     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Vergr��ern", "Verkleinern", "L�schen", "Eigenschaften", "Ausgang", "Klar"},
-     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Agrandir", "R�duire", "Supprimer", "Propri�t�s", "Sortie", "Clair"};
+lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire", "Goleste", "Muta", "Editeaza"},
+     en = {"Language", "START", "Save", "Load", "Zoom in", "Zoom out", "Delete", "Properties", "Exit", "Clear", "Move", "Edit"},
+     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Vergr��ern", "Verkleinern", "L�schen", "Eigenschaften", "Ausgang", "Klar", "Bewegen", "Bearbeiten"},
+     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Agrandir", "R�duire", "Supprimer", "Propri�t�s", "Sortie", "Clair", "Bouger", "Modifier"};
 
 struct prop
 {
@@ -46,8 +49,9 @@ struct object
 {
     int x, y;
     char type[31];
-    int leftConnector = -1, rightConnector = -1;
+    int leftConnector = -1, rightConnector = -1, topConnector = -1, bottomConnector = -1;
     prop properties;
+    int rotateState = 1 ;
 } objects[100];
 
 /*<------------End structures------------>*/
@@ -82,14 +86,20 @@ void connectionRR(int i, int j);
 void connectionRL(int i, int j, char connectorI);
 void connectionS(int i, int j, char connectorI);
 void propertiesDisplay(int i);
-void deleteObject(int i);
+void deleteObject();
 void exit();
 void load();
 void save();
+void rotateObject();
 int imageOverlap(int x, int y, int j);
 void horizontalOverlap(int x1, int x2, int y, int &ok);
 void verticalOverlap(int y1, int y2, int x, int &ok);
+void cornerOverlap(int &x, int &y, int x1, int y1);
 void clear();
+void mov();
+void edit();
+int checkPointOverlap(int x, int y);
+void handlePropertiesInsert(int j);
 
 /*<------------End function definitions------------>*/
 
@@ -114,21 +124,21 @@ void startingPage()
     }
     else
         cleardevice();
-
     setbkcolor(BLACK);
     setcolor(WHITE);
-    settextstyle(8, HORIZ_DIR, 6);
-    outtextxy(middleX - 130, 200, "Electron");
+    readimagefile("background.jpg", 0, 0, systemWidth, systemHeight);
+    setcolor(WHITE);
+    settextstyle(4, HORIZ_DIR, 4);
     setcolor(WHITE);
     rectangle(middleX - 380, 400, middleX - 100, 480);
-    outtextxy(middleX - 370, 415, L.language);
+    outtextxy(middleX - 340, 420, L.language);
     setcolor(WHITE);
     rectangle(middleX + 100, 400, middleX + 380, 480);
-    outtextxy(middleX + 150, 415, L.start);
+    outtextxy(middleX + 160, 420, L.start);
     bool click = false;
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN) && !click)
+        if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
         {
 
             clearmouseclick(WM_LBUTTONDOWN);
@@ -249,29 +259,44 @@ void refresh()
     // circuit editing buttons
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
+    bar(middleX - 630, systemHeight - 615, middleX - 510, systemHeight - 575);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 600, systemHeight - 607, L.edit);
+
+    setfillstyle(SOLID_FILL, LIGHTGRAY);
+    bar(middleX - 630, systemHeight - 565, middleX - 510, systemHeight - 525);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 600, systemHeight - 557, L.clearr);
+
+    setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 515, middleX - 510, systemHeight - 475);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 600, systemHeight - 507, L.clear);
+    outtextxy(middleX - 590, systemHeight - 507, L.load);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 465, middleX - 510, systemHeight - 425);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 598, systemHeight - 457, L.load);
+    outtextxy(middleX - 590, systemHeight - 457, L.save);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 415, middleX - 510, systemHeight - 375);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 598, systemHeight - 407, L.save);
+    outtextxy(middleX - 608, systemHeight - 407, "Rotate");
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 365, middleX - 510, systemHeight - 325);
+    bar(middleX - 630, systemHeight - 365, middleX - 580, systemHeight - 325);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 608, systemHeight - 357, L.zoomIn);
+    outtextxy(middleX - 608, systemHeight - 357, "+");
+
+    setfillstyle(SOLID_FILL, LIGHTGRAY);
+    bar(middleX - 560, systemHeight - 365, middleX - 510, systemHeight - 325);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 538, systemHeight - 357, "-");
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 315, middleX - 510, systemHeight - 275);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 611, systemHeight - 307, L.zoomOut);
+    outtextxy(middleX - 590, systemHeight - 307, L.mov);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 265, middleX - 510, systemHeight - 225);
@@ -293,6 +318,7 @@ void refresh()
     setbkcolor(BLACK);
 }
 
+/// @brief Function that is used to draw the images and takes
 void images()
 {
     refresh();
@@ -300,7 +326,7 @@ void images()
     bool click = false;
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN) && !click)
+        if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
         {
             clearmouseclick(WM_LBUTTONDOWN);
             x = mousex();
@@ -309,7 +335,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -333,7 +359,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -357,7 +383,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -381,7 +407,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -405,7 +431,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -429,7 +455,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -453,7 +479,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -477,7 +503,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -501,7 +527,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -525,7 +551,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN))
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -546,33 +572,16 @@ void images()
                 }
             }
 
-            // if you click on an object change it's position
+
 
             for (int i = 0; i < objectsCount; i++)
             {
                 if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
-                    while (1)
-                    {
-                        propertiesDisplay(i);
-                        if (ismouseclick(WM_LBUTTONDOWN))
-                        {
-                            clearmouseclick(WM_LBUTTONDOWN);
-
-                            if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
-                                break;
-
-                            if (imageOverlap(mousex(), mousey(), i)== 1)
-                            {
-                                objects[i].x = mousex();
-                                objects[i].y = mousey();
-                                draw();
-                            }
-
-                            propertiesDisplay(i);
-                            break;
-                        }
-                    }
-                if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
+                {
+                    propertiesDisplay(i);
+                }
+                // LEFT connection in I
+                if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y +6 && objects[i].rotateState % 2 != 0)
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -580,23 +589,36 @@ void images()
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].leftConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionLL(i, j);
                                 }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].rightConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].leftConnector = j;
+                                    objects[j].bottomConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].leftConnector = j;
+                                    objects[j].topConnector = i;
                                     connectionAnalyst(i, j);
                                 }
                             }
                             break;
                         }
                     }
-                if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
+                // RIGHT connection in I
+                if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6 && objects[i].rotateState % 2 != 0)
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -604,17 +626,108 @@ void images()
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
 
                                     objects[i].rightConnector = j;
                                     objects[j].leftConnector = i;
                                     connectionAnalyst(i, j);
                                 }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].rightConnector = i;
+                                    connectionRR(i, j);
+                                }
+                                 else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].rightConnector = j;
+                                    objects[j].bottomConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].rightConnector = j;
+                                    objects[j].topConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+            // BOTTOM connection in I
+            if (mousex() >= objects[i].x - 6 && mousex() <= objects[i].x + 6 && mousey() >= objects[i].y +75 && mousey() <= objects[i].y + 81 && objects[i].rotateState % 2 == 0)
+                    while (1)
+                    {
+                        if (ismouseclick(WM_LBUTTONDOWN))
+                        {
+                            clearmouseclick(WM_LBUTTONDOWN);
+                            for (int j = 0; j < objectsCount; j++)
+                            {
+                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                {
+                                    objects[i].bottomConnector = j;
+                                    objects[j].leftConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                {
+                                    objects[i].bottomConnector = j;
+                                    objects[j].rightConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].bottomConnector = j;
+                                    objects[j].bottomConnector = i;
+                                    cout<<"TT"<<endl;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].bottomConnector = j;
+                                    objects[j].topConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                // TOP connection in I
+                if (mousex() >= objects[i].x - 6 && mousex() <= objects[i].x + 6 && mousey() >= objects[i].y - 81 && mousey() <= objects[i].y - 75 && objects[i].rotateState % 2 == 0)
+                    while (1)
+                    {
+                        if (ismouseclick(WM_LBUTTONDOWN))
+                        {
+                            clearmouseclick(WM_LBUTTONDOWN);
+                            for (int j = 0; j < objectsCount; j++)
+                            {
+                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                {
+
+                                    objects[i].topConnector = j;
+                                    objects[j].leftConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                {
+                                    objects[i].topConnector = j;
+                                    objects[j].rightConnector = i;
+                                    connectionAnalyst(i, j);
+                                }
+                                 else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].topConnector = j;
+                                    objects[j].bottomConnector = i;
+                                    cout<< "BT" << endl;
+                                    connectionAnalyst(i, j);
+                                }
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                {
+                                    objects[i].topConnector = j;
+                                    objects[j].topConnector = i;
+                                    cout<< "TT" << endl;
                                     connectionAnalyst(i, j);
                                 }
                             }
@@ -622,67 +735,50 @@ void images()
                         }
                     }
             }
-            if(x>=middleX-630 && x<=middleX-510 && y>=systemHeight-515 && y<=systemHeight-475)
+
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 615 && y <= systemHeight - 575)
             {
-                cout<<"pushed clear()"<<'\n';
+                cout << "pushed edit()" << '\n';
+                edit();
+            }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 575 && y <= systemHeight - 525)
+            {
+                cout << "pushed clear()" << '\n';
                 clear();
+            }
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 515 && y <= systemHeight - 475)
+            {
+                cout << "pushed load()" << '\n';
+                load();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 465 && y <= systemHeight - 425)
             {
-                cout << "pushed load()"<<'\n';
-                load();
+                cout << "pushed save()" << '\n';
+                save();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 415 && y <= systemHeight - 375)
             {
-                cout << "pushed save()"<<'\n';
-                save();
+                cout << "pushed rotateObject()" << '\n';
+                rotateObject();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 365 && y <= systemHeight - 325)
             {
-                cout << "pushed zoomin()"<<'\n';
+                cout << "pushed zoomout()" << '\n';
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 315 && y <= systemHeight - 275)
             {
-                cout << "pushed zoomout()"<<'\n';
+                cout << "pushed move()" << '\n';
+                mov();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 265 && y <= systemHeight - 225)
             {
-                cout << "pushed delete()"<<'\n';
-                while (1)
-                {
-                    if (ismouseclick(WM_LBUTTONDOWN))
-                    {
-                        clearmouseclick(WM_LBUTTONDOWN);
-                        for (int j = 0; j < objectsCount; j++)
-                        {
-                            if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
-                            {
-                                objects[j].leftConnector = -1;
-                                draw();
-                            }
-                            else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
-                            {
-                                objects[j].rightConnector = -1;
-                                draw();
-                            }
-                            else if (mousex() >= objects[j].x - 75 && mousex() <= objects[j].x + 75 && mousey() >= objects[j].y - 75 && mousey() <= objects[j].y + 75)
-                            {
-                                for (int i = j; i < objectsCount; i++)
-                                {
-                                    objects[i] = objects[i + 1];
-                                }
-                                objectsCount--;
-                                draw();
-                            }
-                        }
-                        break;
-                    }
-                }
+                cout << "pushed delete()" << '\n';
+                deleteObject();
             }
 
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 215 && y <= systemHeight - 175)
             {
-                cout << "pushed exit()"<<'\n';
+                cout << "pushed exit()" << '\n';
                 exit();
             }
         }
@@ -696,39 +792,47 @@ void draw()
     for (int j = 0; j < objectsCount; j++)
     {
         readimagefile(objects[j].type, objects[j].x - 75, objects[j].y - 75, objects[j].x + 75, objects[j].y + 75);
-        circle(objects[j].x + 78, objects[j].y, 6);
-        circle(objects[j].x - 78, objects[j].y, 6);
+        if(objects[j].rotateState % 2 == 0)
+        {
+            circle(objects[j].x, objects[j].y + 78, 6);
+            circle(objects[j].x, objects[j].y - 78, 6);
+        }
+        else {
+                circle(objects[j].x + 78, objects[j].y, 6);
+                circle(objects[j].x - 78, objects[j].y, 6);
+        }
+
         if (objects[j].rightConnector > -1)
         {
-            connectionAnalyst(j, objects[j].rightConnector);
+            if (objects[objects[j].rightConnector].rightConnector == j)
+                connectionRR(j, objects[j].rightConnector);
+            else
+                connectionAnalyst(j, objects[j].rightConnector);
         }
         if (objects[j].leftConnector > -1)
         {
-            connectionAnalyst(j, objects[j].leftConnector);
+            if (objects[objects[j].leftConnector].leftConnector == j)
+                connectionLL(j, objects[j].leftConnector);
+            else
+                connectionAnalyst(j, objects[j].leftConnector);
         }
     }
 }
 
-void clear(){
-    for(int i=0; i<objectsCount; ++i){
-        memset(&objects[i], 0, sizeof(objects[i])); //sets objects[i] memory block to 0
-    }
-    refresh();
-}
+/*<-----------------------Connection--------------------->*/
 
 void connectionAnalyst(int i, int j)
 {
 
     if (objects[i].leftConnector == j)
     {
-        if (objects[j].leftConnector == i)
-            connectionLL(i, j);
 
-        else if (objects[j].rightConnector == i)
+        if (objects[j].rightConnector == i)
         {
             if (objects[j].x + 81 < objects[i].x - 81)
                 connectionRL(i, j, 'l');
-            else connectionS(i, j, 'l');
+            else
+                connectionS(i, j, 'l');
         }
     }
     else if (objects[i].rightConnector == j)
@@ -737,12 +841,9 @@ void connectionAnalyst(int i, int j)
         {
             if (objects[i].x + 81 < objects[j].x - 81)
                 connectionRL(i, j, 'r');
-            else connectionS(i, j, 'r');
-
+            else
+                connectionS(i, j, 'r');
         }
-
-        else if (objects[j].rightConnector == i)
-            connectionRR(i, j);
     }
 }
 
@@ -753,14 +854,20 @@ void connectionRR(int i, int j)
         swap(i, j);
 
     line(objects[j].x + 81, objects[j].y, objects[j].x + 100, objects[j].y);
-
     int ok;
-    verticalOverlap(objects[j].y, objects[i].y,objects[j].x + 100, ok);
+    int x = objects[j].x + 100, y = objects[i].y;
+
+    cornerOverlap(x, y, objects[i].x + 81, objects[j].y);
+
+    verticalOverlap(objects[j].y, y, objects[j].x + 100, ok);
     if (ok == 0)
-    line(objects[j].x + 100, objects[j].y, objects[j].x + 100, objects[i].y);
-    horizontalOverlap(objects[i].x + 81, objects[j].x + 100, objects[i].y, ok);
-    if(ok == 0)
-    line(objects[i].x + 81, objects[i].y, objects[j].x + 100, objects[i].y);
+        line(objects[j].x + 100, objects[j].y, objects[j].x + 100, y);
+
+    horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
+    if (ok == 0)
+        line(objects[i].x + 81, objects[i].y, x, objects[i].y);
+
+    cout << "connected RR \n";
 }
 
 void connectionLL(int i, int j)
@@ -771,13 +878,18 @@ void connectionLL(int i, int j)
 
     line(objects[j].x - 81, objects[j].y, objects[j].x - 100, objects[j].y);
 
-    int ok;
-    verticalOverlap(objects[j].y, objects[i].y, objects[j].x - 100, ok);
+    int ok, x = objects[j].x - 100, y = objects[i].y;
+
+    cornerOverlap(x, y, objects[i].x - 81, objects[j].y);
+
+    verticalOverlap(objects[j].y, y, objects[j].x - 100, ok);
     if (ok == 0)
-    line(objects[j].x - 100, objects[j].y, objects[j].x - 100, objects[i].y);
-    horizontalOverlap(objects[j].x - 100, objects[i].x - 81, objects[i].y, ok);
-    if(ok == 0)
-    line(objects[j].x - 100, objects[i].y, objects[i].x - 81, objects[i].y);
+        line(objects[j].x - 100, objects[j].y, objects[j].x - 100, y);
+    horizontalOverlap(x, objects[i].x - 81, objects[i].y, ok);
+    if (ok == 0)
+        line(x, objects[i].y, objects[i].x - 81, objects[i].y);
+
+    cout << "connected LL \n";
 }
 
 void connectionRL(int i, int j, char connectorI)
@@ -786,35 +898,194 @@ void connectionRL(int i, int j, char connectorI)
         swap(i, j);
 
     float difference = (objects[j].x - objects[i].x - 162) / 2;
+    int ok;
+    int x = objects[i].x + 81 + difference, y = objects[i].y;
+    cornerOverlap(x, y, objects[i].x + 81, objects[j].y);
+    horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
+    if (ok == 0)
+        line(objects[i].x + 81, objects[i].y, x, objects[i].y);
+    x = objects[i].x + 81 + difference;
+    int y1 = objects[j].y;
+    cornerOverlap(x, y1, objects[j].x - 81, objects[i].y);
+    verticalOverlap(y, y1, objects[i].x + 81 + difference, ok);
+    if (ok == 0)
+        line(objects[i].x + 81 + difference, y, objects[i].x + 81 + difference, y1);
+    horizontalOverlap(x, objects[j].x - 81, objects[j].y, ok);
+    if (ok == 0)
+        line(x, objects[j].y, objects[j].x - 81, objects[j].y);
 
-    line(objects[i].x + 81, objects[i].y, objects[i].x + 81 + difference, objects[i].y);
-    line(objects[i].x + 81 + difference, objects[i].y, objects[i].x + 81 + difference, objects[j].y);
-    line(objects[j].x - 81 - difference, objects[j].y, objects[j].x - 81, objects[j].y);
+    cout << "connected RL \n";
 }
 
-void connectionS(int i, int j, char connectorI) //this is a S type connection which means the left object is connected with the right one by left-right connectors
+void connectionS(int i, int j, char connectorI) // this is a S type connection which means the left object is connected with the right one by left-right connectors
 {
-    if(objects[j].y < objects[i].y){swap(i,j); if(connectorI == 'r') connectorI = 'l'; else connectorI = 'r';}
+    if (objects[j].y < objects[i].y)
+    {
+        swap(i, j);
+        if (connectorI == 'r')
+            connectorI = 'l';
+        else
+            connectorI = 'r';
+    }
 
-    if( connectorI == 'l' )
+    if (connectorI == 'l')
     {
         float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[j].x - objects[i].x + 91);
+        int ok;
         line(objects[i].x - 81, objects[i].y, objects[i].x - 91, objects[i].y);
-        line(objects[i].x - 91, objects[i].y, objects[i].x - 91, objects[i].y + difY);
-        line(objects[i].x - 91, objects[i].y + difY, objects[i].x + difX, objects[i].y + difY);
+        int x = objects[i].x - 91, y = objects[i].y + difY;
+        cornerOverlap(x, y, objects[i].x + difX, objects[i].y);
+        verticalOverlap(objects[i].y, y, objects[i].x - 91, ok);
+        if (ok == 0)
+            line(objects[i].x - 91, objects[i].y, objects[i].x - 91, y);
+        y = objects[i].y + difY;
+        int x1 = objects[j].x + 91;
+        cornerOverlap(x1, y, x, objects[j].y);
+        horizontalOverlap(x, x1, objects[i].y + difY, ok);
+        if (ok == 0)
+            line(x, objects[i].y + difY, x1, objects[i].y + difY);
+        verticalOverlap(y, objects[j].y, objects[j].x + 91, ok);
+        if (ok == 0)
+            line(objects[j].x + 91, objects[j].y, objects[i].x + difX, y);
         line(objects[j].x + 81, objects[j].y, objects[j].x + 91, objects[j].y);
-        line(objects[j].x + 91, objects[j].y, objects[i].x + difX, objects[i].y + difY);
     }
-    else if ( connectorI == 'r' ){
+    else if (connectorI == 'r')
+    {
 
-            float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[i].x - objects[j].x + 91);
-            line(objects[i].x + 81, objects[i].y, objects[i].x + 91, objects[i].y);
-            line(objects[i].x + 91, objects[i].y, objects[i].x + 91, objects[i].y + difY);
-            line(objects[i].x + 91, objects[i].y + difY, objects[i].x - difX, objects[i].y + difY);
-            line(objects[j].x - 81, objects[j].y, objects[j].x - 91, objects[j].y);
-            line(objects[j].x - 91, objects[j].y, objects[i].x - difX, objects[i].y + difY);
+        float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[i].x - objects[j].x + 91);
+        line(objects[i].x + 81, objects[i].y, objects[i].x + 91, objects[i].y);
+        int ok;
+        int x = objects[i].x + 91, y = objects[i].y + difY;
+        cornerOverlap(x, y, objects[i].x - difX, objects[i].y);
+        verticalOverlap(objects[i].y, y, objects[i].x + 91, ok);
+        if (ok == 0)
+            line(objects[i].x + 91, objects[i].y, objects[i].x + 91, y);
+        int x1 = objects[j].x - 91;
+        y = objects[i].y + difY;
+        cornerOverlap(x1, y, x, objects[j].y);
+        horizontalOverlap(x1, x, objects[i].y + difY, ok);
+        if (ok == 0)
+            line(x1, objects[i].y + difY, x, objects[i].y + difY);
+        line(objects[j].x - 81, objects[j].y, objects[j].x - 91, objects[j].y);
+        verticalOverlap(objects[j].y, y, objects[i].x - difX, ok);
+        if (ok == 0)
+            line(objects[j].x - 91, objects[j].y, objects[i].x - difX, y);
     }
+    cout << "connected S";
+}
 
+/*<-----------------------End Connection--------------------->*/
+
+/*<-----------------------Overlap--------------------->*/
+
+int imageOverlap(int x, int y, int j)
+{
+
+    for (int i = 0; i < objectsCount; i++)
+    {
+        if (i != j && abs(objects[i].x - x) < 162 && abs(objects[i].y - y) < 150)
+            return 0;
+    }
+    return 1;
+}
+
+void horizontalOverlap(int x1, int x2, int y, int &ok)
+{
+    ok = 0;
+    for (int k = 0; k < objectsCount; k++)
+        if (objects[k].x >= x1 && objects[k].x <= x2 && objects[k].y + 75 >= y && objects[k].y - 75 <= y)
+        {
+
+            float dif = objects[k].y - y + 80;
+            line(x1, y, objects[k].x - 91, y);
+            line(objects[k].x - 91, y, objects[k].x - 91, y + dif);
+            line(objects[k].x - 91, y + dif, objects[k].x + 91, y + dif);
+            line(objects[k].x + 91, y + dif, objects[k].x + 91, y);
+            line(objects[k].x + 91, y, x2, y);
+            ok = 1;
+        }
+}
+
+void verticalOverlap(int y1, int y2, int x, int &ok)
+{
+    ok = 0;
+    if (y2 < y1)
+        swap(y1, y2);
+    for (int k = 0; k < objectsCount; k++)
+    {
+        if (objects[k].x + 81 >= x && objects[k].x - 81 <= x && objects[k].y > y1 && objects[k].y < y2)
+        {
+            float dif = x - objects[k].x - 86;
+            line(x, y1, x, objects[k].y - 80);
+            line(x, objects[k].y - 80, x - dif, objects[k].y - 80);
+            line(x - dif, objects[k].y - 80, x - dif, objects[k].y + 80);
+            line(x - dif, objects[k].y + 80, x, objects[k].y + 80);
+            line(x, objects[k].y + 80, x, y2);
+            ok = 1;
+        }
+    }
+}
+
+void cornerOverlap(int &x, int &y, int x1, int y1)
+{
+    for (int k = 0; k <= objectsCount; k++)
+    {
+        if (abs(objects[k].x - x) <= 81 && abs(objects[k].y - y) <= 75)
+        {
+            if (objects[k].x + 81 > x && objects[k].x < x1)
+            {
+                if (objects[k].y + 75 > y && objects[k].y + 75 < y1)
+                {
+                    line(objects[k].x + 91, y, objects[k].x + 91, objects[k].y + 80);
+                    line(objects[k].x + 91, objects[k].y + 80, x, objects[k].y + 80);
+                    x = objects[k].x + 91;
+                    y = objects[k].y + 80;
+                }
+                else if (objects[k].y - 75 < y && objects[k].y - 75 > y1)
+                {
+                    line(objects[k].x + 91, y, objects[k].x + 91, objects[k].y - 80);
+                    line(objects[k].x + 91, objects[k].y - 80, x, objects[k].y - 80);
+                    x = objects[k].x + 91;
+                    y = objects[k].y - 80;
+                }
+            }
+            else
+            {
+
+                if (objects[k].y + 75 > y && objects[k].y + 75 < y1)
+                {
+                    line(objects[k].x - 91, y, objects[k].x - 91, objects[k].y + 80);
+                    line(objects[k].x - 91, objects[k].y + 80, x, objects[k].y + 80);
+                    x = objects[k].x - 91;
+                    y = objects[k].y + 80;
+                }
+                else if (objects[k].y - 75 < y && objects[k].y - 75 > y1)
+                {
+                    line(objects[k].x - 91, y, objects[k].x - 91, objects[k].y - 80);
+                    line(objects[k].x - 91, objects[k].y - 80, x, objects[k].y - 80);
+                    x = objects[k].x - 91;
+                    y = objects[k].y - 80;
+                }
+            }
+        }
+    }
+}
+
+/*<-----------------------End Overlap--------------------->*/
+
+/*<-----------------------Properties--------------------->*/
+
+void commonSet()
+{
+    objectsCount++;
+    draw();
+    objectsCount--;
+    propertiesDisplay(objectsCount);
+    setbkcolor(LIGHTGRAY);
+    outtextxy(middleX - 625, systemHeight - 120, "          ");
+    handlePropertiesInsert(objectsCount);
+    propertiesDisplay(objectsCount);
+    objectsCount++;
 }
 
 void propertiesDisplay(int i)
@@ -827,21 +1098,74 @@ void propertiesDisplay(int i)
     setbkcolor(BLACK);
 }
 
-int imageOverlap(int x, int y, int j)
+/// @brief This function is used for inserting the properties of an object
+void handlePropertiesInsert(int j)
 {
-
-    for (int i = 0; i < objectsCount; i++)
+    setbkcolor(DARKGRAY);
+    char key[15] = "";
+    int i = 0;
+    while (1)
     {
-        if( i != j && abs(objects[i].x - x) < 162 && abs(objects[i].y - y) < 150) return 0;
-
+        if (kbhit())
+        {
+            key[i] = getch();
+            // if you press "enter" the loop will break
+            if (key[i] == 13)
+            {
+                key[i] = '\0';
+                break;
+            }
+            setbkcolor(DARKGRAY);
+            outtextxy(middleX - 625, systemHeight - 120, key);
+            if (key[i] == 8)
+            {
+                key[i] = '\0';
+                key[i - 1] = '\0';
+                setbkcolor(LIGHTGRAY);
+                outtextxy(middleX - 625, systemHeight - 120, "          ");
+                setbkcolor(DARKGRAY);
+                outtextxy(middleX - 625, systemHeight - 120, key);
+                i--;
+                continue;
+            }
+            i++;
+        }
     }
-    return 1;
+    strcpy(objects[j].properties.quantity, key);
+    setbkcolor(LIGHTGRAY);
 }
 
+/*<-----------------------End Properties--------------------->*/
 
+/*<-----------------------Buttons--------------------->*/
 void load()
 {
-    ifstream circuitFile("my_circuit.txt");
+    // open a FileOpenDialog box and load the file
+    OPENFILENAME ofn = {};
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = new TCHAR[MAX_PATH];
+    ofn.lpstrFile[0] = '\0';
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0";
+    ofn.nFilterIndex = 1;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrDefExt = "txt";
+    ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+    ifstream circuitFile;
+    // Display the Open dialog box
+    if (GetOpenFileName(&ofn) == TRUE)
+    {
+        string fileName = ofn.lpstrFile;
+        circuitFile.open(fileName);
+    }
+    else
+    {
+        cout << "Dialog cancelled" << std::endl;
+        return;
+    }
     if (circuitFile.is_open())
     {
         // Read the objectsCount variable from the file
@@ -854,7 +1178,7 @@ void load()
             circuitFile >> objects[i].leftConnector >> objects[i].rightConnector;
             circuitFile >> objects[i].properties.quantity >> objects[i].properties.measurement;
             circuitFile >> objects[i].properties.name;
-            cout << objects[i].x << " " << objects[i].y <<'\n';
+            cout << objects[i].x << " " << objects[i].y << '\n';
         }
 
         // Close the file
@@ -865,7 +1189,34 @@ void load()
 
 void save()
 {
-    ofstream circuitFile("my_circuit.txt");
+    // open a save as dialogue box and save the file
+    OPENFILENAME ofn = {};
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = new TCHAR[MAX_PATH];
+    ofn.lpstrFile[0] = '\0';
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0";
+    ofn.nFilterIndex = 1;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrDefExt = "txt";
+    ofn.Flags = OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+    ofstream circuitFile;
+    // Display the Save As dialog box
+    if (GetSaveFileName(&ofn) == TRUE)
+    {
+        string fileName = ofn.lpstrFile;
+        circuitFile.open(fileName);
+    }
+    else
+    {
+        cout << "Dialog cancelled" << std::endl;
+        return;
+    }
+
+    // if the user presses the OK button, save the file
     circuitFile << "";
     if (circuitFile.is_open())
     {
@@ -883,86 +1234,187 @@ void save()
 
         // Close the file
         circuitFile.close();
-        cout << "saved"<<'\n';
+        cout << "saved" << '\n';
     }
 }
 
-void commonSet()
+/// @brief This function is used for the edit button
+void edit()
 {
-    objectsCount++;
-    draw();
-    objectsCount--;
-    propertiesDisplay(objectsCount);
-    setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 625, systemHeight - 120, "          ");
-    char key[15] = "";
-    int i = 0;
+    int x, y;
+    while (!ismouseclick(WM_LBUTTONDOWN))
+    {
+        delay(100); // Reduce CPU usage by waiting 100 milliseconds before checking again
+    }
+    x = mousex();
+    y = mousey();
+    clearmouseclick(WM_LBUTTONDOWN);
+    for (int i = 0; i < objectsCount; ++i)
+    {
+        if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
+        {
+            propertiesDisplay(i);
+            setbkcolor(LIGHTGRAY);
+            outtextxy(middleX - 625, systemHeight - 120, "          ");
+            handlePropertiesInsert(i);
+            propertiesDisplay(i);
+            return;
+        }
+    }
+    // Mouse is not within range of any object
+    cout << "No object was edited" << endl;
+}
+
+/// @brief This function is used for the clear button
+void clear()
+{
+    for (int i = 0; i < objectsCount; ++i)
+    {
+        memset(&objects[i], 0, sizeof(objects[i])); // sets objects[i] memory block to 0
+    }
+    refresh();
+}
+
+/// @brief This function is used for the move button
+void mov()
+{
+    bool shouldExit = false;
+
+    while (!shouldExit)
+    {
+        if (ismouseclick(WM_LBUTTONDOWN))
+        {
+            clearmouseclick(WM_LBUTTONDOWN);
+            int x = mousex(), y = mousey();
+            for (int i = 0; i < objectsCount && !shouldExit; i++)
+            {
+                if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
+                {
+                    while (!shouldExit)
+                    {
+                        if (ismouseclick(WM_LBUTTONDOWN))
+                        {
+                            clearmouseclick(WM_LBUTTONDOWN);
+                            int newX = mousex(), newY = mousey();
+                            if (newX < middleX - 410 || newY < 200 || newX > systemWidth - 85 || newY > systemHeight - 60)
+                                break;
+                            if (imageOverlap(newX, newY, i) == 0)
+                                break;
+                            objects[i].x = newX;
+                            objects[i].y = newY;
+                            draw();
+                            propertiesDisplay(i);
+                            shouldExit = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// @brief This function is used for the delete button
+void deleteObject()
+{
     while (1)
     {
-        if (kbhit())
+        if (ismouseclick(WM_LBUTTONDOWN))
         {
-            key[i] = getch();
-            setbkcolor(DARKGRAY);
-            outtextxy(middleX - 625, systemHeight - 120, key);
-            // if you press "enter" the loop will break
-            if (key[i] == 13)
+            clearmouseclick(WM_LBUTTONDOWN);
+            for (int j = 0; j < objectsCount; j++)
             {
-                key[i] = '\0';
-                break;
+                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                {
+                    objects[j].leftConnector = -1;
+                    draw();
+                }
+                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                {
+                    objects[j].rightConnector = -1;
+                    draw();
+                }
+                else if (mousex() >= objects[j].x - 75 && mousex() <= objects[j].x + 75 && mousey() >= objects[j].y - 75 && mousey() <= objects[j].y + 75)
+                {
+                    for (int i = j; i < objectsCount; i++)
+                    {
+                        objects[i] = objects[i + 1];
+                    }
+                    objectsCount--;
+                    draw();
+                }
             }
-
-            i++;
-        }
-    }
-    strcpy(objects[objectsCount].properties.quantity, key);
-    propertiesDisplay(objectsCount);
-    objectsCount++;
-
-}
-
-void horizontalOverlap(int x1, int x2, int y, int &ok)
-{
-    ok = 0;
-    for(int k = 0; k < objectsCount; k++ )
-        if(objects[k].x >= x1 && objects[k].x <= x2 && objects[k].y + 75 >= y && objects[k].y -75 <= y)
-    {
-
-            float dif = objects[k].y - y + 80;
-            line(x1, y, objects[k].x - 91, y);
-            line(objects[k].x - 91, y, objects[k].x - 91, y + dif);
-            line(objects[k].x - 91, y + dif, objects[k].x + 91, y + dif);
-            line(objects[k].x + 91, y + dif, objects[k].x + 91, y);
-            line(objects[k].x + 91, y, x2, y);
-            ok = 1;
-    }
-
-}
-
-void verticalOverlap(int y1, int y2, int x, int &ok)
-{
-    ok = 0;
-    if( y2 < y1 ) swap(y1, y2);
-    for (int k = 0; k < objectsCount; k++)
-    {
-        if (objects[k].x + 81 >= x && objects[k].x - 81 <= x && objects[k].y > y1 && objects[k].y < y2)
-        {
-                float dif = x - objects[k].x - 86;
-                line(x, y1, x, objects[k].y - 80);
-                line(x, objects[k].y - 80, x - dif, objects[k].y - 80);
-                line(x - dif, objects[k].y - 80, x - dif, objects[k].y + 80);
-                line(x - dif, objects[k].y + 80, x , objects[k].y + 80);
-                line(x, objects[k].y + 80, x , y2);
-                ok = 1;
-
+            break;
         }
     }
 }
-
 
 void exit()
 {
     closegraph();
     return;
 }
+
+void rotateObject()
+{
+    bool found = false;
+    int i;
+    while (1)
+    {
+        if (ismouseclick(WM_LBUTTONDOWN))
+        {
+            clearmouseclick(WM_LBUTTONDOWN);
+            for (i = 0; i < objectsCount; i++)
+            {
+                if (mousex() >= objects[i].x - 75 && mousex() <= objects[i].x + 75 && mousey() >= objects[i].y - 75 && mousey() <= objects[i].y + 75)
+                {
+                    found = true;
+                    break;
+                }
+
+            }
+            break;
+        }
+    }
+    if(found)
+    {
+        char *type;
+        type = strtok(objects[i].type, "234.");
+        if(strstr(objects[i].type, "battery")!= NULL || strstr(objects[i].type, "dioda")!= NULL || strstr(objects[i].type, "tranzistor")!= NULL || strstr(objects[i].type, "inductor")!= NULL)
+        {
+            if(objects[i].rotateState == 4)
+            {
+                strcat(type, ".bmp");
+                strcpy(objects[i].type, type);
+                objects[i].rotateState = 1;
+            }
+        else {
+            char ext[6];
+            objects[i].rotateState ++;
+            ext[0] = objects[i].rotateState + '0';
+            strcat(ext, ".bmp");
+            strcat(type, ext);
+            strcpy(objects[i].type, type);
+            }
+        }
+    else {
+
+        if(objects[i].rotateState == 2)
+        {
+            strcat(type, ".bmp");
+            strcpy(objects[i].type, type);
+            objects[i].rotateState = 1;
+        }
+        else {
+            objects[i].rotateState ++;
+            strcat(type, "2.bmp");
+            strcpy(objects[i].type, type);
+        }
+    }
+
+    draw();
+}
+}
+
+/*<-----------------------End Buttons--------------------->*/
 
 /*<--------------------------End functions------------------------>*/
