@@ -281,25 +281,17 @@ void refresh()
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 415, middleX - 510, systemHeight - 375);
     setbkcolor(LIGHTGRAY);
-<<<<<<< HEAD
     outtextxy(middleX - 608, systemHeight - 407, "Rotate");
-=======
-    outtextxy(middleX - 608, systemHeight - 407, L.zoomIn);
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 365, middleX - 580, systemHeight - 325);
     setbkcolor(LIGHTGRAY);
-<<<<<<< HEAD
     outtextxy(middleX - 608, systemHeight - 357, "+");
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 560, systemHeight - 365, middleX - 510, systemHeight - 325);
     setbkcolor(LIGHTGRAY);
     outtextxy(middleX - 538, systemHeight - 357, "-");
-=======
-    outtextxy(middleX - 608, systemHeight - 357, L.zoomOut);
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 315, middleX - 510, systemHeight - 275);
@@ -588,12 +580,8 @@ void images()
                 {
                     propertiesDisplay(i);
                 }
-<<<<<<< HEAD
                 // LEFT connection in I
                 if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y +6 && objects[i].rotateState % 2 != 0)
-=======
-                if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6)
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -650,7 +638,6 @@ void images()
                                     objects[i].rightConnector = j;
                                     objects[j].rightConnector = i;
                                     connectionRR(i, j);
-<<<<<<< HEAD
                                 }
                                  else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
                                 {
@@ -694,7 +681,6 @@ void images()
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].bottomConnector = i;
-                                    cout<<"TT"<<endl;
                                     connectionAnalyst(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
@@ -733,27 +719,20 @@ void images()
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].bottomConnector = i;
-                                    cout<< "BT" << endl;
                                     connectionAnalyst(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].topConnector = i;
-                                    cout<< "TT" << endl;
                                     connectionAnalyst(i, j);
-=======
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
                                 }
                             }
                             break;
                         }
                     }
             }
-<<<<<<< HEAD
 
-=======
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 615 && y <= systemHeight - 575)
             {
                 cout << "pushed edit()" << '\n';
@@ -776,12 +755,8 @@ void images()
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 415 && y <= systemHeight - 375)
             {
-<<<<<<< HEAD
                 cout << "pushed rotateObject()" << '\n';
                 rotateObject();
-=======
-                cout << "pushed zoomin()" << '\n';
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 365 && y <= systemHeight - 325)
             {
@@ -1376,7 +1351,6 @@ void exit()
     return;
 }
 
-<<<<<<< HEAD
 void rotateObject()
 {
     bool found = false;
@@ -1438,8 +1412,6 @@ void rotateObject()
 }
 }
 
-=======
->>>>>>> 6fe5f322af76637b7d6884090f138c3099f9d44b
 /*<-----------------------End Buttons--------------------->*/
 
 /*<--------------------------End functions------------------------>*/
