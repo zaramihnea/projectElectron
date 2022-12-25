@@ -124,18 +124,20 @@ void startingPage()
     }
     else
         cleardevice();
+
+    readimagefile("background.jpg", 0, 0, systemWidth, systemHeight);
+    settextstyle(4, HORIZ_DIR, 4);
+    setbkcolor(WHITE);
+    bar(middleX - 380, middleY - 40 , middleX - 100, middleY + 40);
+    bar(middleX + 100, middleY - 40 , middleX + 380, middleY + 40);
+    setcolor(BLACK);
+    outtextxy(middleX - 340, middleY - 12, L.language);
+    outtextxy(middleX + 160, middleY - 12, L.start);
+    rectangle(middleX - 380, middleY - 40 , middleX - 100, middleY + 40);
+    rectangle(middleX + 100, middleY - 40 , middleX + 380, middleY + 40);
+    bool click = false;
     setbkcolor(BLACK);
     setcolor(WHITE);
-    readimagefile("background.jpg", 0, 0, systemWidth, systemHeight);
-    setcolor(WHITE);
-    settextstyle(4, HORIZ_DIR, 4);
-    setcolor(WHITE);
-    rectangle(middleX - 380, 400, middleX - 100, 480);
-    outtextxy(middleX - 340, 420, L.language);
-    setcolor(WHITE);
-    rectangle(middleX + 100, 400, middleX + 380, 480);
-    outtextxy(middleX + 160, 420, L.start);
-    bool click = false;
     while (1)
     {
         if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
@@ -144,13 +146,13 @@ void startingPage()
             clearmouseclick(WM_LBUTTONDOWN);
             int xMouse = mousex();
             int yMouse = mousey();
-            if (xMouse >= middleX - 380 && xMouse <= middleX - 100 && yMouse >= 400 && xMouse <= 480)
+            if (xMouse >= middleX - 380 && xMouse <= middleX - 100 && yMouse >= middleY - 40 && yMouse <= middleY + 40)
             {
                 languageMenu();
                 click = true;
             }
             if (click == false)
-                if (xMouse >= middleX + 100 && xMouse <= middleX + 380 && yMouse >= 400 && yMouse <= 480)
+                if (xMouse >= middleX + 100 && xMouse <= middleX + 380 && yMouse >= middleY - 40 && yMouse <= middleY + 40)
                 {
                     click = true;
                     images();
