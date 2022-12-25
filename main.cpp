@@ -85,6 +85,13 @@ void connectionLL(int i, int j);
 void connectionRR(int i, int j);
 void connectionRL(int i, int j, char connectorI);
 void connectionS(int i, int j, char connectorI);
+void connectionBT(int i, int j);
+void connectionTT(int i, int j);
+void connectionBB(int i, int j);
+void connectionTL(int i, int j);
+void connectionTR(int i, int j);
+void connectionBL(int i, int j);
+void connectionBR(int i, int j);
 void propertiesDisplay(int i);
 void deleteObject();
 void exit();
@@ -607,13 +614,15 @@ void images()
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].bottomConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBL(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].topConnector = i;
-                                    connectionAnalyst(i, j);
+                                    cout << "TL";
+                                    connectionTL(i, j);
+
                                 }
                             }
                             break;
@@ -645,13 +654,13 @@ void images()
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].bottomConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBR(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].topConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionTR(i, j);
                                 }
                             }
                             break;
@@ -671,25 +680,25 @@ void images()
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].leftConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBL(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].rightConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBR(i, j);
                                 }
                                 else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].bottomConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBB(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].topConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBT(i, j);
                                 }
                             }
                             break;
@@ -709,25 +718,25 @@ void images()
 
                                     objects[i].topConnector = j;
                                     objects[j].leftConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionTL(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].rightConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionTR(i, j);
                                 }
                                  else if(mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y +75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].bottomConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionBT(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].topConnector = i;
-                                    connectionAnalyst(i, j);
+                                    connectionTT(i, j);
                                 }
                             }
                             break;
@@ -803,17 +812,47 @@ void draw()
 
         if (objects[j].rightConnector > -1)
         {
-            if (objects[objects[j].rightConnector].rightConnector == j)
+            if(objects[objects[j].rightConnector].rightConnector == j)
                 connectionRR(j, objects[j].rightConnector);
-            else
+            if(objects[objects[j].rightConnector].leftConnector == j)
                 connectionAnalyst(j, objects[j].rightConnector);
+            if(objects[objects[j].rightConnector].topConnector == j)
+                connectionTR(j, objects[j].rightConnector);
+            if(objects[objects[j].rightConnector].bottomConnector == j)
+                connectionBR(j, objects[j].rightConnector);
         }
         if (objects[j].leftConnector > -1)
         {
-            if (objects[objects[j].leftConnector].leftConnector == j)
+            if(objects[objects[j].leftConnector].leftConnector == j)
                 connectionLL(j, objects[j].leftConnector);
-            else
+            if(objects[objects[j].leftConnector].rightConnector == j)
                 connectionAnalyst(j, objects[j].leftConnector);
+            if(objects[objects[j].leftConnector].topConnector == j)
+                connectionTL(j, objects[j].leftConnector);
+            if(objects[objects[j].leftConnector].bottomConnector == j)
+                connectionBL(j, objects[j].leftConnector);
+        }
+        if(objects[j].topConnector > -1)
+        {
+            if(objects[objects[j].topConnector].topConnector == j)
+                connectionTT(j, objects[j].topConnector);
+            if(objects[objects[j].topConnector].bottomConnector == j)
+                connectionBT(j, objects[j].topConnector);
+            if(objects[objects[j].topConnector].rightConnector == j)
+                connectionTR(j, objects[j].topConnector);
+            if(objects[objects[j].topConnector].leftConnector == j)
+                connectionTL(j, objects[j].topConnector);
+        }
+        if(objects[j].bottomConnector > -1)
+        {
+            if(objects[objects[j].bottomConnector].bottomConnector == j)
+                connectionBB(j, objects[j].bottomConnector);
+            if(objects[objects[j].bottomConnector].topConnector == j)
+                connectionBT(j, objects[j].bottomConnector);
+            if(objects[objects[j].bottomConnector].rightConnector == j)
+                connectionBR(j, objects[j].bottomConnector);
+            if(objects[objects[j].bottomConnector].leftConnector == j)
+                connectionBL(j, objects[j].bottomConnector);
         }
     }
 }
@@ -970,7 +1009,133 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
         if (ok == 0)
             line(objects[j].x - 91, objects[j].y, objects[i].x - difX, y);
     }
-    cout << "connected S";
+    cout << "connected S \n";
+}
+
+void connectionBT(int i, int j)
+{
+    if(objects[i].y > objects[j].y)
+        swap(i, j);
+
+    if(objects[i].y < objects[j].y && objects[i].bottomConnector == j)
+    {
+        float dif = abs(objects[j].y - objects[i].y) / 2;
+        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + dif);
+        line(objects[i].x, objects[i].y + dif, objects[j].x, objects[i].y + dif);
+        line(objects[j].x, objects[i].y + dif, objects[j].x, objects[j].y - 81);
+
+    }
+   else if (objects[i].topConnector == j)
+    {
+        int a;
+        if(objects[i].x > objects[j].x)
+            a = 80;
+        else a = -80;
+        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
+        line(objects[i].x, objects[i].y - 91, objects[i].x + a, objects[i].y - 91);
+        line(objects[i].x + a, objects[i].y - 91, objects[i].x + a, objects[j].y + 91);
+        line(objects[i].x + a, objects[j].y + 91, objects[j].x, objects[j].y + 91);
+        line(objects[j].x, objects[j].y + 91, objects[j].x, objects[j].y + 81);
+    }
+    cout << "connected BT \n";
+}
+
+void connectionTT(int i, int j)
+{
+    if(objects[i].y > objects[j].y)
+    swap(i, j);
+    line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
+    line(objects[i].x, objects[i].y - 91, objects[j].x, objects[i].y - 91);
+    line(objects[j].x, objects[i].y - 91, objects[j].x, objects[j].y - 81);
+    cout << "connected TT \n";
+}
+
+void connectionBB(int i, int j)
+{
+    if(objects[i].y < objects[j].y)
+    swap(i, j);
+    line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + 91);
+    line(objects[i].x, objects[i].y + 91, objects[j].x, objects[i].y + 91);
+    line(objects[j].x, objects[i].y + 91, objects[j].x, objects[j].y + 81);
+    cout << "connected BB \n";
+}
+
+void connectionTL(int i, int j)
+{
+    if(objects[i].leftConnector == j)
+        swap(i, j);
+    if(objects[i].y - 81 > objects[j].y && objects[i].x < objects[j].x - 81)
+    {
+            line(objects[i].x, objects[i].y - 81, objects[i].x, objects[j].y);
+            line(objects[i].x, objects[j].y, objects[j].x - 81, objects[j].y);
+    }
+    else
+    {
+        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
+        line(objects[i].x, objects[i].y - 91, objects[j].x - 91, objects[i].y - 91);
+        line(objects[j].x - 91, objects[i].y - 91, objects[j].x - 91, objects[j].y);
+        line(objects[j].x - 91, objects[j].y, objects[j].x - 81, objects[j].y);
+    }
+
+    cout << "connected TL \n";
+}
+
+void connectionTR(int i, int j)
+{
+    if(objects[i].rightConnector == j)
+        swap(i, j);
+    if(objects[i].y - 81 > objects[j].y && objects[i].x > objects[j].x + 81)
+    {
+        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[j].y);
+        line(objects[i].x, objects[j].y, objects[j].x + 81, objects[j].y);
+    }
+    else
+    {
+        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
+        line(objects[i].x, objects[i].y - 91, objects[j].x + 91, objects[i].y - 91);
+        line(objects[j].x + 91, objects[i].y - 91, objects[j].x + 91, objects[j].y);
+        line(objects[j].x + 91, objects[j].y, objects[j].x + 81, objects[j].y);
+    }
+    cout << "connected TR \n";
+}
+
+void connectionBL(int i, int j)
+{
+    if(objects[i].leftConnector == j)
+        swap(i, j);
+    if(objects[i].y + 81 < objects[j].y && objects[i].x < objects[j].x - 81)
+    {
+            line(objects[i].x, objects[i].y + 81, objects[i].x, objects[j].y);
+            line(objects[i].x, objects[j].y, objects[j].x - 81, objects[j].y);
+    }
+    else
+    {
+        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + 91);
+        line(objects[i].x, objects[i].y + 91, objects[j].x - 91, objects[i].y + 91);
+        line(objects[j].x - 91, objects[i].y + 91, objects[j].x - 91, objects[j].y);
+        line(objects[j].x - 91, objects[j].y, objects[j].x - 81, objects[j].y);
+    }
+
+    cout << "connected BL \n";
+}
+
+void connectionBR(int i, int j)
+{
+    if(objects[i].rightConnector == j)
+        swap(i, j);
+    if(objects[i].y + 81 < objects[j].y && objects[i].x > objects[j].x + 81)
+    {
+        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[j].y);
+        line(objects[i].x, objects[j].y, objects[j].x + 81, objects[j].y);
+    }
+    else
+    {
+        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + 91);
+        line(objects[i].x, objects[i].y + 91, objects[j].x + 91, objects[i].y + 91);
+        line(objects[j].x + 91, objects[i].y + 91, objects[j].x + 91, objects[j].y);
+        line(objects[j].x + 91, objects[j].y, objects[j].x + 81, objects[j].y);
+    }
+    cout << "connected BR \n";
 }
 
 /*<-----------------------End Connection--------------------->*/
