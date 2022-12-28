@@ -70,6 +70,9 @@ int objectsCount = 0;
 
 lang L = en;
 
+const int DEFAULT_OBJECT_SIZE = 75;
+int objectSize = DEFAULT_OBJECT_SIZE;
+
 /*<------------End global variables------------>*/
 
 /*<------------Begin function definitions------------>*/
@@ -107,6 +110,8 @@ void mov();
 void edit();
 int checkPointOverlap(int x, int y);
 void handlePropertiesInsert(int j);
+void zoomIn();
+void zoomOut();
 
 /*<------------End function definitions------------>*/
 
@@ -351,9 +356,9 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("condensator.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
-                        circle(mousex() - 78, mousey(), 6);
-                        circle(mousex() + 78, mousey(), 6);
+                        readimagefile("condensator.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
+                        circle(mousex() - (objectSize+2), mousey(), 6);
+                        circle(mousex() + (objectSize+2), mousey(), 6);
                         objects[objectsCount].x = mousex();
                         objects[objectsCount].y = mousey();
                         strcpy(objects[objectsCount].type, "condensator.bmp");
@@ -375,7 +380,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("dioda.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("dioda.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -399,7 +404,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("tranzistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("tranzistor.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -423,7 +428,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("inductor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("inductor.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -447,7 +452,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("rezistor.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("rezistor.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -471,7 +476,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("voltmeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("voltmeter.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -495,7 +500,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("ammeter.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("ammeter.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -519,7 +524,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("bulb.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("bulb.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -543,7 +548,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("fuse.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("fuse.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -567,7 +572,7 @@ void images()
                             continue;
                         if (!imageOverlap(mousex(), mousey(), objectsCount))
                             continue;
-                        readimagefile("battery.bmp", mousex() - 75, mousey() - 75, mousex() + 75, mousey() + 75);
+                        readimagefile("battery.bmp", mousex() - objectSize, mousey() - objectSize, mousex() + objectSize, mousey() + objectSize);
                         circle(mousex() - 78, mousey(), 6);
                         circle(mousex() + 78, mousey(), 6);
                         objects[objectsCount].x = mousex();
@@ -583,12 +588,12 @@ void images()
 
             for (int i = 0; i < objectsCount; i++)
             {
-                if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
+                if (x >= objects[i].x - objectSize && x <= objects[i].x + objectSize && y >= objects[i].y - objectSize && y <= objects[i].y + objectSize)
                 {
                     propertiesDisplay(i);
                 }
                 // LEFT connection in I
-                if (x >= objects[i].x - 81 && x <= objects[i].x - 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6 && objects[i].rotateState % 2 != 0)
+                if (x >= objects[i].x - (objectSize+6) && x <= objects[i].x - objectSize && y >= objects[i].y - 6 && y <= objects[i].y + 6 && objects[i].rotateState % 2 != 0)
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -596,25 +601,25 @@ void images()
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].leftConnector = i;
                                     connectionLL(i, j);
                                 }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].rightConnector = i;
                                     connectionAnalyst(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + 75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].bottomConnector = i;
                                     connectionBL(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].leftConnector = j;
                                     objects[j].topConnector = i;
@@ -626,7 +631,7 @@ void images()
                         }
                     }
                 // RIGHT connection in I
-                if (x <= objects[i].x + 81 && x >= objects[i].x + 75 && y >= objects[i].y - 6 && y <= objects[i].y + 6 && objects[i].rotateState % 2 != 0)
+                if (x <= objects[i].x + (objectSize+6) && x >= objects[i].x + objectSize && y >= objects[i].y - 6 && y <= objects[i].y + 6 && objects[i].rotateState % 2 != 0)
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -634,26 +639,26 @@ void images()
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
 
                                     objects[i].rightConnector = j;
                                     objects[j].leftConnector = i;
                                     connectionAnalyst(i, j);
                                 }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].rightConnector = i;
                                     connectionRR(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + 75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].bottomConnector = i;
                                     connectionBR(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].rightConnector = j;
                                     objects[j].topConnector = i;
@@ -665,7 +670,7 @@ void images()
                     }
 
                 // BOTTOM connection in I
-                if (mousex() >= objects[i].x - 6 && mousex() <= objects[i].x + 6 && mousey() >= objects[i].y + 75 && mousey() <= objects[i].y + 81 && objects[i].rotateState % 2 == 0)
+                if (mousex() >= objects[i].x - 6 && mousex() <= objects[i].x + 6 && mousey() >= objects[i].y + objectSize && mousey() <= objects[i].y + (objectSize+6) && objects[i].rotateState % 2 == 0)
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -673,25 +678,25 @@ void images()
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].leftConnector = i;
                                     connectionBL(i, j);
                                 }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].rightConnector = i;
                                     connectionBR(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + 75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].bottomConnector = i;
                                     connectionBB(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].bottomConnector = j;
                                     objects[j].topConnector = i;
@@ -702,7 +707,7 @@ void images()
                         }
                     }
                 // TOP connection in I
-                if (mousex() >= objects[i].x - 6 && mousex() <= objects[i].x + 6 && mousey() >= objects[i].y - 81 && mousey() <= objects[i].y - 75 && objects[i].rotateState % 2 == 0)
+                if (mousex() >= objects[i].x - 6 && mousex() <= objects[i].x + 6 && mousey() >= objects[i].y - (objectSize+6) && mousey() <= objects[i].y - objectSize && objects[i].rotateState % 2 == 0)
                     while (1)
                     {
                         if (ismouseclick(WM_LBUTTONDOWN))
@@ -710,26 +715,26 @@ void images()
                             clearmouseclick(WM_LBUTTONDOWN);
                             for (int j = 0; j < objectsCount; j++)
                             {
-                                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
 
                                     objects[i].topConnector = j;
                                     objects[j].leftConnector = i;
                                     connectionTL(i, j);
                                 }
-                                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
+                                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].rightConnector = i;
                                     connectionTR(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + 75 && mousey() <= objects[j].y + 81 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].bottomConnector = i;
                                     connectionBT(i, j);
                                 }
-                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - 81 && mousey() <= objects[j].y - 75 && objects[j].rotateState % 2 == 0)
+                                else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
                                     objects[i].topConnector = j;
                                     objects[j].topConnector = i;
@@ -766,9 +771,15 @@ void images()
                 cout << "pushed rotateObject()" << '\n';
                 rotateObject();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 365 && y <= systemHeight - 325)
+            if (x >= middleX - 630 && x <= middleX - 580 && y >= systemHeight - 365 && y <= systemHeight - 325)
             {
-                cout << "pushed zoomout()" << '\n';
+                cout << "pushed zoomIn()" << '\n';
+                zoomIn();
+            }
+            if (x >= middleX - 560 && x <= middleX - 510 && y >= systemHeight - 365 && y <= systemHeight - 325)
+            {
+                cout << "pushed zoomOut()" << '\n';
+                zoomOut();
             }
             if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 315 && y <= systemHeight - 275)
             {
@@ -796,16 +807,16 @@ void draw()
 
     for (int j = 0; j < objectsCount; j++)
     {
-        readimagefile(objects[j].type, objects[j].x - 75, objects[j].y - 75, objects[j].x + 75, objects[j].y + 75);
+        readimagefile(objects[j].type, objects[j].x - objectSize, objects[j].y - objectSize, objects[j].x + objectSize, objects[j].y + objectSize);
         if (objects[j].rotateState % 2 == 0)
         {
-            circle(objects[j].x, objects[j].y + 78, 6);
-            circle(objects[j].x, objects[j].y - 78, 6);
+            circle(objects[j].x, objects[j].y + (objectSize + 2), 6);
+            circle(objects[j].x, objects[j].y - (objectSize + 2), 6);
         }
         else
         {
-            circle(objects[j].x + 78, objects[j].y, 6);
-            circle(objects[j].x - 78, objects[j].y, 6);
+            circle(objects[j].x + (objectSize + 2), objects[j].y, 6);
+            circle(objects[j].x - (objectSize + 2), objects[j].y, 6);
         }
 
         if (objects[j].rightConnector > -1)
@@ -865,7 +876,7 @@ void connectionAnalyst(int i, int j)
 
         if (objects[j].rightConnector == i)
         {
-            if (objects[j].x + 81 < objects[i].x - 81)
+            if (objects[j].x + (objectSize+6) < objects[i].x - (objectSize+6))
                 connectionRL(i, j, 'l');
             else
                 connectionS(i, j, 'l');
@@ -875,7 +886,7 @@ void connectionAnalyst(int i, int j)
     {
         if (objects[j].leftConnector == i)
         {
-            if (objects[i].x + 81 < objects[j].x - 81)
+            if (objects[i].x + (objectSize+6) < objects[j].x - (objectSize+6))
                 connectionRL(i, j, 'r');
             else
                 connectionS(i, j, 'r');
@@ -889,19 +900,19 @@ void connectionRR(int i, int j)
     if (objects[i].x > objects[j].x)
         swap(i, j);
 
-    line(objects[j].x + 81, objects[j].y, objects[j].x + 100, objects[j].y);
+    line(objects[j].x + (objectSize+6), objects[j].y, objects[j].x + 100, objects[j].y);
     int ok;
     int x = objects[j].x + 100, y = objects[i].y;
 
-    cornerOverlap(x, y, objects[i].x + 81, objects[j].y);
+    cornerOverlap(x, y, objects[i].x + (objectSize+6), objects[j].y);
 
     verticalOverlap(objects[j].y, y, objects[j].x + 100, ok);
     if (ok == 0)
         line(objects[j].x + 100, objects[j].y, objects[j].x + 100, y);
 
-    horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
+    horizontalOverlap(objects[i].x + (objectSize+6), x, objects[i].y, ok);
     if (ok == 0)
-        line(objects[i].x + 81, objects[i].y, x, objects[i].y);
+        line(objects[i].x + (objectSize+6), objects[i].y, x, objects[i].y);
 
     cout << "connected RR \n";
 }
@@ -912,18 +923,18 @@ void connectionLL(int i, int j)
     if (objects[j].x > objects[i].x)
         swap(i, j);
 
-    line(objects[j].x - 81, objects[j].y, objects[j].x - 100, objects[j].y);
+    line(objects[j].x - (objectSize+6), objects[j].y, objects[j].x - 100, objects[j].y);
 
     int ok, x = objects[j].x - 100, y = objects[i].y;
 
-    cornerOverlap(x, y, objects[i].x - 81, objects[j].y);
+    cornerOverlap(x, y, objects[i].x - (objectSize+6), objects[j].y);
 
     verticalOverlap(objects[j].y, y, objects[j].x - 100, ok);
     if (ok == 0)
         line(objects[j].x - 100, objects[j].y, objects[j].x - 100, y);
-    horizontalOverlap(x, objects[i].x - 81, objects[i].y, ok);
+    horizontalOverlap(x, objects[i].x - (objectSize+6), objects[i].y, ok);
     if (ok == 0)
-        line(x, objects[i].y, objects[i].x - 81, objects[i].y);
+        line(x, objects[i].y, objects[i].x - (objectSize+6), objects[i].y);
 
     cout << "connected LL \n";
 }
@@ -935,20 +946,20 @@ void connectionRL(int i, int j, char connectorI)
 
     float difference = (objects[j].x - objects[i].x - 162) / 2;
     int ok;
-    int x = objects[i].x + 81 + difference, y = objects[i].y;
-    cornerOverlap(x, y, objects[i].x + 81, objects[j].y);
-    horizontalOverlap(objects[i].x + 81, x, objects[i].y, ok);
+    int x = objects[i].x + (objectSize+6) + difference, y = objects[i].y;
+    cornerOverlap(x, y, objects[i].x + (objectSize+6), objects[j].y);
+    horizontalOverlap(objects[i].x + (objectSize+6), x, objects[i].y, ok);
     if (ok == 0)
-        line(objects[i].x + 81, objects[i].y, x, objects[i].y);
-    x = objects[i].x + 81 + difference;
+        line(objects[i].x + (objectSize+6), objects[i].y, x, objects[i].y);
+    x = objects[i].x + (objectSize+6) + difference;
     int y1 = objects[j].y;
-    cornerOverlap(x, y1, objects[j].x - 81, objects[i].y);
-    verticalOverlap(y, y1, objects[i].x + 81 + difference, ok);
+    cornerOverlap(x, y1, objects[j].x - (objectSize+6), objects[i].y);
+    verticalOverlap(y, y1, objects[i].x + (objectSize+6) + difference, ok);
     if (ok == 0)
-        line(objects[i].x + 81 + difference, y, objects[i].x + 81 + difference, y1);
-    horizontalOverlap(x, objects[j].x - 81, objects[j].y, ok);
+        line(objects[i].x + (objectSize+6) + difference, y, objects[i].x + (objectSize+6) + difference, y1);
+    horizontalOverlap(x, objects[j].x - (objectSize+6), objects[j].y, ok);
     if (ok == 0)
-        line(x, objects[j].y, objects[j].x - 81, objects[j].y);
+        line(x, objects[j].y, objects[j].x - (objectSize+6), objects[j].y);
 
     cout << "connected RL \n";
 }
@@ -966,46 +977,46 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
 
     if (connectorI == 'l')
     {
-        float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[j].x - objects[i].x + 91);
+        float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[j].x - objects[i].x + (objectSize + 16));
         int ok;
-        line(objects[i].x - 81, objects[i].y, objects[i].x - 91, objects[i].y);
-        int x = objects[i].x - 91, y = objects[i].y + difY;
+        line(objects[i].x - (objectSize+6), objects[i].y, objects[i].x - (objectSize + 16), objects[i].y);
+        int x = objects[i].x - (objectSize + 16), y = objects[i].y + difY;
         cornerOverlap(x, y, objects[i].x + difX, objects[i].y);
-        verticalOverlap(objects[i].y, y, objects[i].x - 91, ok);
+        verticalOverlap(objects[i].y, y, objects[i].x - (objectSize + 16), ok);
         if (ok == 0)
-            line(objects[i].x - 91, objects[i].y, objects[i].x - 91, y);
+            line(objects[i].x - (objectSize + 16), objects[i].y, objects[i].x - (objectSize + 16), y);
         y = objects[i].y + difY;
-        int x1 = objects[j].x + 91;
+        int x1 = objects[j].x + (objectSize + 16);
         cornerOverlap(x1, y, x, objects[j].y);
         horizontalOverlap(x, x1, objects[i].y + difY, ok);
         if (ok == 0)
             line(x, objects[i].y + difY, x1, objects[i].y + difY);
-        verticalOverlap(y, objects[j].y, objects[j].x + 91, ok);
+        verticalOverlap(y, objects[j].y, objects[j].x + (objectSize + 16), ok);
         if (ok == 0)
-            line(objects[j].x + 91, objects[j].y, objects[i].x + difX, y);
-        line(objects[j].x + 81, objects[j].y, objects[j].x + 91, objects[j].y);
+            line(objects[j].x + (objectSize + 16), objects[j].y, objects[i].x + difX, y);
+        line(objects[j].x + (objectSize+6), objects[j].y, objects[j].x + (objectSize + 16), objects[j].y);
     }
     else if (connectorI == 'r')
     {
 
-        float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[i].x - objects[j].x + 91);
-        line(objects[i].x + 81, objects[i].y, objects[i].x + 91, objects[i].y);
+        float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[i].x - objects[j].x + (objectSize + 16));
+        line(objects[i].x + (objectSize+6), objects[i].y, objects[i].x + (objectSize + 16), objects[i].y);
         int ok;
-        int x = objects[i].x + 91, y = objects[i].y + difY;
+        int x = objects[i].x + (objectSize + 16), y = objects[i].y + difY;
         cornerOverlap(x, y, objects[i].x - difX, objects[i].y);
-        verticalOverlap(objects[i].y, y, objects[i].x + 91, ok);
+        verticalOverlap(objects[i].y, y, objects[i].x + (objectSize + 16), ok);
         if (ok == 0)
-            line(objects[i].x + 91, objects[i].y, objects[i].x + 91, y);
-        int x1 = objects[j].x - 91;
+            line(objects[i].x + (objectSize + 16), objects[i].y, objects[i].x + (objectSize + 16), y);
+        int x1 = objects[j].x - (objectSize + 16);
         y = objects[i].y + difY;
         cornerOverlap(x1, y, x, objects[j].y);
         horizontalOverlap(x1, x, objects[i].y + difY, ok);
         if (ok == 0)
             line(x1, objects[i].y + difY, x, objects[i].y + difY);
-        line(objects[j].x - 81, objects[j].y, objects[j].x - 91, objects[j].y);
+        line(objects[j].x - (objectSize+6), objects[j].y, objects[j].x - (objectSize + 16), objects[j].y);
         verticalOverlap(objects[j].y, y, objects[i].x - difX, ok);
         if (ok == 0)
-            line(objects[j].x - 91, objects[j].y, objects[i].x - difX, y);
+            line(objects[j].x - (objectSize + 16), objects[j].y, objects[i].x - difX, y);
     }
     cout << "connected S \n";
 }
@@ -1018,9 +1029,9 @@ void connectionBT(int i, int j)
     if (objects[i].y < objects[j].y && objects[i].bottomConnector == j)
     {
         float dif = abs(objects[j].y - objects[i].y) / 2;
-        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + dif);
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[i].y + dif);
         line(objects[i].x, objects[i].y + dif, objects[j].x, objects[i].y + dif);
-        line(objects[j].x, objects[i].y + dif, objects[j].x, objects[j].y - 81);
+        line(objects[j].x, objects[i].y + dif, objects[j].x, objects[j].y - (objectSize+6));
     }
     else if (objects[i].topConnector == j)
     {
@@ -1029,11 +1040,11 @@ void connectionBT(int i, int j)
             a = 80;
         else
             a = -80;
-        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
-        line(objects[i].x, objects[i].y - 91, objects[i].x + a, objects[i].y - 91);
-        line(objects[i].x + a, objects[i].y - 91, objects[i].x + a, objects[j].y + 91);
-        line(objects[i].x + a, objects[j].y + 91, objects[j].x, objects[j].y + 91);
-        line(objects[j].x, objects[j].y + 91, objects[j].x, objects[j].y + 81);
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, objects[i].y - (objectSize + 16));
+        line(objects[i].x, objects[i].y - (objectSize + 16), objects[i].x + a, objects[i].y - (objectSize + 16));
+        line(objects[i].x + a, objects[i].y - (objectSize + 16), objects[i].x + a, objects[j].y + (objectSize + 16));
+        line(objects[i].x + a, objects[j].y + (objectSize + 16), objects[j].x, objects[j].y + (objectSize + 16));
+        line(objects[j].x, objects[j].y + (objectSize + 16), objects[j].x, objects[j].y + (objectSize+6));
     }
     cout << "connected BT \n";
 }
@@ -1042,9 +1053,9 @@ void connectionTT(int i, int j)
 {
     if (objects[i].y > objects[j].y)
         swap(i, j);
-    line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
-    line(objects[i].x, objects[i].y - 91, objects[j].x, objects[i].y - 91);
-    line(objects[j].x, objects[i].y - 91, objects[j].x, objects[j].y - 81);
+    line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, objects[i].y - (objectSize + 16));
+    line(objects[i].x, objects[i].y - (objectSize + 16), objects[j].x, objects[i].y - (objectSize + 16));
+    line(objects[j].x, objects[i].y - (objectSize + 16), objects[j].x, objects[j].y - (objectSize+6));
     cout << "connected TT \n";
 }
 
@@ -1052,9 +1063,9 @@ void connectionBB(int i, int j)
 {
     if (objects[i].y < objects[j].y)
         swap(i, j);
-    line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + 91);
-    line(objects[i].x, objects[i].y + 91, objects[j].x, objects[i].y + 91);
-    line(objects[j].x, objects[i].y + 91, objects[j].x, objects[j].y + 81);
+    line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[i].y + (objectSize + 16));
+    line(objects[i].x, objects[i].y + (objectSize + 16), objects[j].x, objects[i].y + (objectSize + 16));
+    line(objects[j].x, objects[i].y + (objectSize + 16), objects[j].x, objects[j].y + (objectSize+6));
     cout << "connected BB \n";
 }
 
@@ -1062,17 +1073,17 @@ void connectionTL(int i, int j)
 {
     if (objects[i].leftConnector == j)
         swap(i, j);
-    if (objects[i].y - 81 > objects[j].y && objects[i].x < objects[j].x - 81)
+    if (objects[i].y - (objectSize+6) > objects[j].y && objects[i].x < objects[j].x - (objectSize+6))
     {
-        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[j].y);
-        line(objects[i].x, objects[j].y, objects[j].x - 81, objects[j].y);
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, objects[j].y);
+        line(objects[i].x, objects[j].y, objects[j].x - (objectSize+6), objects[j].y);
     }
     else
     {
-        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
-        line(objects[i].x, objects[i].y - 91, objects[j].x - 91, objects[i].y - 91);
-        line(objects[j].x - 91, objects[i].y - 91, objects[j].x - 91, objects[j].y);
-        line(objects[j].x - 91, objects[j].y, objects[j].x - 81, objects[j].y);
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, objects[i].y - (objectSize + 16));
+        line(objects[i].x, objects[i].y - (objectSize + 16), objects[j].x - (objectSize + 16), objects[i].y - (objectSize + 16));
+        line(objects[j].x - (objectSize + 16), objects[i].y - (objectSize + 16), objects[j].x - (objectSize + 16), objects[j].y);
+        line(objects[j].x - (objectSize + 16), objects[j].y, objects[j].x - (objectSize+6), objects[j].y);
     }
 
     cout << "connected TL \n";
@@ -1082,17 +1093,17 @@ void connectionTR(int i, int j)
 {
     if (objects[i].rightConnector == j)
         swap(i, j);
-    if (objects[i].y - 81 > objects[j].y && objects[i].x > objects[j].x + 81)
+    if (objects[i].y - (objectSize+6) > objects[j].y && objects[i].x > objects[j].x + (objectSize+6))
     {
-        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[j].y);
-        line(objects[i].x, objects[j].y, objects[j].x + 81, objects[j].y);
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, objects[j].y);
+        line(objects[i].x, objects[j].y, objects[j].x + (objectSize+6), objects[j].y);
     }
     else
     {
-        line(objects[i].x, objects[i].y - 81, objects[i].x, objects[i].y - 91);
-        line(objects[i].x, objects[i].y - 91, objects[j].x + 91, objects[i].y - 91);
-        line(objects[j].x + 91, objects[i].y - 91, objects[j].x + 91, objects[j].y);
-        line(objects[j].x + 91, objects[j].y, objects[j].x + 81, objects[j].y);
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, objects[i].y - (objectSize + 16));
+        line(objects[i].x, objects[i].y - (objectSize + 16), objects[j].x + (objectSize + 16), objects[i].y - (objectSize + 16));
+        line(objects[j].x + (objectSize + 16), objects[i].y - (objectSize + 16), objects[j].x + (objectSize + 16), objects[j].y);
+        line(objects[j].x + (objectSize + 16), objects[j].y, objects[j].x + (objectSize+6), objects[j].y);
     }
     cout << "connected TR \n";
 }
@@ -1101,17 +1112,17 @@ void connectionBL(int i, int j)
 {
     if (objects[i].leftConnector == j)
         swap(i, j);
-    if (objects[i].y + 81 < objects[j].y && objects[i].x < objects[j].x - 81)
+    if (objects[i].y + (objectSize+6) < objects[j].y && objects[i].x < objects[j].x - (objectSize+6))
     {
-        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[j].y);
-        line(objects[i].x, objects[j].y, objects[j].x - 81, objects[j].y);
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[j].y);
+        line(objects[i].x, objects[j].y, objects[j].x - (objectSize+6), objects[j].y);
     }
     else
     {
-        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + 91);
-        line(objects[i].x, objects[i].y + 91, objects[j].x - 91, objects[i].y + 91);
-        line(objects[j].x - 91, objects[i].y + 91, objects[j].x - 91, objects[j].y);
-        line(objects[j].x - 91, objects[j].y, objects[j].x - 81, objects[j].y);
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[i].y + (objectSize + 16));
+        line(objects[i].x, objects[i].y + (objectSize + 16), objects[j].x - (objectSize + 16), objects[i].y + (objectSize + 16));
+        line(objects[j].x - (objectSize + 16), objects[i].y + (objectSize + 16), objects[j].x - (objectSize + 16), objects[j].y);
+        line(objects[j].x - (objectSize + 16), objects[j].y, objects[j].x - (objectSize+6), objects[j].y);
     }
 
     cout << "connected BL \n";
@@ -1121,17 +1132,17 @@ void connectionBR(int i, int j)
 {
     if (objects[i].rightConnector == j)
         swap(i, j);
-    if (objects[i].y + 81 < objects[j].y && objects[i].x > objects[j].x + 81)
+    if (objects[i].y + (objectSize+6) < objects[j].y && objects[i].x > objects[j].x + (objectSize+6))
     {
-        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[j].y);
-        line(objects[i].x, objects[j].y, objects[j].x + 81, objects[j].y);
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[j].y);
+        line(objects[i].x, objects[j].y, objects[j].x + (objectSize+6), objects[j].y);
     }
     else
     {
-        line(objects[i].x, objects[i].y + 81, objects[i].x, objects[i].y + 91);
-        line(objects[i].x, objects[i].y + 91, objects[j].x + 91, objects[i].y + 91);
-        line(objects[j].x + 91, objects[i].y + 91, objects[j].x + 91, objects[j].y);
-        line(objects[j].x + 91, objects[j].y, objects[j].x + 81, objects[j].y);
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[i].y + (objectSize + 16));
+        line(objects[i].x, objects[i].y + (objectSize + 16), objects[j].x + (objectSize + 16), objects[i].y + (objectSize + 16));
+        line(objects[j].x + (objectSize + 16), objects[i].y + (objectSize + 16), objects[j].x + (objectSize + 16), objects[j].y);
+        line(objects[j].x + (objectSize + 16), objects[j].y, objects[j].x + (objectSize+6), objects[j].y);
     }
     cout << "connected BR \n";
 }
@@ -1155,15 +1166,15 @@ void horizontalOverlap(int x1, int x2, int y, int &ok)
 {
     ok = 0;
     for (int k = 0; k < objectsCount; k++)
-        if (objects[k].x >= x1 && objects[k].x <= x2 && objects[k].y + 75 >= y && objects[k].y - 75 <= y)
+        if (objects[k].x >= x1 && objects[k].x <= x2 && objects[k].y + objectSize >= y && objects[k].y - objectSize <= y)
         {
 
             float dif = objects[k].y - y + 80;
-            line(x1, y, objects[k].x - 91, y);
-            line(objects[k].x - 91, y, objects[k].x - 91, y + dif);
-            line(objects[k].x - 91, y + dif, objects[k].x + 91, y + dif);
-            line(objects[k].x + 91, y + dif, objects[k].x + 91, y);
-            line(objects[k].x + 91, y, x2, y);
+            line(x1, y, objects[k].x - (objectSize + 16), y);
+            line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), y + dif);
+            line(objects[k].x - (objectSize + 16), y + dif, objects[k].x + (objectSize + 16), y + dif);
+            line(objects[k].x + (objectSize + 16), y + dif, objects[k].x + (objectSize + 16), y);
+            line(objects[k].x + (objectSize + 16), y, x2, y);
             ok = 1;
         }
 }
@@ -1175,7 +1186,7 @@ void verticalOverlap(int y1, int y2, int x, int &ok)
         swap(y1, y2);
     for (int k = 0; k < objectsCount; k++)
     {
-        if (objects[k].x + 81 >= x && objects[k].x - 81 <= x && objects[k].y > y1 && objects[k].y < y2)
+        if (objects[k].x + (objectSize+6) >= x && objects[k].x - (objectSize+6) <= x && objects[k].y > y1 && objects[k].y < y2)
         {
             float dif = x - objects[k].x - 86;
             line(x, y1, x, objects[k].y - 80);
@@ -1192,40 +1203,40 @@ void cornerOverlap(int &x, int &y, int x1, int y1)
 {
     for (int k = 0; k <= objectsCount; k++)
     {
-        if (abs(objects[k].x - x) <= 81 && abs(objects[k].y - y) <= 75)
+        if (abs(objects[k].x - x) <= (objectSize+6) && abs(objects[k].y - y) <= objectSize)
         {
-            if (objects[k].x + 81 > x && objects[k].x < x1)
+            if (objects[k].x + (objectSize+6) > x && objects[k].x < x1)
             {
-                if (objects[k].y + 75 > y && objects[k].y + 75 < y1)
+                if (objects[k].y + objectSize > y && objects[k].y + objectSize < y1)
                 {
-                    line(objects[k].x + 91, y, objects[k].x + 91, objects[k].y + 80);
-                    line(objects[k].x + 91, objects[k].y + 80, x, objects[k].y + 80);
-                    x = objects[k].x + 91;
+                    line(objects[k].x + (objectSize + 16), y, objects[k].x + (objectSize + 16), objects[k].y + 80);
+                    line(objects[k].x + (objectSize + 16), objects[k].y + 80, x, objects[k].y + 80);
+                    x = objects[k].x + (objectSize + 16);
                     y = objects[k].y + 80;
                 }
-                else if (objects[k].y - 75 < y && objects[k].y - 75 > y1)
+                else if (objects[k].y - objectSize < y && objects[k].y - objectSize > y1)
                 {
-                    line(objects[k].x + 91, y, objects[k].x + 91, objects[k].y - 80);
-                    line(objects[k].x + 91, objects[k].y - 80, x, objects[k].y - 80);
-                    x = objects[k].x + 91;
+                    line(objects[k].x + (objectSize + 16), y, objects[k].x + (objectSize + 16), objects[k].y - 80);
+                    line(objects[k].x + (objectSize + 16), objects[k].y - 80, x, objects[k].y - 80);
+                    x = objects[k].x + (objectSize + 16);
                     y = objects[k].y - 80;
                 }
             }
             else
             {
 
-                if (objects[k].y + 75 > y && objects[k].y + 75 < y1)
+                if (objects[k].y + objectSize > y && objects[k].y + objectSize < y1)
                 {
-                    line(objects[k].x - 91, y, objects[k].x - 91, objects[k].y + 80);
-                    line(objects[k].x - 91, objects[k].y + 80, x, objects[k].y + 80);
-                    x = objects[k].x - 91;
+                    line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), objects[k].y + 80);
+                    line(objects[k].x - (objectSize + 16), objects[k].y + 80, x, objects[k].y + 80);
+                    x = objects[k].x - (objectSize + 16);
                     y = objects[k].y + 80;
                 }
-                else if (objects[k].y - 75 < y && objects[k].y - 75 > y1)
+                else if (objects[k].y - objectSize < y && objects[k].y - objectSize > y1)
                 {
-                    line(objects[k].x - 91, y, objects[k].x - 91, objects[k].y - 80);
-                    line(objects[k].x - 91, objects[k].y - 80, x, objects[k].y - 80);
-                    x = objects[k].x - 91;
+                    line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), objects[k].y - 80);
+                    line(objects[k].x - (objectSize + 16), objects[k].y - 80, x, objects[k].y - 80);
+                    x = objects[k].x - (objectSize + 16);
                     y = objects[k].y - 80;
                 }
             }
@@ -1413,7 +1424,7 @@ void edit()
     clearmouseclick(WM_LBUTTONDOWN);
     for (int i = 0; i < objectsCount; ++i)
     {
-        if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
+        if (x >= objects[i].x - objectSize && x <= objects[i].x + objectSize && y >= objects[i].y - objectSize && y <= objects[i].y + objectSize)
         {
             propertiesDisplay(i);
             setbkcolor(LIGHTGRAY);
@@ -1450,7 +1461,7 @@ void mov()
             int x = mousex(), y = mousey();
             for (int i = 0; i < objectsCount && !shouldExit; i++)
             {
-                if (x >= objects[i].x - 75 && x <= objects[i].x + 75 && y >= objects[i].y - 75 && y <= objects[i].y + 75)
+                if (x >= objects[i].x - objectSize && x <= objects[i].x + objectSize && y >= objects[i].y - objectSize && y <= objects[i].y + objectSize)
                 {
                     while (!shouldExit)
                     {
@@ -1485,17 +1496,17 @@ void deleteObject()
             clearmouseclick(WM_LBUTTONDOWN);
             for (int j = 0; j < objectsCount; j++)
             {
-                if (mousex() >= objects[j].x - 81 && mousex() <= objects[j].x - 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                 {
                     objects[j].leftConnector = -1;
                     draw();
                 }
-                else if (mousex() <= objects[j].x + 81 && mousex() >= objects[j].x + 75 && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                 {
                     objects[j].rightConnector = -1;
                     draw();
                 }
-                else if (mousex() >= objects[j].x - 75 && mousex() <= objects[j].x + 75 && mousey() >= objects[j].y - 75 && mousey() <= objects[j].y + 75)
+                else if (mousex() >= objects[j].x - objectSize && mousex() <= objects[j].x + objectSize && mousey() >= objects[j].y - objectSize && mousey() <= objects[j].y + objectSize)
                 {
                     for (int i = j; i < objectsCount; i++)
                     {
@@ -1527,7 +1538,7 @@ void rotateObject()
             clearmouseclick(WM_LBUTTONDOWN);
             for (i = 0; i < objectsCount; i++)
             {
-                if (mousex() >= objects[i].x - 75 && mousex() <= objects[i].x + 75 && mousey() >= objects[i].y - 75 && mousey() <= objects[i].y + 75)
+                if (mousex() >= objects[i].x - objectSize && mousex() <= objects[i].x + objectSize && mousey() >= objects[i].y - objectSize && mousey() <= objects[i].y + objectSize)
                 {
                     found = true;
                     break;
@@ -1560,7 +1571,7 @@ void rotateObject()
         }
         else
         {
-            
+
             if (objects[i].rotateState % 2 == 0)
             {
                 strcat(type, ".bmp");
@@ -1573,7 +1584,7 @@ void rotateObject()
                 strcpy(objects[i].type, type);
                 objects[i].rotateState++;
             }
-            
+
         }
         if (objects[i].rotateState == 5)
         {
@@ -1606,6 +1617,26 @@ void rotateObject()
         }
         draw();
     }
+}
+
+void zoomIn()
+{
+    if(objectSize < 85){
+        objectSize += 5;
+        draw();
+        cout<<objectSize<<'\n';
+    }
+
+}
+
+void zoomOut()
+{
+    if(objectSize > 65){
+        objectSize -= 5;
+        draw();
+        cout<<objectSize<<'\n';
+    }
+
 }
 
 /*<-----------------------End Buttons--------------------->*/
