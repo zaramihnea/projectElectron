@@ -45,11 +45,17 @@ struct prop
         name[21];
 } properties;
 
+
+
 struct object
 {
     int x, y;
-    char type[31];
-    int leftConnector = -1, rightConnector = -1, topConnector = -1, bottomConnector = -1;
+    char type[31], connection[2];
+    struct connection
+    {
+    int index = -1;
+    char type[2];
+    }leftConnector, rightConnector, topConnector, bottomConnector;
     prop properties;
     int rotateState = 1;
 } objects[100];
@@ -88,7 +94,7 @@ void connectionLL(int i, int j);
 void connectionRR(int i, int j);
 void connectionRL(int i, int j, char connectorI);
 void connectionS(int i, int j, char connectorI);
-void connectionBT(int i, int j);
+void connectionBT(int i, int j, char connectorI);
 void connectionTT(int i, int j);
 void connectionBB(int i, int j);
 void connectionTL(int i, int j);
@@ -603,27 +609,34 @@ void images()
                             {
                                 if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
-                                    objects[i].leftConnector = j;
-                                    objects[j].leftConnector = i;
+                                    objects[i].leftConnector.index = j;
+                                    objects[j].leftConnector.index = i;
+                                    strcpy(objects[i].leftConnector.type, "LL");
+                                    strcpy(objects[j].leftConnector.type, "LL");
                                     connectionLL(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
-                                    objects[i].leftConnector = j;
-                                    objects[j].rightConnector = i;
+                                    objects[i].leftConnector.index = j;
+                                    objects[j].rightConnector.index = i;
+                                    strcpy(objects[i].leftConnector.type, "RL");
+                                    strcpy(objects[j].rightConnector.type, "RL");
                                     connectionAnalyst(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].leftConnector = j;
-                                    objects[j].bottomConnector = i;
+                                    objects[i].leftConnector.index = j;
+                                    objects[j].bottomConnector.index = i;
+                                    strcpy(objects[i].leftConnector.type, "BL");
+                                    strcpy(objects[j].bottomConnector.type, "BL");
                                     connectionBL(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].leftConnector = j;
-                                    objects[j].topConnector = i;
-                                    cout << "TL";
+                                    objects[i].leftConnector.index = j;
+                                    objects[j].topConnector.index = i;
+                                    strcpy(objects[i].leftConnector.type, "TL");
+                                    strcpy(objects[j].topConnector.type, "TL");
                                     connectionTL(i, j);
                                 }
                             }
@@ -642,26 +655,34 @@ void images()
                                 if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
 
-                                    objects[i].rightConnector = j;
-                                    objects[j].leftConnector = i;
+                                    objects[i].rightConnector.index = j;
+                                    objects[j].leftConnector.index = i;
+                                    strcpy(objects[i].rightConnector.type, "RL");
+                                    strcpy(objects[j].leftConnector.type, "RL");
                                     connectionAnalyst(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
-                                    objects[i].rightConnector = j;
-                                    objects[j].rightConnector = i;
+                                    objects[i].rightConnector.index = j;
+                                    objects[j].rightConnector.index = i;
+                                    strcpy(objects[i].rightConnector.type, "RR");
+                                    strcpy(objects[j].rightConnector.type, "RR");
                                     connectionRR(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].rightConnector = j;
-                                    objects[j].bottomConnector = i;
+                                    objects[i].rightConnector.index = j;
+                                    objects[j].bottomConnector.index = i;
+                                    strcpy(objects[i].rightConnector.type, "BR");
+                                    strcpy(objects[j].bottomConnector.type, "BR");
                                     connectionBR(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].rightConnector = j;
-                                    objects[j].topConnector = i;
+                                    objects[i].rightConnector.index = j;
+                                    objects[j].topConnector.index = i;
+                                    strcpy(objects[i].rightConnector.type, "TR");
+                                    strcpy(objects[j].topConnector.type, "TR");
                                     connectionTR(i, j);
                                 }
                             }
@@ -680,27 +701,35 @@ void images()
                             {
                                 if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
-                                    objects[i].bottomConnector = j;
-                                    objects[j].leftConnector = i;
+                                    objects[i].bottomConnector.index = j;
+                                    objects[j].leftConnector.index = i;
+                                    strcpy(objects[i].bottomConnector.type, "BL");
+                                    strcpy(objects[j].leftConnector.type, "BL");
                                     connectionBL(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
-                                    objects[i].bottomConnector = j;
-                                    objects[j].rightConnector = i;
+                                    objects[i].bottomConnector.index = j;
+                                    objects[j].rightConnector.index = i;
+                                    strcpy(objects[i].bottomConnector.type, "BR");
+                                    strcpy(objects[j].rightConnector.type, "BR");
                                     connectionBR(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].bottomConnector = j;
-                                    objects[j].bottomConnector = i;
+                                    objects[i].bottomConnector.index = j;
+                                    objects[j].bottomConnector.index = i;
+                                    strcpy(objects[i].bottomConnector.type, "BB");
+                                    strcpy(objects[j].bottomConnector.type, "BB");
                                     connectionBB(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].bottomConnector = j;
-                                    objects[j].topConnector = i;
-                                    connectionBT(i, j);
+                                    objects[i].bottomConnector.index = j;
+                                    objects[j].topConnector.index = i;
+                                    strcpy(objects[i].bottomConnector.type, "BT");
+                                    strcpy(objects[j].topConnector.type, "BT");
+                                    connectionBT(i, j, 'B');
                                 }
                             }
                             break;
@@ -718,26 +747,34 @@ void images()
                                 if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
 
-                                    objects[i].topConnector = j;
-                                    objects[j].leftConnector = i;
+                                    objects[i].topConnector.index = j;
+                                    objects[j].leftConnector.index = i;
+                                    strcpy(objects[i].topConnector.type, "TL");
+                                    strcpy(objects[j].leftConnector.type, "TL");
                                     connectionTL(i, j);
                                 }
                                 else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                                 {
-                                    objects[i].topConnector = j;
-                                    objects[j].rightConnector = i;
+                                    objects[i].topConnector.index = j;
+                                    objects[j].rightConnector.index = i;
+                                    strcpy(objects[i].topConnector.type, "TR");
+                                    strcpy(objects[j].rightConnector.type, "TR");
                                     connectionTR(i, j);
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].topConnector = j;
-                                    objects[j].bottomConnector = i;
-                                    connectionBT(i, j);
+                                    objects[i].topConnector.index = j;
+                                    objects[j].bottomConnector.index = i;
+                                    strcpy(objects[i].topConnector.type, "BT");
+                                    strcpy(objects[j].bottomConnector.type, "BT");
+                                    connectionBT(i, j, 'T');
                                 }
                                 else if (mousex() >= objects[j].x - 6 && mousex() <= objects[j].x + 6 && mousey() >= objects[j].y - (objectSize+6) && mousey() <= objects[j].y - objectSize && objects[j].rotateState % 2 == 0)
                                 {
-                                    objects[i].topConnector = j;
-                                    objects[j].topConnector = i;
+                                    objects[i].topConnector.index = j;
+                                    objects[j].topConnector.index = i;
+                                    strcpy(objects[i].topConnector.type, "TT");
+                                    strcpy(objects[j].topConnector.type, "TT");
                                     connectionTT(i, j);
                                 }
                             }
@@ -819,49 +856,49 @@ void draw()
             circle(objects[j].x - (objectSize + 2), objects[j].y, 6);
         }
 
-        if (objects[j].rightConnector > -1)
+        if (objects[j].rightConnector.index > -1)
         {
-            if (objects[objects[j].rightConnector].rightConnector == j)
-                connectionRR(j, objects[j].rightConnector);
-            if (objects[objects[j].rightConnector].leftConnector == j)
-                connectionAnalyst(j, objects[j].rightConnector);
-            if (objects[objects[j].rightConnector].topConnector == j)
-                connectionTR(j, objects[j].rightConnector);
-            if (objects[objects[j].rightConnector].bottomConnector == j)
-                connectionBR(j, objects[j].rightConnector);
+            if (objects[j].rightConnector.type[1]== 'R' && objects[j].rightConnector.type[0]== 'R' && objects[objects[j].rightConnector.index].rightConnector.index == j)
+                connectionRR(j, objects[j].rightConnector.index);
+            else if (objects[j].rightConnector.type[1]== 'L' && objects[objects[j].rightConnector.index].leftConnector.index == j)
+                connectionAnalyst(j, objects[j].rightConnector.index);
+            else if (objects[j].rightConnector.type[0]== 'T' && objects[objects[j].rightConnector.index].topConnector.index == j)
+                connectionTR(j, objects[j].rightConnector.index);
+            else if (objects[j].rightConnector.type[0]== 'B' && objects[objects[j].rightConnector.index].bottomConnector.index == j)
+                connectionBR(j, objects[j].rightConnector.index);
         }
-        if (objects[j].leftConnector > -1)
+        if (objects[j].leftConnector.index > -1)
         {
-            if (objects[objects[j].leftConnector].leftConnector == j)
-                connectionLL(j, objects[j].leftConnector);
-            if (objects[objects[j].leftConnector].rightConnector == j)
-                connectionAnalyst(j, objects[j].leftConnector);
-            if (objects[objects[j].leftConnector].topConnector == j)
-                connectionTL(j, objects[j].leftConnector);
-            if (objects[objects[j].leftConnector].bottomConnector == j)
-                connectionBL(j, objects[j].leftConnector);
+            if (objects[j].leftConnector.type[0]== 'L' && objects[objects[j].leftConnector.index].leftConnector.index == j)
+                connectionLL(j, objects[j].leftConnector.index);
+            else if (objects[j].leftConnector.type[0]== 'R' && objects[objects[j].leftConnector.index].rightConnector.index == j)
+                connectionAnalyst(j, objects[j].leftConnector.index);
+            else if (objects[j].leftConnector.type[0]== 'T' && objects[objects[j].leftConnector.index].topConnector.index == j)
+                connectionTL(j, objects[j].leftConnector.index);
+            else if (objects[j].leftConnector.type[0]== 'B' && objects[objects[j].leftConnector.index].bottomConnector.index == j)
+                connectionBL(j, objects[j].leftConnector.index);
         }
-        if (objects[j].topConnector > -1)
+        if (objects[j].topConnector.index > -1)
         {
-            if (objects[objects[j].topConnector].topConnector == j)
-                connectionTT(j, objects[j].topConnector);
-            if (objects[objects[j].topConnector].bottomConnector == j)
-                connectionBT(j, objects[j].topConnector);
-            if (objects[objects[j].topConnector].rightConnector == j)
-                connectionTR(j, objects[j].topConnector);
-            if (objects[objects[j].topConnector].leftConnector == j)
-                connectionTL(j, objects[j].topConnector);
+            if (objects[j].topConnector.type[1]== 'T' && objects[j].topConnector.type[0]== 'T' && objects[objects[j].topConnector.index].topConnector.index == j)
+                connectionTT(j, objects[j].topConnector.index);
+            else if (objects[j].topConnector.type[0]== 'B' && objects[objects[j].topConnector.index].bottomConnector.index == j)
+                connectionBT(j, objects[j].topConnector.index, 'T');
+            else if (objects[j].topConnector.type[1]== 'R' && objects[objects[j].topConnector.index].rightConnector.index == j)
+                connectionTR(j, objects[j].topConnector.index);
+            else if (objects[j].topConnector.type[1]== 'L' && objects[objects[j].topConnector.index].leftConnector.index == j)
+                connectionTL(j, objects[j].topConnector.index);
         }
-        if (objects[j].bottomConnector > -1)
+        if (objects[j].bottomConnector.index > -1)
         {
-            if (objects[objects[j].bottomConnector].bottomConnector == j)
-                connectionBB(j, objects[j].bottomConnector);
-            if (objects[objects[j].bottomConnector].topConnector == j)
-                connectionBT(j, objects[j].bottomConnector);
-            if (objects[objects[j].bottomConnector].rightConnector == j)
-                connectionBR(j, objects[j].bottomConnector);
-            if (objects[objects[j].bottomConnector].leftConnector == j)
-                connectionBL(j, objects[j].bottomConnector);
+            if (objects[j].bottomConnector.type[1]== 'B' && objects[objects[j].bottomConnector.index].bottomConnector.index == j)
+                connectionBB(j, objects[j].bottomConnector.index);
+            else if (objects[j].bottomConnector.type[1]== 'T' && objects[objects[j].bottomConnector.index].topConnector.index == j)
+                connectionBT(j, objects[j].bottomConnector.index, 'B');
+            else if (objects[j].bottomConnector.type[1]== 'R' && objects[objects[j].bottomConnector.index].rightConnector.index == j)
+                connectionBR(j, objects[j].bottomConnector.index);
+            else if (objects[j].bottomConnector.type[1]== 'L' && objects[objects[j].bottomConnector.index].leftConnector.index == j)
+                connectionBL(j, objects[j].bottomConnector.index);
         }
     }
 }
@@ -871,10 +908,10 @@ void draw()
 void connectionAnalyst(int i, int j)
 {
 
-    if (objects[i].leftConnector == j)
+    if (objects[i].leftConnector.index == j)
     {
 
-        if (objects[j].rightConnector == i)
+        if (objects[j].rightConnector.index == i)
         {
             if (objects[j].x + (objectSize+6) < objects[i].x - (objectSize+6))
                 connectionRL(i, j, 'l');
@@ -882,9 +919,9 @@ void connectionAnalyst(int i, int j)
                 connectionS(i, j, 'l');
         }
     }
-    else if (objects[i].rightConnector == j)
+    else if (objects[i].rightConnector.index == j)
     {
-        if (objects[j].leftConnector == i)
+        if (objects[j].leftConnector.index == i)
         {
             if (objects[i].x + (objectSize+6) < objects[j].x - (objectSize+6))
                 connectionRL(i, j, 'r');
@@ -914,7 +951,7 @@ void connectionRR(int i, int j)
     if (ok == 0)
         line(objects[i].x + (objectSize+6), objects[i].y, x, objects[i].y);
 
-    cout << "connected RR \n";
+    cout << "connected RR \n"<< i<< endl<< j<< endl;
 }
 
 void connectionLL(int i, int j)
@@ -1021,22 +1058,26 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
     cout << "connected S \n";
 }
 
-void connectionBT(int i, int j)
+void connectionBT(int i, int j, char connectorI)
 {
-    if (objects[i].y > objects[j].y)
-        swap(i, j);
+    if(objects[i].y > objects[j].y)
+    {swap(i, j);
+     if(connectorI == 'B')connectorI = 'T'; else connectorI = 'B';}
 
-    if (objects[i].y < objects[j].y && objects[i].bottomConnector == j)
+    if (objects[i].y + 81 < objects[j].y - 81 && connectorI == 'B')
     {
         float dif = abs(objects[j].y - objects[i].y) / 2;
         line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, objects[i].y + dif);
         line(objects[i].x, objects[i].y + dif, objects[j].x, objects[i].y + dif);
         line(objects[j].x, objects[i].y + dif, objects[j].x, objects[j].y - (objectSize+6));
     }
-    else if (objects[i].topConnector == j)
+    else
     {
+        if(connectorI == 'B')
+            swap(i, j);
+
         int a;
-        if (objects[i].x > objects[j].x)
+        if (objects[i].x < objects[j].x)
             a = 80;
         else
             a = -80;
@@ -1046,6 +1087,7 @@ void connectionBT(int i, int j)
         line(objects[i].x + a, objects[j].y + (objectSize + 16), objects[j].x, objects[j].y + (objectSize + 16));
         line(objects[j].x, objects[j].y + (objectSize + 16), objects[j].x, objects[j].y + (objectSize+6));
     }
+
     cout << "connected BT \n";
 }
 
@@ -1071,7 +1113,7 @@ void connectionBB(int i, int j)
 
 void connectionTL(int i, int j)
 {
-    if (objects[i].leftConnector == j)
+    if (objects[i].leftConnector.index == j)
         swap(i, j);
     if (objects[i].y - (objectSize+6) > objects[j].y && objects[i].x < objects[j].x - (objectSize+6))
     {
@@ -1091,7 +1133,7 @@ void connectionTL(int i, int j)
 
 void connectionTR(int i, int j)
 {
-    if (objects[i].rightConnector == j)
+    if (objects[i].rightConnector.index == j)
         swap(i, j);
     if (objects[i].y - (objectSize+6) > objects[j].y && objects[i].x > objects[j].x + (objectSize+6))
     {
@@ -1110,7 +1152,7 @@ void connectionTR(int i, int j)
 
 void connectionBL(int i, int j)
 {
-    if (objects[i].leftConnector == j)
+    if (objects[i].leftConnector.index == j)
         swap(i, j);
     if (objects[i].y + (objectSize+6) < objects[j].y && objects[i].x < objects[j].x - (objectSize+6))
     {
@@ -1130,7 +1172,7 @@ void connectionBL(int i, int j)
 
 void connectionBR(int i, int j)
 {
-    if (objects[i].rightConnector == j)
+    if (objects[i].rightConnector.index == j)
         swap(i, j);
     if (objects[i].y + (objectSize+6) < objects[j].y && objects[i].x > objects[j].x + (objectSize+6))
     {
@@ -1348,7 +1390,7 @@ void load()
         for (int i = 0; i < objectsCount; ++i)
         {
             circuitFile >> objects[i].x >> objects[i].y >> objects[i].type;
-            circuitFile >> objects[i].leftConnector >> objects[i].rightConnector;
+            circuitFile >> objects[i].leftConnector.index >> objects[i].rightConnector.index;
             circuitFile >> objects[i].properties.quantity >> objects[i].properties.measurement;
             circuitFile >> objects[i].properties.name;
             cout << objects[i].x << " " << objects[i].y << '\n';
@@ -1400,7 +1442,7 @@ void save()
         for (int i = 0; i < objectsCount; ++i)
         {
             circuitFile << objects[i].x << " " << objects[i].y << " " << objects[i].type << " ";
-            circuitFile << objects[i].leftConnector << " " << objects[i].rightConnector << " ";
+            circuitFile << objects[i].leftConnector.index << " " << objects[i].rightConnector.index << " ";
             circuitFile << objects[i].properties.quantity << " " << objects[i].properties.measurement << " ";
             circuitFile << objects[i].properties.name << endl;
         }
@@ -1498,16 +1540,104 @@ void deleteObject()
             {
                 if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                 {
-                    objects[j].leftConnector = -1;
+                    objects[j].leftConnector.index = -1;
                     draw();
                 }
                 else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
                 {
-                    objects[j].rightConnector = -1;
+                    objects[j].rightConnector.index = -1;
                     draw();
                 }
                 else if (mousex() >= objects[j].x - objectSize && mousex() <= objects[j].x + objectSize && mousey() >= objects[j].y - objectSize && mousey() <= objects[j].y + objectSize)
                 {
+                    if(objects[j].rotateState % 2 != 0)
+                    {
+                        if(objects[j].leftConnector.index > -1)
+                        {
+                            if(objects[j].leftConnector.type[0] == 'T')
+                            {objects[objects[j].leftConnector.index].topConnector.index = -1;
+                            strcpy(objects[objects[j].leftConnector.index].topConnector.type,"");}
+                            else if(objects[j].leftConnector.type[0] == 'B')
+                            {objects[objects[j].leftConnector.index].bottomConnector.index = -1;
+                            strcpy(objects[objects[j].leftConnector.index].bottomConnector.type, "");}
+                            else if(objects[j].leftConnector.type[0] == 'R')
+                            {objects[objects[j].leftConnector.index].rightConnector.index = -1;
+                            strcpy(objects[objects[j].leftConnector.index].rightConnector.type, "");}
+                            else if(objects[j].leftConnector.type[0] == 'L')
+                            {objects[objects[j].leftConnector.index].leftConnector.index = -1;
+                            strcpy(objects[objects[j].leftConnector.index].leftConnector.type, "");}
+                        }
+
+                        if(objects[j].rightConnector.index > -1)
+                        {
+                            if(objects[j].rightConnector.type[0] == 'T')
+                            {objects[objects[j].rightConnector.index].topConnector.index = -1;
+                            strcpy(objects[objects[j].rightConnector.index].topConnector.type, "");}
+                            else if(objects[j].rightConnector.type[0] == 'B')
+                            {objects[objects[j].rightConnector.index].bottomConnector.index = -1;
+                            strcpy(objects[objects[j].rightConnector.index].bottomConnector.type, "");}
+                            else if(objects[j].rightConnector.type[1] == 'R' && objects[j].rightConnector.type[0] == 'R')
+                            {objects[objects[j].rightConnector.index].rightConnector.index = -1;
+                            strcpy(objects[objects[j].rightConnector.index].rightConnector.type, "");}
+                            else if(objects[j].rightConnector.type[1] == 'L')
+                            {objects[objects[j].rightConnector.index].leftConnector.index = -1;
+                            strcpy(objects[objects[j].rightConnector.index].leftConnector.type, "");}
+                        }
+
+                    }
+                    else {
+                            if(objects[j].topConnector.index > -1)
+                            {
+                                if(objects[objects[j].topConnector.index].bottomConnector.index == j)
+                                {
+                                    objects[objects[j].topConnector.index].bottomConnector.index = -1;
+                                    strcpy(objects[objects[j].topConnector.index].bottomConnector.type, "");
+                                }
+                                if(objects[objects[j].topConnector.index].topConnector.index == j)
+                                {
+                                    objects[objects[j].topConnector.index].topConnector.index = -1;
+                                    strcpy(objects[objects[j].topConnector.index].topConnector.type, "");
+                                }
+                                if(objects[objects[j].topConnector.index].leftConnector.index == j)
+                                {
+                                    objects[objects[j].topConnector.index].leftConnector.index = -1;
+                                    strcpy(objects[objects[j].topConnector.index].leftConnector.type, "");
+                                }
+                                if(objects[objects[j].topConnector.index].rightConnector.index == j)
+                                {
+                                    objects[objects[j].topConnector.index].rightConnector.index = -1;
+                                    strcpy(objects[objects[j].topConnector.index].rightConnector.type, "");
+                                }
+                            }
+
+                            if(objects[j].bottomConnector.index > -1)
+                            {
+                                if(objects[objects[j].bottomConnector.index].bottomConnector.index == j)
+                                {
+                                    objects[objects[j].bottomConnector.index].bottomConnector.index = -1;
+                                    strcpy(objects[objects[j].bottomConnector.index].bottomConnector.type, "");
+                                }
+                                if(objects[objects[j].bottomConnector.index].topConnector.index == j)
+                                {
+                                    objects[objects[j].bottomConnector.index].topConnector.index = -1;
+                                    strcpy(objects[objects[j].bottomConnector.index].topConnector.type, "");
+                                }
+                                if(objects[objects[j].bottomConnector.index].leftConnector.index == j)
+                                {
+                                    objects[objects[j].bottomConnector.index].leftConnector.index = -1;
+                                    strcpy(objects[objects[j].bottomConnector.index].leftConnector.type, "");
+                                }
+                                if(objects[objects[j].bottomConnector.index].rightConnector.index == j)
+                                {
+                                    objects[objects[j].bottomConnector.index].rightConnector.index = -1;
+                                    strcpy(objects[objects[j].bottomConnector.index].rightConnector.type, "");
+                                }
+
+                            }
+
+
+                    }
+
                     for (int i = j; i < objectsCount; i++)
                     {
                         objects[i] = objects[i + 1];
@@ -1558,6 +1688,7 @@ void rotateObject()
                 strcat(type, ".bmp");
                 strcpy(objects[i].type, type);
                 objects[i].rotateState = 1;
+
             }
             else
             {
@@ -1576,44 +1707,110 @@ void rotateObject()
             {
                 strcat(type, ".bmp");
                 strcpy(objects[i].type, type);
-                objects[i].rotateState ++;
+                objects[i].rotateState = 1;
             }
             else
             {
                 strcat(type, "2.bmp");
                 strcpy(objects[i].type, type);
-                objects[i].rotateState++;
+                objects[i].rotateState = 2;
             }
 
         }
-        if (objects[i].rotateState == 5)
+        if (objects[i].rotateState % 2 != 0)
         {
-            objects[i].rotateState = 1;
-            swap(objects[i].topConnector, objects[i].rightConnector);
-            swap(objects[i].bottomConnector, objects[i].leftConnector);
-            objects[i].topConnector = -1;
-            objects[i].bottomConnector = -1;
+            swap(objects[i].topConnector.index, objects[i].rightConnector.index);
+            swap(objects[i].bottomConnector.index, objects[i].leftConnector.index);
+
+            if(objects[i].topConnector.type[0] == 'T')
+            {
+                if(objects[i].topConnector.type[1] == 'L')
+                    {strcpy(objects[i].rightConnector.type, "RL");
+                     strcpy(objects[objects[i].rightConnector.index].leftConnector.type, "RL");}
+                else if(objects[i].topConnector.type[1] == 'R')
+                     {strcpy(objects[i].rightConnector.type, "RR");
+                      strcpy(objects[objects[i].rightConnector.index].rightConnector.type, "RR");}
+                else if(objects[i].topConnector.type[1] == 'T')
+                     {strcpy(objects[i].rightConnector.type, "TR");
+                      strcpy(objects[objects[i].rightConnector.index].topConnector.type, "TR");}
+            }
+            else if(objects[i].topConnector.type[0] == 'B' && objects[i].topConnector.type[1] == 'T')
+                 {strcpy(objects[i].rightConnector.type, "BR");
+                  strcpy(objects[objects[i].rightConnector.index].bottomConnector.type, "BR");}
+
+            if(objects[i].bottomConnector.type[0] == 'B')
+            {
+                if(objects[i].bottomConnector.type[1] == 'L')
+                    {strcpy(objects[i].leftConnector.type, "LL");
+                     strcpy(objects[objects[i].leftConnector.index].leftConnector.type, "LL");}
+                else if(objects[i].bottomConnector.type[1] == 'R')
+                     {strcpy(objects[i].leftConnector.type, "RL");
+                      strcpy(objects[objects[i].leftConnector.index].rightConnector.type, "RL");}
+                else if(objects[i].bottomConnector.type[1] == 'T')
+                     {strcpy(objects[i].leftConnector.type, "TL");
+                      strcpy(objects[objects[i].leftConnector.index].topConnector.type, "TL");}
+                else if(objects[i].bottomConnector.type[1] == 'B')
+                     {strcpy(objects[i].leftConnector.type, "BL");
+                      strcpy(objects[objects[i].leftConnector.index].bottomConnector.type, "BL");}
+            }
+
+            objects[i].topConnector.index = -1;
+            objects[i].bottomConnector.index = -1;
+            strcpy(objects[i].topConnector.type, "  ");
+            strcpy(objects[i].bottomConnector.type, "  ");
+            cout<< objects[i].rightConnector.type << endl;
+            cout<< objects[i].leftConnector.type << endl;
+
         }
-        if (objects[i].rotateState == 2)
+
+        if (objects[i].rotateState % 2 == 0)
         {
-            swap(objects[i].leftConnector, objects[i].topConnector);
-            swap(objects[i].rightConnector, objects[i].bottomConnector);
-            objects[i].leftConnector = -1;
-            objects[i].rightConnector = -1;
-        }
-        if (objects[i].rotateState == 3)
-        {
-            swap(objects[i].topConnector, objects[i].rightConnector);
-            swap(objects[i].bottomConnector, objects[i].leftConnector);
-            objects[i].topConnector = -1;
-            objects[i].bottomConnector = -1;
-        }
-        if (objects[i].rotateState == 4)
-        {
-            swap(objects[i].rightConnector, objects[i].bottomConnector);
-            swap(objects[i].leftConnector, objects[i].topConnector);
-            objects[i].rightConnector = -1;
-            objects[i].leftConnector = -1;
+            swap(objects[i].leftConnector.index, objects[i].topConnector.index);
+            swap(objects[i].rightConnector.index, objects[i].bottomConnector.index);
+
+            if(objects[i].leftConnector.type[1] == 'L')
+            {
+                if(objects[i].leftConnector.type[0] == 'T')
+                    {strcpy(objects[i].topConnector.type, "TT");
+                     strcpy(objects[objects[i].topConnector.index].topConnector.type, "TT");}
+                else if(objects[i].leftConnector.type[0] == 'R')
+                     {strcpy(objects[i].topConnector.type, "TR");
+                      strcpy(objects[objects[i].topConnector.index].rightConnector.type, "TR");}
+                else if(objects[i].leftConnector.type[0] == 'L')
+                     {strcpy(objects[i].topConnector.type, "TL");
+                      strcpy(objects[objects[i].topConnector.index].leftConnector.type, "TL");}
+                else if(objects[i].leftConnector.type[0] == 'B')
+                     {strcpy(objects[i].topConnector.type, "BT");
+                  strcpy(objects[objects[i].topConnector.index].bottomConnector.type, "BT");}
+            }
+
+
+            if(objects[i].rightConnector.type[1] == 'R')
+            {
+
+                if(objects[i].rightConnector.type[0] == 'R')
+                     {strcpy(objects[i].bottomConnector.type, "BR");
+                      strcpy(objects[objects[i].bottomConnector.index].rightConnector.type, "BR");}
+                else if(objects[i].rightConnector.type[0] == 'T')
+                     {strcpy(objects[i].bottomConnector.type, "BT");
+                      strcpy(objects[objects[i].bottomConnector.index].topConnector.type, "BT");}
+                else if(objects[i].rightConnector.type[0] == 'B')
+                     {strcpy(objects[i].bottomConnector.type, "BB");
+                      strcpy(objects[objects[i].bottomConnector.index].bottomConnector.type, "BB");}
+            }
+            else if(objects[i].rightConnector.type[0] == 'R' && objects[i].rightConnector.type[1] == 'L')
+                    {strcpy(objects[i].bottomConnector.type, "BL");
+                     strcpy(objects[objects[i].bottomConnector.index].leftConnector.type, "BL");}
+
+            objects[i].leftConnector.index = -1;
+            objects[i].rightConnector.index = -1;
+            strcpy(objects[i].rightConnector.type, "  ");
+            strcpy(objects[i].leftConnector.type, "  ");
+            cout<< objects[i].topConnector.type << endl;
+            cout<< objects[i].bottomConnector.type << endl;
+            cout<< objects[i].leftConnector.type << endl;
+            cout<< objects[i].rightConnector.type << endl;
+
         }
         draw();
     }
