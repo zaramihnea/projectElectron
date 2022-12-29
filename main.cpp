@@ -1538,14 +1538,24 @@ void deleteObject()
             clearmouseclick(WM_LBUTTONDOWN);
             for (int j = 0; j < objectsCount; j++)
             {
-                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                if (mousex() >= objects[j].x - (objectSize+6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                 {
                     objects[j].leftConnector.index = -1;
                     draw();
                 }
-                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6)
+                else if (mousex() <= objects[j].x + (objectSize+6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                 {
                     objects[j].rightConnector.index = -1;
+                    draw();
+                }
+                else if(mousex() <= objects[j].x + 6 && mousex() >= objects[j].x - 6 && mousey() >= objects[j].y - objectSize && mousey() <= objects[j].y - (objectSize+6) && objects[j].rotateState % 2 == 0 )
+                {
+                    objects[j].topConnector.index = -1;
+                    draw();
+                }
+                else if(mousex() <= objects[j].x + 6 && mousex() >= objects[j].x - 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize+6) && objects[j].rotateState % 2 == 0 )
+                {
+                    objects[j].bottomConnector.index = -1;
                     draw();
                 }
                 else if (mousex() >= objects[j].x - objectSize && mousex() <= objects[j].x + objectSize && mousey() >= objects[j].y - objectSize && mousey() <= objects[j].y + objectSize)
@@ -1554,93 +1564,82 @@ void deleteObject()
                     {
                         if(objects[j].leftConnector.index > -1)
                         {
-                            if(objects[j].leftConnector.type[0] == 'T')
-                            {objects[objects[j].leftConnector.index].topConnector.index = -1;
-                            strcpy(objects[objects[j].leftConnector.index].topConnector.type,"");}
-                            else if(objects[j].leftConnector.type[0] == 'B')
-                            {objects[objects[j].leftConnector.index].bottomConnector.index = -1;
-                            strcpy(objects[objects[j].leftConnector.index].bottomConnector.type, "");}
-                            else if(objects[j].leftConnector.type[0] == 'R')
-                            {objects[objects[j].leftConnector.index].rightConnector.index = -1;
-                            strcpy(objects[objects[j].leftConnector.index].rightConnector.type, "");}
-                            else if(objects[j].leftConnector.type[0] == 'L')
-                            {objects[objects[j].leftConnector.index].leftConnector.index = -1;
-                            strcpy(objects[objects[j].leftConnector.index].leftConnector.type, "");}
+                                if(objects[objects[j].leftConnector.index].bottomConnector.index == j)
+                                    objects[objects[j].leftConnector.index].bottomConnector.index = -1;
+
+                                if(objects[objects[j].leftConnector.index].topConnector.index == j)
+                                    objects[objects[j].leftConnector.index].topConnector.index = -1;
+
+                                if(objects[objects[j].leftConnector.index].leftConnector.index == j)
+                                    objects[objects[j].leftConnector.index].leftConnector.index = -1;
+
+                                if(objects[objects[j].leftConnector.index].rightConnector.index == j)
+                                    objects[objects[j].leftConnector.index].rightConnector.index = -1;
+
                         }
 
-                        if(objects[j].rightConnector.index > -1)
+                         if(objects[j].rightConnector.index > -1)
                         {
-                            if(objects[j].rightConnector.type[0] == 'T')
-                            {objects[objects[j].rightConnector.index].topConnector.index = -1;
-                            strcpy(objects[objects[j].rightConnector.index].topConnector.type, "");}
-                            else if(objects[j].rightConnector.type[0] == 'B')
-                            {objects[objects[j].rightConnector.index].bottomConnector.index = -1;
-                            strcpy(objects[objects[j].rightConnector.index].bottomConnector.type, "");}
-                            else if(objects[j].rightConnector.type[1] == 'R' && objects[j].rightConnector.type[0] == 'R')
-                            {objects[objects[j].rightConnector.index].rightConnector.index = -1;
-                            strcpy(objects[objects[j].rightConnector.index].rightConnector.type, "");}
-                            else if(objects[j].rightConnector.type[1] == 'L')
-                            {objects[objects[j].rightConnector.index].leftConnector.index = -1;
-                            strcpy(objects[objects[j].rightConnector.index].leftConnector.type, "");}
+                                if(objects[objects[j].rightConnector.index].bottomConnector.index == j)
+                                    objects[objects[j].rightConnector.index].bottomConnector.index = -1;
+
+                                if(objects[objects[j].rightConnector.index].topConnector.index == j)
+                                    objects[objects[j].rightConnector.index].topConnector.index = -1;
+
+                                if(objects[objects[j].rightConnector.index].leftConnector.index == j)
+                                    objects[objects[j].rightConnector.index].leftConnector.index = -1;
+
+                                if(objects[objects[j].rightConnector.index].rightConnector.index == j)
+                                    objects[objects[j].rightConnector.index].rightConnector.index = -1;
+
                         }
 
-                    }
+                        }
+
                     else {
                             if(objects[j].topConnector.index > -1)
                             {
                                 if(objects[objects[j].topConnector.index].bottomConnector.index == j)
-                                {
                                     objects[objects[j].topConnector.index].bottomConnector.index = -1;
-                                    strcpy(objects[objects[j].topConnector.index].bottomConnector.type, "");
-                                }
+
                                 if(objects[objects[j].topConnector.index].topConnector.index == j)
-                                {
                                     objects[objects[j].topConnector.index].topConnector.index = -1;
-                                    strcpy(objects[objects[j].topConnector.index].topConnector.type, "");
-                                }
+
                                 if(objects[objects[j].topConnector.index].leftConnector.index == j)
-                                {
                                     objects[objects[j].topConnector.index].leftConnector.index = -1;
-                                    strcpy(objects[objects[j].topConnector.index].leftConnector.type, "");
-                                }
+
                                 if(objects[objects[j].topConnector.index].rightConnector.index == j)
-                                {
                                     objects[objects[j].topConnector.index].rightConnector.index = -1;
-                                    strcpy(objects[objects[j].topConnector.index].rightConnector.type, "");
-                                }
+
                             }
 
                             if(objects[j].bottomConnector.index > -1)
                             {
                                 if(objects[objects[j].bottomConnector.index].bottomConnector.index == j)
-                                {
                                     objects[objects[j].bottomConnector.index].bottomConnector.index = -1;
-                                    strcpy(objects[objects[j].bottomConnector.index].bottomConnector.type, "");
-                                }
+
                                 if(objects[objects[j].bottomConnector.index].topConnector.index == j)
-                                {
                                     objects[objects[j].bottomConnector.index].topConnector.index = -1;
-                                    strcpy(objects[objects[j].bottomConnector.index].topConnector.type, "");
-                                }
+
                                 if(objects[objects[j].bottomConnector.index].leftConnector.index == j)
-                                {
                                     objects[objects[j].bottomConnector.index].leftConnector.index = -1;
-                                    strcpy(objects[objects[j].bottomConnector.index].leftConnector.type, "");
-                                }
+
                                 if(objects[objects[j].bottomConnector.index].rightConnector.index == j)
-                                {
                                     objects[objects[j].bottomConnector.index].rightConnector.index = -1;
-                                    strcpy(objects[objects[j].bottomConnector.index].rightConnector.type, "");
-                                }
+
 
                             }
 
 
                     }
 
-                    for (int i = j; i < objectsCount; i++)
+                    for (int i = j; i < objectsCount ; i++)
                     {
                         objects[i] = objects[i + 1];
+                        if(objects[i].bottomConnector.index >= j)objects[i].bottomConnector.index--;
+                        if(objects[i].topConnector.index >= j)objects[i].topConnector.index --;
+                        if(objects[i].leftConnector.index >= j)objects[i].leftConnector.index --;
+                        if(objects[i].rightConnector.index >= j)objects[i].rightConnector.index --;
                     }
                     objectsCount--;
                     draw();
