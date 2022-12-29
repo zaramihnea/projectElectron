@@ -279,62 +279,62 @@ void refresh()
     // circuit editing buttons
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 615, middleX - 510, systemHeight - 575);
+    bar(middleX - 630, systemHeight - 600, middleX - 510, systemHeight - 560);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 600, systemHeight - 607, L.edit);
+    outtextxy(middleX - 600, systemHeight - 592, L.edit);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 565, middleX - 510, systemHeight - 525);
+    bar(middleX - 630, systemHeight - 550, middleX - 510, systemHeight - 510);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 600, systemHeight - 557, L.clearr);
+    outtextxy(middleX - 600, systemHeight - 542, L.clearr);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 515, middleX - 510, systemHeight - 475);
+    bar(middleX - 630, systemHeight - 500, middleX - 510, systemHeight - 460);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 590, systemHeight - 507, L.load);
+    outtextxy(middleX - 590, systemHeight - 492, L.load);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 465, middleX - 510, systemHeight - 425);
+    bar(middleX - 630, systemHeight - 450, middleX - 510, systemHeight - 410);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 590, systemHeight - 457, L.save);
+    outtextxy(middleX - 590, systemHeight - 442, L.save);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 415, middleX - 510, systemHeight - 375);
+    bar(middleX - 630, systemHeight - 400, middleX - 510, systemHeight - 360);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 608, systemHeight - 407, "Rotate");
+    outtextxy(middleX - 608, systemHeight - 392, "Rotate");
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 365, middleX - 580, systemHeight - 325);
+    bar(middleX - 630, systemHeight - 350, middleX - 580, systemHeight - 310);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 608, systemHeight - 357, "+");
+    outtextxy(middleX - 608, systemHeight - 342, "+");
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 560, systemHeight - 365, middleX - 510, systemHeight - 325);
+    bar(middleX - 560, systemHeight - 350, middleX - 510, systemHeight - 310);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 538, systemHeight - 357, "-");
+    outtextxy(middleX - 538, systemHeight - 342, "-");
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 315, middleX - 510, systemHeight - 275);
+    bar(middleX - 630, systemHeight - 300, middleX - 510, systemHeight - 260);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 590, systemHeight - 307, L.mov);
+    outtextxy(middleX - 590, systemHeight - 292, L.mov);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 265, middleX - 510, systemHeight - 225);
+    bar(middleX - 630, systemHeight - 250, middleX - 510, systemHeight - 210);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 600, systemHeight - 257, L.dele);
+    outtextxy(middleX - 600, systemHeight - 242, L.dele);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 215, middleX - 510, systemHeight - 175);
+    bar(middleX - 630, systemHeight - 200, middleX - 510, systemHeight - 160);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 590, systemHeight - 207, L.exit);
+    outtextxy(middleX - 590, systemHeight - 192, L.exit);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    bar(middleX - 630, systemHeight - 165, middleX - 510, systemHeight - 50);
+    bar(middleX - 630, systemHeight - 150, middleX - 510, systemHeight - 30);
     setcolor(WHITE);
-    rectangle(middleX - 631, systemHeight - 166, middleX - 510, systemHeight - 50);
-    line(middleX - 631, systemHeight - 145, middleX - 510, systemHeight - 145);
+    rectangle(middleX - 631, systemHeight - 151, middleX - 510, systemHeight - 30);
+    line(middleX - 631, systemHeight - 130, middleX - 510, systemHeight - 130);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 625, systemHeight - 165, L.props);
+    outtextxy(middleX - 625, systemHeight - 150, L.props);
     setbkcolor(BLACK);
 }
 
@@ -783,53 +783,53 @@ void images()
                     }
             }
 
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 615 && y <= systemHeight - 575)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 600 && y <= systemHeight - 560)
             {
                 cout << "pushed edit()" << '\n';
                 edit();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 575 && y <= systemHeight - 525)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 550 && y <= systemHeight - 510)
             {
                 cout << "pushed clear()" << '\n';
                 clear();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 515 && y <= systemHeight - 475)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 500 && y <= systemHeight - 460)
             {
                 cout << "pushed load()" << '\n';
                 load();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 465 && y <= systemHeight - 425)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 450 && y <= systemHeight - 410)
             {
                 cout << "pushed save()" << '\n';
                 save();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 415 && y <= systemHeight - 375)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 400 && y <= systemHeight - 360)
             {
                 cout << "pushed rotateObject()" << '\n';
                 rotateObject();
             }
-            if (x >= middleX - 630 && x <= middleX - 580 && y >= systemHeight - 365 && y <= systemHeight - 325)
+            if (x >= middleX - 630 && x <= middleX - 580 && y >= systemHeight - 350 && y <= systemHeight - 310)
             {
                 cout << "pushed zoomIn()" << '\n';
                 zoomIn();
             }
-            if (x >= middleX - 560 && x <= middleX - 510 && y >= systemHeight - 365 && y <= systemHeight - 325)
+            if (x >= middleX - 560 && x <= middleX - 510 && y >= systemHeight - 350 && y <= systemHeight - 310)
             {
                 cout << "pushed zoomOut()" << '\n';
                 zoomOut();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 315 && y <= systemHeight - 275)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 300 && y <= systemHeight - 260)
             {
                 cout << "pushed move()" << '\n';
                 mov();
             }
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 265 && y <= systemHeight - 225)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 250 && y <= systemHeight - 210)
             {
                 cout << "pushed delete()" << '\n';
                 deleteObject();
             }
 
-            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 215 && y <= systemHeight - 175)
+            if (x >= middleX - 630 && x <= middleX - 510 && y >= systemHeight - 200 && y <= systemHeight - 160)
             {
                 cout << "pushed exit()" << '\n';
                 exit();
@@ -1297,7 +1297,7 @@ void commonSet()
     objectsCount--;
     propertiesDisplay(objectsCount);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 625, systemHeight - 120, "          ");
+    outtextxy(middleX - 625, systemHeight - 105, "          ");
     handlePropertiesInsert(objectsCount);
     propertiesDisplay(objectsCount);
     objectsCount++;
@@ -1307,9 +1307,9 @@ void propertiesDisplay(int i)
 {
     settextstyle(8, HORIZ_DIR, 1);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 625, systemHeight - 120, objects[i].properties.quantity);
-    outtextxy(middleX - 625, systemHeight - 140, objects[i].properties.name);
-    outtextxy(middleX - 625, systemHeight - 100, objects[i].properties.measurement);
+    outtextxy(middleX - 625, systemHeight - 105, objects[i].properties.quantity);
+    outtextxy(middleX - 625, systemHeight - 125, objects[i].properties.name);
+    outtextxy(middleX - 625, systemHeight - 85, objects[i].properties.measurement);
     setbkcolor(BLACK);
 }
 
@@ -1331,15 +1331,15 @@ void handlePropertiesInsert(int j)
                 break;
             }
             setbkcolor(DARKGRAY);
-            outtextxy(middleX - 625, systemHeight - 120, key);
+            outtextxy(middleX - 625, systemHeight - 105, key);
             if (key[i] == 8)
             {
                 key[i] = '\0';
                 key[i - 1] = '\0';
                 setbkcolor(LIGHTGRAY);
-                outtextxy(middleX - 625, systemHeight - 120, "          ");
+                outtextxy(middleX - 625, systemHeight - 105, "          ");
                 setbkcolor(DARKGRAY);
-                outtextxy(middleX - 625, systemHeight - 120, key);
+                outtextxy(middleX - 625, systemHeight - 105, key);
                 i--;
                 continue;
             }
