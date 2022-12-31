@@ -346,7 +346,7 @@ void images()
     bool click = false;
     while (1)
     {
-        if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+        if (ismouseclick(WM_LBUTTONDOWN) && !click )
         {
             clearmouseclick(WM_LBUTTONDOWN);
             x = mousex();
@@ -355,7 +355,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click )
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -379,7 +379,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click )
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -403,7 +403,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click )
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -427,7 +427,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click )
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -451,7 +451,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click)
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -475,7 +475,7 @@ void images()
             {
                 while (1)
                 {
-                    if (ismouseclick(WM_LBUTTONDOWN) && !click && !click)
+                    if (ismouseclick(WM_LBUTTONDOWN) && !click )
                     {
                         clearmouseclick(WM_LBUTTONDOWN);
                         if (mousex() < middleX - 410 || mousey() < 200 || mousex() > systemWidth - 85 || mousey() > systemHeight - 60)
@@ -1012,7 +1012,29 @@ void connectionS(int i, int j, char connectorI) // this is a S type connection w
             connectorI = 'r';
     }
 
-    if (connectorI == 'l')
+   if(objects[i].y + objectSize > objects[j].y - objectSize)
+        {
+            if(objects[i].x > objects[j].x)
+                swap(i, j);
+            int mx = max(objects[i].y + objectSize + 5, objects[j].y + objectSize + 5), x = objects[i].x - (objectSize+16), y = mx, ok;
+
+            line(objects[i].x - (objectSize+6), objects[i].y, objects[i].x - (objectSize+16), objects[i].y);
+            cornerOverlap(x, y, objects[j].x + (objectSize+16), objects[i].y);
+            line(objects[i].x - (objectSize+16), objects[i].y, objects[i].x - (objectSize+16), y);
+            int x1 = objects[j].x + (objectSize+16);
+            y = mx;
+            cornerOverlap(x1, y, x, objects[j].y);
+            horizontalOverlap(x, x1, mx, ok);
+            if( ok == 0 )
+            line(x, mx, x1, mx);
+            line(objects[j].x + (objectSize+16), y, objects[j].x + (objectSize+16), objects[j].y);
+            line(objects[j].x + (objectSize+16), objects[j].y, objects[j].x + (objectSize+6), objects[j].y);
+
+            cout << "done" << endl;
+        }
+
+
+    else if (connectorI == 'l')
     {
         float difY = (objects[j].y - objects[i].y) / 2, difX = (objects[j].x - objects[i].x + (objectSize + 16));
         int ok;
@@ -1731,14 +1753,16 @@ void deleteObject()
                     }
 
                     for (int i = j; i < objectsCount ; i++)
-                    {
                         objects[i] = objects[i + 1];
+
+                    objectsCount--;
+                    for(int i = 0; i < objectsCount; i++)
+                    {
                         if(objects[i].bottomConnector.index >= j)objects[i].bottomConnector.index--;
                         if(objects[i].topConnector.index >= j)objects[i].topConnector.index --;
                         if(objects[i].leftConnector.index >= j)objects[i].leftConnector.index --;
                         if(objects[i].rightConnector.index >= j)objects[i].rightConnector.index --;
                     }
-                    objectsCount--;
                     draw();
                 }
             }
