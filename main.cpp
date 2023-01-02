@@ -1621,7 +1621,7 @@ void edit()
         {
             propertiesDisplay(i);
             setbkcolor(LIGHTGRAY);
-            outtextxy(middleX - 625, systemHeight - 120, "          ");
+            outtextxy(middleX - 625, systemHeight - 105, "          ");
             handlePropertiesInsert(i);
             propertiesDisplay(i);
             return;
