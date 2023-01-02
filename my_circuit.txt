@@ -1,12 +1,4 @@
-11
-258 218 rezistor.bmp 4 8 45 Ohm        resistor  
-607 203 rezistor.bmp 8 2 56 Ohm        resistor  
-875 234 condensator.bmp 1 3 45 Farad      condenser 
-1122 369 dioda2.bmp -1 -1 45 Ohm        diode     
-263 390 tranzistor4.bmp -1 -1 45 Ohm/A/V    transistor
-400 573 inductor3.bmp 4 6 78 Henrys     inductor  
-648 633 voltmeter.bmp 5 9 67 Volt       voltmeter 
-932 599 ammeter.bmp 9 10 56 Amperes    ammeter   
-538 379 bulb.bmp 0 1 90 Watts      bulb      
-816 414 fuse.bmp 6 7 78 Amperes    fuse      
-1120 524 battery.bmp 7 3 78 mAmps*H    battery   
+3
+954 309 bulb2.bmp -1 -1 1 1 AA AA TL BR 89 Watts      bulb       2
+684 506 fuse.bmp 0 0 -1 -1 TL BR AA AA 78 Amperes    fuse       1
+349 447 voltmeter.bmp -1 -1 -1 -1 LL RR AA AA 90 Volt       voltmeter  1
