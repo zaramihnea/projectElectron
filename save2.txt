@@ -1,0 +1,13 @@
+12
+343 301 tranzistor4.bmp -1 -1 3 2 AA AA TL BL 123 Ohm/A/V transistor 4
+1006 464 ammeter2.bmp -1 -1 3 4 AA AA TR BT 123 Amperes ammeter 2
+435 747 battery.bmp 0 5 -1 -1 BL RL AA AA 123 mAmps*H battery 1
+897 218 ammeter.bmp 0 1 -1 -1 TL TR AA AA 222 Amperes ammeter 1
+986 687 voltmeter2.bmp -1 -1 1 5 AA AA BT BR 123 Volt voltmeter 2
+642 751 tranzistor.bmp 2 4 -1 -1 RL BR AA AA 1234 Ohm/A/V transistor 1
+1157 210 tranzistor.bmp 7 8 -1 -1 TL RR AA AA 444 Ohm/A/V    transistor 1
+1178 398 dioda2.bmp -1 -1 6 8 AA AA TL BL 33 Ohm        diode      2
+1179 724 rezistor.bmp 7 6 -1 -1 BL RR AA AA 44 Ohm        resistor   1
+556 297 inductor.bmp 11 10 -1 -1 LL TR AA AA 1199 Henrys     inductor   1
+808 458 ammeter2.bmp -1 -1 9 11 AA AA TR BR 456 Amperes    ammeter    2
+508 569 fuse.bmp 9 10 -1 -1 LL BR AA AA 987 Amperes    fuse       1
