@@ -1692,25 +1692,21 @@ void deleteObject()
                 if (mousex() >= objects[j].x - (objectSize + 6) && mousex() <= objects[j].x - objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                 {
                     objects[j].leftConnector.index = -1;
-                    cout<<"left"<<endl;
                     draw();
                 }
                 else if (mousex() <= objects[j].x + (objectSize + 6) && mousex() >= objects[j].x + objectSize && mousey() >= objects[j].y - 6 && mousey() <= objects[j].y + 6 && objects[j].rotateState % 2 != 0)
                 {
                     objects[j].rightConnector.index = -1;
-                    cout<<"right"<<endl;
                     draw();
                 }
                 else if (mousex() <= objects[j].x + 6 && mousex() >= objects[j].x - 6 && mousey() <= objects[j].y - objectSize && mousey() >= objects[j].y - (objectSize + 6) && objects[j].rotateState % 2 == 0)
                 {
                     objects[j].topConnector.index = -1;
-                    cout<<"top"<<endl;
                     draw();
                 }
                 else if (mousex() <= objects[j].x + 6 && mousex() >= objects[j].x - 6 && mousey() >= objects[j].y + objectSize && mousey() <= objects[j].y + (objectSize + 6) && objects[j].rotateState % 2 == 0)
                 {
                     objects[j].bottomConnector.index = -1;
-                    cout<<"bottom"<<endl;
                     draw();
                 }
                 else if (mousex() >= objects[j].x - objectSize && mousex() <= objects[j].x + objectSize && mousey() >= objects[j].y - objectSize && mousey() <= objects[j].y + objectSize)
