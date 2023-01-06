@@ -1,4 +1,5 @@
-3
-954 309 bulb2.bmp -1 -1 1 1 AA AA TL BR 89 Watts      bulb       2
-684 506 fuse.bmp 0 0 -1 -1 TL BR AA AA 78 Amperes    fuse       1
-349 447 voltmeter.bmp -1 -1 -1 -1 LL RR AA AA 90 Volt       voltmeter  1
+4
+760 214 rezistor.bmp 3 1 -1 -1 RL TR AA AA 780 Ohm resistor 1
+977 429 ammeter2.bmp -1 -1 0 2 AA AA TR BR 67 Amperes ammeter 2
+617 578 battery.bmp 3 1 -1 -1 LL BR AA AA 67 mAmps*H battery 1
+266 242 bulb.bmp 2 0 -1 -1 LL RL AA AA 78 Watts      bulb       1
