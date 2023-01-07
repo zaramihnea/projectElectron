@@ -1,5 +1,0 @@
-4
-760 214 rezistor.bmp 3 1 -1 -1 RL TR AA AA 780 Ohm        resistor   1
-977 429 ammeter2.bmp -1 -1 0 2 AA AA TR BR 67 Amperes    ammeter    2
-617 578 battery.bmp 3 1 -1 -1 LL BR AA AA 67 mAmps*H    battery    1
-461 392 ammeter.bmp 2 0 -1 -1 LL RL AA AA 78 Amperes    ammeter    1
