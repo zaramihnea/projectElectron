@@ -24,8 +24,7 @@ struct lang
         start[20],
         save[20],
         load[30],
-        zoomIn[20],
-        zoomOut[20],
+        rotate[20],
         dele[20],
         props[20],
         exit[20],
@@ -33,10 +32,10 @@ struct lang
         mov[20],
         edit[20];
 };
-lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Mareste", "Micsoreaza", "Sterge", "Proprietati", "Iesire", "Goleste", "Muta", "Editeaza"},
-     en = {"Language", "START", "Save", "Load", "Zoom in", "Zoom out", "Delete", "Properties", "Exit", "Clear", "Move", "Edit"},
-     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Vergr��ern", "Verkleinern", "L�schen", "Eigenschaften", "Ausgang", "Klar", "Bewegen", "Bearbeiten"},
-     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Agrandir", "R�duire", "Supprimer", "Propri�t�s", "Sortie", "Clair", "Bouger", "Modifier"};
+lang ro = {"Limba", "INCEPE", "Salveaza", "Incarca", "Rotire", "Sterge", "Proprietati", "Iesire", "Goleste", "Muta", "Editeaza"},
+     en = {"Language", "START", "Save", "Load", "Rotate", "Delete", "Properties", "Exit", "Clear", "Move", "Edit"},
+     ge = {"Sprache", "ANFANG", "Speichern", "Belastung", "Drehen", "Laschen", "Eigenschaften", "Ausgang", "Klar", "Bewegen", "Bearbeiten"},
+     fr = {"Langue", "DEBUT", "Sauvegarder", "Charger", "Tourner", "Supprimer", "Proprietes", "Sortie", "Clair", "Bouger", "Modifier"};
 
 struct prop
 {
@@ -299,7 +298,7 @@ void refresh()
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 400, middleX - 510, systemHeight - 360);
     setbkcolor(LIGHTGRAY);
-    outtextxy(middleX - 608, systemHeight - 392, "Rotate");
+    outtextxy(middleX - 608, systemHeight - 392, L.rotate);
 
     setfillstyle(SOLID_FILL, LIGHTGRAY);
     bar(middleX - 630, systemHeight - 350, middleX - 580, systemHeight - 310);
