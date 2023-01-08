@@ -1325,7 +1325,7 @@ void horizontalOverlap(int x1, int x2, int y, int &ok)
             if (objects[k].x > xL)
                 xL = objects[k].x;
         }
-    if (ok)
+    if (ok == 1)
     {
         line(x1, y, xF - (objectSize + 16), y);
         line(xF - (objectSize + 16), y, xF - (objectSize + 16), y + mx);
@@ -1345,7 +1345,7 @@ void verticalOverlap(int y1, int y2, int x, int &ok)
     {
         if (objects[k].x + (objectSize + 6) >= x && objects[k].x - (objectSize + 6) <= x && objects[k].y > y1 && objects[k].y < y2)
         {
-            float dif = x - objects[k].x - (objectSize + 11);
+            float dif = x - objects[k].x - 86;
             if (dif < mx)
                 mx = dif;
             if (yF > objects[k].y)
@@ -1357,11 +1357,11 @@ void verticalOverlap(int y1, int y2, int x, int &ok)
     }
     if (ok)
     {
-        line(x, y1, x, yF - (objectSize+5));
-        line(x, yF - (objectSize+5), x - mx, yF - (objectSize+5));
-        line(x - mx, yF - (objectSize+5), x - mx, yL + (objectSize+5));
-        line(x - mx, yL + (objectSize+5), x, yL + (objectSize+5));
-        line(x, yL + (objectSize+5), x, y2);
+        line(x, y1, x, yF - 80);
+        line(x, yF - 80, x - mx, yF - 80);
+        line(x - mx, yF - 80, x - mx, yL + 80);
+        line(x - mx, yL + 80, x, yL + 80);
+        line(x, yL + 80, x, y2);
     }
 }
 
