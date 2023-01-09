@@ -934,15 +934,15 @@ void connectionRR(int i, int j)
     if (objects[i].x > objects[j].x)
         swap(i, j);
 
-    line(objects[j].x + (objectSize + 6), objects[j].y, objects[j].x + 100, objects[j].y);
+    line(objects[j].x + (objectSize + 6), objects[j].y, objects[j].x + (objectSize+25), objects[j].y);
     int ok;
-    int x = objects[j].x + 100, y = objects[i].y;
+    int x = objects[j].x + (objectSize+25), y = objects[i].y;
 
     cornerOverlap(x, y, objects[i].x + (objectSize + 6), objects[j].y);
 
-    verticalOverlap(objects[j].y, y, objects[j].x + 100, ok);
+    verticalOverlap(objects[j].y, y, objects[j].x + (objectSize+25), ok);
     if (ok == 0)
-        line(objects[j].x + 100, objects[j].y, objects[j].x + 100, y);
+        line(objects[j].x + (objectSize+25), objects[j].y, objects[j].x + (objectSize+25), y);
 
     horizontalOverlap(objects[i].x + (objectSize + 6), x, objects[i].y, ok);
     if (ok == 0)
@@ -959,15 +959,15 @@ void connectionLL(int i, int j)
     if (objects[j].x > objects[i].x)
         swap(i, j);
 
-    line(objects[j].x - (objectSize + 6), objects[j].y, objects[j].x - 100, objects[j].y);
+    line(objects[j].x - (objectSize + 6), objects[j].y, objects[j].x - (objectSize+25), objects[j].y);
 
-    int ok, x = objects[j].x - 100, y = objects[i].y;
+    int ok, x = objects[j].x - (objectSize+25), y = objects[i].y;
 
     cornerOverlap(x, y, objects[i].x - (objectSize + 6), objects[j].y);
 
-    verticalOverlap(objects[j].y, y, objects[j].x - 100, ok);
+    verticalOverlap(objects[j].y, y, objects[j].x - (objectSize+25), ok);
     if (ok == 0)
-        line(objects[j].x - 100, objects[j].y, objects[j].x - 100, y);
+        line(objects[j].x - (objectSize+25), objects[j].y, objects[j].x - (objectSize+25), y);
     horizontalOverlap(x, objects[i].x - (objectSize + 6), objects[i].y, ok);
     if (ok == 0)
         line(x, objects[i].y, objects[i].x - (objectSize + 6), objects[i].y);
@@ -980,7 +980,7 @@ void connectionRL(int i, int j, char connectorI)
     if (connectorI == 'l')
         swap(i, j);
 
-    float difference = (objects[j].x - objects[i].x - 162) / 2;
+    float difference = (objects[j].x - objects[i].x - 2*(objectSize+6)) / 2;
     int ok;
     int x = objects[i].x + (objectSize + 6) + difference, y = objects[i].y;
     cornerOverlap(x, y, objects[i].x + (objectSize + 6), objects[j].y);
@@ -1089,7 +1089,7 @@ void connectionBT(int i, int j, char connectorI)
             connectorI = 'B';
     }
 
-    if (objects[i].y + 81 < objects[j].y - 81 && connectorI == 'B')
+    if (objects[i].y + (objectSize+6) < objects[j].y - (objectSize+6) && connectorI == 'B')
     {
         float dif = abs(objects[j].y - objects[i].y) / 2;
         int ok, x = objects[i].x, y = objects[i].y + dif;
@@ -1110,9 +1110,9 @@ void connectionBT(int i, int j, char connectorI)
 
         int a;
         if (objects[i].x < objects[j].x)
-            a = 80;
+            a = (objectSize+5);
         else
-            a = -80;
+            a = -(objectSize+5);
         line(objects[i].x, objects[i].y - (objectSize + 6), objects[i].x, objects[i].y - (objectSize + 16));
         line(objects[i].x, objects[i].y - (objectSize + 16), objects[i].x + a, objects[i].y - (objectSize + 16));
         int x = objects[i].x + a, y = objects[j].y + (objectSize + 16), ok;
@@ -1181,6 +1181,21 @@ void connectionTL(int i, int j)
         if (ok == 0)
             line(x, objects[j].y, objects[j].x - (objectSize + 6), objects[j].y);
     }
+    else if (objects[i].y - (objectSize + 16) < objects[j].y + objectSize && objects[i].y > objects[j].y && objects[i].x > objects[j].x - (objectSize + 6))
+    {
+        int x = objects[i].x, y = objects[j].y - (objectSize+6);
+        cornerOverlap(x, y, objects[j].x - (objectSize + 16), objects[i].y - (objectSize+6));
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, y);
+        int x1 = objects[j].x - (objectSize + 16);
+        y = objects[j].y - (objectSize+6);
+        cornerOverlap(x1, y, x, objects[j].y);
+        int ok;
+        horizontalOverlap(x, x1, objects[j].y - (objectSize+6), ok);
+        if(ok == 0)
+        line(x, objects[j].y - (objectSize+6), x1, objects[j].y - (objectSize+6));
+        line(objects[j].x - (objectSize + 16), y, objects[j].x - (objectSize + 16), objects[j].y);
+        line(objects[j].x - (objectSize + 16), objects[j].y, objects[j].x - (objectSize + 6), objects[j].y);
+    }
     else
     {
         line(objects[i].x, objects[i].y - (objectSize + 6), objects[i].x, objects[i].y - (objectSize + 16));
@@ -1213,8 +1228,24 @@ void connectionTR(int i, int j)
         if (ok == 0)
             line(x, objects[j].y, objects[j].x + (objectSize + 6), objects[j].y);
     }
+    else if (objects[i].y - (objectSize + 16) < objects[j].y + objectSize && objects[i].y > objects[j].y && objects[i].x + objectSize < objects[j].x - (objectSize + 6))
+    {
+        int x = objects[i].x, y = objects[j].y - (objectSize+5);
+        cornerOverlap(x, y, objects[j].x + (objectSize + 16), objects[i].y - (objectSize+6));
+        line(objects[i].x, objects[i].y - (objectSize+6), objects[i].x, y);
+        int x1 = objects[j].x + (objectSize + 16);
+        y = objects[j].y - (objectSize+5);
+        cornerOverlap(x1, y, x, objects[j].y);
+        int ok;
+        horizontalOverlap(x, x1, objects[j].y - (objectSize+5), ok);
+        if(ok == 0)
+        line(x, objects[j].y - (objectSize+5), x1, objects[j].y - (objectSize+5));
+        line(objects[j].x + (objectSize + 16), y, objects[j].x + (objectSize + 16), objects[j].y);
+        line(objects[j].x + (objectSize + 16), objects[j].y, objects[j].x + (objectSize + 6), objects[j].y);
+    }
     else
     {
+        cout<<"else";
         line(objects[i].x, objects[i].y - (objectSize + 6), objects[i].x, objects[i].y - (objectSize + 16));
         int x = objects[j].x + (objectSize + 16), y = objects[i].y - (objectSize + 16), ok;
         cornerOverlap(x, y, objects[i].x, objects[j].y);
@@ -1243,6 +1274,21 @@ void connectionBL(int i, int j)
         horizontalOverlap(x, objects[j].x - (objectSize + 6), objects[j].y, ok);
         if (ok == 0)
             line(x, objects[j].y, objects[j].x - (objectSize + 6), objects[j].y);
+    }
+    else if (objects[i].y + (objectSize + 16) > objects[j].y - objectSize && objects[i].y < objects[j].y && objects[i].x > objects[j].x - (objectSize + 6))
+    {
+        int x = objects[i].x, y = objects[j].y + (objectSize+6);
+        cornerOverlap(x, y, objects[j].x - (objectSize + 16), objects[i].y + (objectSize+6));
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, y);
+        int x1 = objects[j].x - (objectSize + 16);
+        y = objects[j].y + (objectSize+6);
+        cornerOverlap(x1, y, x, objects[j].y);
+        int ok;
+        horizontalOverlap(x, x1, objects[j].y + (objectSize+6), ok);
+        if(ok == 0)
+        line(x, objects[j].y + (objectSize+6), x1, objects[j].y + (objectSize+6));
+        line(objects[j].x - (objectSize + 16), y, objects[j].x - (objectSize + 16), objects[j].y);
+        line(objects[j].x - (objectSize + 16), objects[j].y, objects[j].x - (objectSize + 6), objects[j].y);
     }
     else
     {
@@ -1276,6 +1322,21 @@ void connectionBR(int i, int j)
         if (ok == 0)
             line(x, objects[j].y, objects[j].x + (objectSize + 6), objects[j].y);
     }
+    else if (objects[i].y + (objectSize + 16) > objects[j].y - objectSize &&  objects[i].y < objects[j].y &&objects[i].x < objects[j].x - (objectSize + 6))
+    {
+        int x = objects[i].x, y = objects[j].y + (objectSize+6);
+        cornerOverlap(x, y, objects[j].x + (objectSize + 16), objects[i].y + (objectSize+6));
+        line(objects[i].x, objects[i].y + (objectSize+6), objects[i].x, y);
+        int x1 = objects[j].x + (objectSize + 16);
+        y = objects[j].y + (objectSize+6);
+        cornerOverlap(x1, y, x, objects[j].y);
+        int ok;
+        horizontalOverlap(x, x1, objects[j].y + (objectSize+6), ok);
+        if(ok == 0)
+        line(x, objects[j].y + (objectSize+6), x1, objects[j].y + (objectSize+6));
+        line(objects[j].x + (objectSize + 16), y, objects[j].x + (objectSize + 16), objects[j].y);
+        line(objects[j].x + (objectSize + 16), objects[j].y, objects[j].x + (objectSize + 6), objects[j].y);
+    }
     else
     {
         line(objects[i].x, objects[i].y + (objectSize + 6), objects[i].x, objects[i].y + (objectSize + 16));
@@ -1301,7 +1362,9 @@ int imageOverlap(int x, int y, int j)
 
     for (int i = 0; i < objectsCount; i++)
     {
-        if (i != j && abs(objects[i].x - x) < 162 && abs(objects[i].y - y) < 150)
+        if (i != j && abs(objects[i].x - x) < 2*(objectSize+6) && abs(objects[i].y - y) < 2* objectSize && objects[i].rotateState % 2 != 0)
+            return 0;
+        if (i != j && abs(objects[i].y - y) < 2*(objectSize+6) && abs(objects[i].x - x) < 2* objectSize && objects[i].rotateState % 2 == 0)
             return 0;
     }
     return 1;
@@ -1317,7 +1380,7 @@ void horizontalOverlap(int x1, int x2, int y, int &ok)
         if (objects[k].x >= x1 && objects[k].x <= x2 && objects[k].y + objectSize >= y && objects[k].y - objectSize <= y)
         {
             ok = 1;
-            float dif = objects[k].y - y + 80;
+            float dif = objects[k].y - y + objectSize + 5;
             if (dif > mx)
                 mx = dif;
             if (objects[k].x < xF)
@@ -1325,7 +1388,7 @@ void horizontalOverlap(int x1, int x2, int y, int &ok)
             if (objects[k].x > xL)
                 xL = objects[k].x;
         }
-    if (ok == 1)
+    if (ok)
     {
         line(x1, y, xF - (objectSize + 16), y);
         line(xF - (objectSize + 16), y, xF - (objectSize + 16), y + mx);
@@ -1345,7 +1408,7 @@ void verticalOverlap(int y1, int y2, int x, int &ok)
     {
         if (objects[k].x + (objectSize + 6) >= x && objects[k].x - (objectSize + 6) <= x && objects[k].y > y1 && objects[k].y < y2)
         {
-            float dif = x - objects[k].x - 86;
+            float dif = x - objects[k].x - (objectSize + 11);
             if (dif < mx)
                 mx = dif;
             if (yF > objects[k].y)
@@ -1357,11 +1420,11 @@ void verticalOverlap(int y1, int y2, int x, int &ok)
     }
     if (ok)
     {
-        line(x, y1, x, yF - 80);
-        line(x, yF - 80, x - mx, yF - 80);
-        line(x - mx, yF - 80, x - mx, yL + 80);
-        line(x - mx, yL + 80, x, yL + 80);
-        line(x, yL + 80, x, y2);
+        line(x, y1, x, yF - (objectSize+5));
+        line(x, yF - (objectSize+5), x - mx, yF - (objectSize+5));
+        line(x - mx, yF - (objectSize+5), x - mx, yL + (objectSize+5));
+        line(x - mx, yL + (objectSize+5), x, yL + (objectSize+5));
+        line(x, yL + (objectSize+5), x, y2);
     }
 }
 
@@ -1375,17 +1438,17 @@ void cornerOverlap(int &x, int &y, int x1, int y1)
             {
                 if (objects[k].y + objectSize > y && objects[k].y + objectSize < y1)
                 {
-                    line(objects[k].x + (objectSize + 16), y, objects[k].x + (objectSize + 16), objects[k].y + 80);
-                    line(objects[k].x + (objectSize + 16), objects[k].y + 80, x, objects[k].y + 80);
+                    line(objects[k].x + (objectSize + 16), y, objects[k].x + (objectSize + 16), objects[k].y + (objectSize+5));
+                    line(objects[k].x + (objectSize + 16), objects[k].y + (objectSize+5), x, objects[k].y + (objectSize+5));
                     x = objects[k].x + (objectSize + 16);
-                    y = objects[k].y + 80;
+                    y = objects[k].y + (objectSize+5);
                 }
                 else if (objects[k].y - objectSize < y && objects[k].y - objectSize > y1)
                 {
-                    line(objects[k].x + (objectSize + 16), y, objects[k].x + (objectSize + 16), objects[k].y - 80);
-                    line(objects[k].x + (objectSize + 16), objects[k].y - 80, x, objects[k].y - 80);
+                    line(objects[k].x + (objectSize + 16), y, objects[k].x + (objectSize + 16), objects[k].y - (objectSize+5));
+                    line(objects[k].x + (objectSize + 16), objects[k].y - (objectSize+5), x, objects[k].y - (objectSize+5));
                     x = objects[k].x + (objectSize + 16);
-                    y = objects[k].y - 80;
+                    y = objects[k].y - (objectSize+5);
                 }
             }
             else
@@ -1393,17 +1456,17 @@ void cornerOverlap(int &x, int &y, int x1, int y1)
 
                 if (objects[k].y + objectSize > y && objects[k].y + objectSize < y1)
                 {
-                    line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), objects[k].y + 80);
-                    line(objects[k].x - (objectSize + 16), objects[k].y + 80, x, objects[k].y + 80);
+                    line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), objects[k].y + (objectSize+5));
+                    line(objects[k].x - (objectSize + 16), objects[k].y + (objectSize+5), x, objects[k].y + (objectSize+5));
                     x = objects[k].x - (objectSize + 16);
-                    y = objects[k].y + 80;
+                    y = objects[k].y + (objectSize+5);
                 }
                 else if (objects[k].y - objectSize < y && objects[k].y - objectSize > y1)
                 {
-                    line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), objects[k].y - 80);
-                    line(objects[k].x - (objectSize + 16), objects[k].y - 80, x, objects[k].y - 80);
+                    line(objects[k].x - (objectSize + 16), y, objects[k].x - (objectSize + 16), objects[k].y - (objectSize+5));
+                    line(objects[k].x - (objectSize + 16), objects[k].y - (objectSize+5), x, objects[k].y - (objectSize+5));
                     x = objects[k].x - (objectSize + 16);
-                    y = objects[k].y - 80;
+                    y = objects[k].y - (objectSize+5);
                 }
             }
         }
