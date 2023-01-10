@@ -1492,8 +1492,11 @@ void commonSet()
 
 void propertiesDisplay(int i)
 {
-    settextstyle(8, HORIZ_DIR, 1);
     setbkcolor(LIGHTGRAY);
+    settextstyle(8, HORIZ_DIR, 1);
+    outtextxy(middleX - 625, systemHeight - 125, "          ");
+    outtextxy(middleX - 625, systemHeight - 85, "          ");
+    outtextxy(middleX - 625, systemHeight - 105, "          ");
     outtextxy(middleX - 625, systemHeight - 105, objects[i].properties.quantity);
     outtextxy(middleX - 625, systemHeight - 125, objects[i].properties.name);
     outtextxy(middleX - 625, systemHeight - 85, objects[i].properties.measurement);
